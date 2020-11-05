@@ -17,13 +17,12 @@ import (
 
 const (
 	// https://en.wikipedia.org/wiki/ANSI_escape_code
-	//red    = "\033[01;31m"
-	red    = "\x1B[01;31m"
-	green  = "\033[01;32m"
-	yellow = "\033[01;33m"
-	blue   = "\033[01;34m"
-	//white  = "\033[00m"
-	white = "\x1B[0m"
+	red     = "\033[01;31m"
+	green   = "\033[01;32m"
+	yellow  = "\033[01;33m"
+	blue    = "\033[01;34m"
+	white   = "\033[01;97m"
+	neutral = "\033[0m"
 )
 
 var areas = [52][4]int{
@@ -40,6 +39,21 @@ var areas = [52][4]int{
 	{43, 41, 42, 41}, {44, 40, 42, 41}, {47, 41, 43, 43}, {48, 42, 45, 44},
 	{49, 45, 45, 44}, {50, 51, 0, 0}, {47, 43, 48, 47}, {48, 44, 48, 47},
 	{0, 45, 50, 0}, {0, 46, 0, 49}, {46, 0, 0, 0},
+}
+
+var areaMap = [12][10]int{
+	{0, 0, 0, 0, 0, 0, 47, 48, 49, 50},
+	{0, 0, 0, 0, 0, 0, 43, 44, 45, 46},
+	{0, 0, 0, 0, 0, 0, 41, 42, 0, 51},
+	{0, 0, 0, 0, 33, 32, 0, 40, 0, 0},
+	{0, 0, 0, 35, 34, 0, 37, 39, 0, 0},
+	{27, 28, 29, 30, 36, 0, 38, 0, 0, 0},
+	{22, 23, 24, 25, 0, 26, 0, 0, 0, 0},
+	{16, 17, 18, 19, 20, 21, 0, 0, 0},
+	{13, 14, 15, 0, 0, 0, 0, 0, 0, 0},
+	{6, 7, 0, 31, 0, 0, 0, 0, 0, 0},
+	{0, 8, 9, 10, 11, 12, 0, 0, 0, 0},
+	{1, 2, 3, 4, 5, 0, 0, 0, 0, 0},
 }
 
 var objectsInArea = [45][2]int{
@@ -86,6 +100,61 @@ func printScreen(text []string) {
 	fmt.Println(block)
 }
 
+func getBoxLen(locations []string) int {
+	boxLen := 0
+	for _, v := range locations {
+		lineLen := len([]rune(strings.Split(v, "\n")[0]))
+		if lineLen > boxLen {
+			boxLen = lineLen
+		}
+	}
+	// make boxLen odd for middle connection piece
+	if boxLen%2 == 0 {
+		boxLen++
+	}
+	return boxLen + 4
+}
+
+func drawBox(area int, boxLen int, locations []string) (box [3]string) {
+	if area == 0 {
+		horLine := strings.Repeat(" ", boxLen)
+		box[0] = fmt.Sprintf("%s", horLine)
+		box[1] = fmt.Sprintf("%s", horLine)
+		box[2] = fmt.Sprintf("%s", horLine)
+		return
+	}
+	var leftCon, rightCon, topCon, bottomCon string
+	text := strings.Split(locations[area-1], "\n")[0]
+	textLen := len([]rune(text)) + 2 // one space left and right
+	leftBuffer := strings.Repeat(" ", (boxLen-textLen)/2)
+	rightBuffer := strings.Repeat(" ", boxLen-len(leftBuffer)-textLen)
+	horLine := strings.Repeat("\u2501", (boxLen-3)/2)
+	if areas[area][3] == 0 {
+		leftCon = "\u2503"
+	} else {
+		leftCon = "\u252B"
+	}
+	if areas[area][2] == 0 {
+		rightCon = "\u2503"
+	} else {
+		rightCon = "\u2523"
+	}
+	if areas[area][0] == 0 {
+		topCon = "\u2501"
+	} else {
+		topCon = "\u253B"
+	}
+	if areas[area][1] == 0 {
+		bottomCon = "\u2501"
+	} else {
+		bottomCon = "\u2533"
+	}
+	box[0] = fmt.Sprintf("\u250F%s%s%s\u2513", horLine, topCon, horLine)
+	box[1] = fmt.Sprintf("%s%s%s%s%s", leftCon, leftBuffer, text, rightBuffer, rightCon)
+	box[2] = fmt.Sprintf("\u2517%s%s%s\u251B", horLine, bottomCon, horLine)
+	return
+}
+
 // Setup keyboard scanning
 func scanner() (r rune) {
 	var b []byte = make([]byte, 4)
@@ -124,10 +193,32 @@ func setupCloseHandler() {
 */
 //}
 
-func surroundings(area int, locations []string, objects []string) {
+func flash(text []string, err string) {
+	flashText := make([]string, len(text))
+	copy(flashText, text)
+	flashText = append(text, "")
+	flashText = append(text, fmt.Sprintf("%s%s", red, err))
+	printScreen(flashText)
+	time.Sleep(2 * time.Second)
+	printScreen(text)
+}
+
+func surroundings(area int, locations []string, objects []string) (text []string) {
+	if area == 25 {
+		objectsInArea[40][0] = 25
+		objects[40-9] = "eine Tür im Norden"
+	}
+	if area == 30 {
+		objectsInArea[40][0] = 30
+		objects[40-9] = "eine Tür im Süden"
+	}
+
+	//	thenge(40)=25:ge$(40)="eine tuer im norden"
+	//	ifoa=30thenge(40)=30:ge$(40)="eine tuer im sueden"
 	//fmt.Printf("Ich bin %s\n", locations[area-1])
-	var text []string
-	text = append(text, fmt.Sprintf("%sIch bin %s%s", yellow, locations[area-1], white))
+	//var text []string
+	text = append(text, fmt.Sprintf("%sArea: %d [N:%d,S:%d,O:%d,W:%d]", white, area, areas[area][0], areas[area][1], areas[area][2], areas[area][3]))
+	text = append(text, fmt.Sprintf("%sIch bin %s", yellow, locations[area-1]))
 	//appendText(&text, fmt.Sprintf("Ich bin %s", locations[area-1]), yellow)
 	var items []string
 	for i, v := range objectsInArea {
@@ -150,14 +241,16 @@ func surroundings(area int, locations []string, objects []string) {
 		for _, item := range items {
 			text = append(text, item)
 		}
-		text = append(text, white)
+		text = append(text, neutral)
 	}
+	printScreen(text)
+	return
 	//appendText(&text, "Ich sehe:", blue)
 	/*if v[1] == area {
 		//items = append(items, objects[i-9])
 		appendText(&text, fmt.Sprintf("  - %s", objects[i-9]), red)
 	}*/
-	printScreen(text)
+	//printScreen(text)
 	/*if len(items) > 0 {
 		fmt.Println("Ich sehe:")
 		for _, i := range items {
@@ -193,18 +286,20 @@ func surroundings(area int, locations []string, objects []string) {
 	*/
 }
 
-func move(area int, direction int) (newArea int, err string) {
+func move(area int, direction int, text []string) int {
 	//if direction == 0 {
 	//	return 0, "Ich brauche eine Richtung."
 	//}
 	if areas[area][direction] == 0 {
-		return 0, "In diese Richtung führt kein Weg."
+		flash(text, "In diese Richtung führt kein Weg.")
+		return area
 	}
 	// Area 30 and 25 are connected by a door. Is it open?
 	if (area == 30 || area == 25 && direction == 0) && !doorOpen {
-		return 0, "Die Tür ist versperrt."
+		flash(text, "Die Tür ist versperrt.")
+		return area
 	}
-	return areas[area][direction], ""
+	return areas[area][direction]
 }
 
 func useDoor() {
@@ -242,6 +337,25 @@ func main() {
 	c.getConf("locations.yaml")
 	locations := c.Locations
 
+	boxLen := getBoxLen(locations)
+	for i := 0; i < 12; i++ {
+		box1 := drawBox(areaMap[i][1], boxLen, locations)
+		box2 := drawBox(areaMap[i][2], boxLen, locations)
+		box3 := drawBox(areaMap[i][3], boxLen, locations)
+		fmt.Printf("%s%s%s\n", box1[0], box2[0], box3[0])
+		fmt.Printf("%s%s%s\n", box1[1], box2[1], box3[1])
+		fmt.Printf("%s%s%s\n", box1[2], box2[2], box3[2])
+	}
+	return
+	/*
+		box1 := drawBox(1, boxLen, locations)
+		box2 := drawBox(2, boxLen, locations)
+		box3 := drawBox(3, boxLen, locations)
+		fmt.Printf("%s%s%s\n", box1[0], box2[0], box3[0])
+		fmt.Printf("%s%s%s\n", box1[1], box2[1], box3[1])
+		fmt.Printf("%s%s%s\n", box1[2], box2[2], box3[2])
+		return
+	*/
 	// disable input buffering
 	exec.Command("stty", "-F", "/dev/tty", "cbreak", "min", "1").Run()
 	// do not display entered characters on the screen
@@ -256,7 +370,8 @@ func main() {
 	area := 1
 	var dir rune
 	var direction int
-	surroundings(area, locations, objects)
+	var text []string
+	text = surroundings(area, locations, objects)
 	for {
 		dir = scanner()
 		switch int(dir) {
@@ -270,16 +385,8 @@ func main() {
 			direction = 3
 		}
 
-		newArea, err := move(area, direction)
-		if err != "" {
-			fmt.Println()
-			fmt.Println(err)
-			time.Sleep(2 * time.Second)
-			surroundings(area, locations, objects)
-		} else {
-			area = newArea
-			surroundings(area, locations, objects)
-		}
+		area = move(area, direction, text)
+		text = surroundings(area, locations, objects)
 	}
 	//scanner()
 
