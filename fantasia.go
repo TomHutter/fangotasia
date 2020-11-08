@@ -70,7 +70,7 @@ func getBoxLen(locations []string) int {
 	if boxLen%2 == 0 {
 		boxLen++
 	}
-	return boxLen + 4 // one blank and border left and right
+	return boxLen + 2 // one blank and border left and right
 }
 
 func drawBox(area int, boxLen int, locations []string, overwrites [][]string) (box [7]string) {
@@ -149,8 +149,8 @@ func drawBox(area int, boxLen int, locations []string, overwrites [][]string) (b
 }
 
 func drawMap(x, y int, locations []string, overwrites [][]string) {
-	if x > 7 {
-		x = 7
+	if x > 8 {
+		x = 8
 	}
 	if y > 8 {
 		y = 8
@@ -160,6 +160,7 @@ func drawMap(x, y int, locations []string, overwrites [][]string) {
 	for i := y; i < y+4; i++ {
 		box1 := drawBox(config.AreaMap[i][x], boxLen, locations, overwrites)
 		box2 := drawBox(config.AreaMap[i][x+1], boxLen, locations, overwrites)
+		box3 := drawBox(config.AreaMap[i][x+2], boxLen, locations, overwrites)
 		/*
 			var box2 [7]string
 			if len(overwrites[config.AreaMap[i][x+1]]) > 0 {
@@ -173,8 +174,8 @@ func drawMap(x, y int, locations []string, overwrites [][]string) {
 			//box3 := drawBox(config.AreaMap[i][x+2], boxLen, locations)
 		*/
 		for l := 0; l < 7; l++ {
-			//fmt.Printf("%s%s%s\n", box1[l], box2[l], box3[l])
-			fmt.Printf("%s%s\n", box1[l], box2[l])
+			fmt.Printf("%s%s%s\n", box1[l], box2[l], box3[l])
+			//fmt.Printf("%s%s\n", box1[l], box2[l])
 		}
 		/*
 			fmt.Printf("%s\u2503%s   %s\u2503%s   %s\u2503%s\n", spacer, spacer, spacer, spacer, spacer, spacer)
@@ -411,6 +412,7 @@ func main() {
 
 	//drawMap(0, 7, locations)
 	drawMap(0, 7, locations, overwrites)
+	//drawMap(10, 0, locations, overwrites)
 	return
 
 	/*
