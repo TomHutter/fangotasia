@@ -18,12 +18,18 @@ import (
 
 var doorOpen = false
 
+type mapOverwrites struct {
+	Area    int
+	Content [7]string
+}
+
 type conf struct {
-	Verbs     []string `yaml:"verbs"`
-	Nouns     []string `yaml:"nouns"`
-	Objects   []string `yaml:"objects"`
-	Answers   []string `yaml:"answers"`
-	Locations []string `yaml:"locations"`
+	Verbs      []string        `yaml:"verbs"`
+	Nouns      []string        `yaml:"nouns"`
+	Objects    []string        `yaml:"objects"`
+	Answers    []string        `yaml:"answers"`
+	Locations  []string        `yaml:"locations"`
+	Overwrites []mapOverwrites `yaml:"overwrites"`
 }
 
 func (c *conf) getConf(filename string) {
@@ -64,60 +70,76 @@ func getBoxLen(locations []string) int {
 	if boxLen%2 == 0 {
 		boxLen++
 	}
-	return boxLen + 4
+	return boxLen + 4 // one blank and border left and right
 }
 
-func drawBox(area int, boxLen int, locations []string) (box [5]string) {
+func drawBox(area int, boxLen int, locations []string) (box [7]string) {
+	// draw emty field, if area == 0
 	if area == 0 {
-		spacer := strings.Repeat(" ", boxLen)
-		box[0] = fmt.Sprintf("%s", spacer)
-		box[1] = fmt.Sprintf("%s", spacer)
-		box[2] = fmt.Sprintf("%s", spacer)
-		box[3] = fmt.Sprintf("%s", spacer)
-		box[4] = fmt.Sprintf("%s", spacer)
+		// boxlen + left an right connection
+		spacer := strings.Repeat(" ", boxLen+4)
+		for l := 0; l < 7; l++ {
+			box[l] = fmt.Sprintf("%s", spacer)
+		}
 		return
 	}
-	var leftCon, rightCon, topCon, bottomCon string
+	var leftCon, rightCon, upperCon, topCon, lowerCon, bottomCon string
+	// get first line of area from locations
 	text := strings.Split(locations[area-1], "\n")[0]
-	textLen := len([]rune(text)) + 2 // one space left and right
-	leftBuffer := strings.Repeat(" ", (boxLen-textLen)/2)
-	rightBuffer := strings.Repeat(" ", boxLen-len(leftBuffer)-textLen)
+	textLen := len([]rune(text)) + 2 // two space left and right
+	leftSpacer := strings.Repeat(" ", (boxLen-textLen)/2)
+	conSpacer := strings.Repeat(" ", (boxLen-1)/2)
+	rightSpacer := strings.Repeat(" ", boxLen-len(leftSpacer)-textLen)
 	empty := strings.Repeat(" ", textLen-2)
+	// horizontal line - left/right corner and middle connection element
 	horLine := strings.Repeat(config.HL, (boxLen-3)/2)
-	if config.Areas[area][3] == 0 {
-		leftCon = config.VL
-	} else {
-		leftCon = config.LC
-	}
-	if config.Areas[area][2] == 0 {
-		rightCon = config.VL
-	} else {
-		rightCon = config.RC
-	}
+	// can we walk to the north?
 	if config.Areas[area][0] == 0 {
+		// no => draw a hoizontal line
+		upperCon = " "
 		topCon = config.HL
 	} else {
+		// yes => draw a connection to north
+		upperCon = config.VL
 		topCon = config.TC
 	}
+	// can we walk to the south?
 	if config.Areas[area][1] == 0 {
+		// no => draw a hoizontal line
 		bottomCon = config.HL
+		lowerCon = " "
 	} else {
+		// yes => draw a connection to south
 		bottomCon = config.BC
+		lowerCon = config.VL
 	}
-	box[0] = fmt.Sprintf("%s%s%s%s%s", config.BTL, horLine, topCon, horLine, config.BTR)
-	box[1] = fmt.Sprintf("%s%s%s%s%s", config.VL, leftBuffer, empty, rightBuffer, config.VL)
-	box[2] = fmt.Sprintf("%s%s%s%s%s", leftCon, leftBuffer, text, rightBuffer, rightCon)
-	box[3] = fmt.Sprintf("%s%s%s%s%s", config.VL, leftBuffer, empty, rightBuffer, config.VL)
-	box[4] = fmt.Sprintf("%s%s%s%s%s", config.BBL, horLine, bottomCon, horLine, config.BBR)
+	// can we walk to the east?
+	if config.Areas[area][2] == 0 {
+		// no => draw a vertical line
+		rightCon = fmt.Sprintf("%s  ", config.VL)
+	} else {
+		// yes => draw a connection to west
+		rightCon = fmt.Sprintf("%s%s%s", config.RC, config.HL, config.HL)
+	}
+	// can we walk to the west?
+	if config.Areas[area][3] == 0 {
+		// no => draw a vertical line
+		leftCon = fmt.Sprintf("  %s", config.VL)
+	} else {
+		// yes => draw a connection to west
+		leftCon = fmt.Sprintf("%s%s%s", config.HL, config.HL, config.LC)
+	}
+	box[0] = fmt.Sprintf("  %s%s%s  ", conSpacer, upperCon, conSpacer)
+	box[1] = fmt.Sprintf("  %s%s%s%s%s  ", config.BTL, horLine, topCon, horLine, config.BTR)
+	box[2] = fmt.Sprintf("  %s%s%s%s%s  ", config.VL, leftSpacer, empty, rightSpacer, config.VL)
+	box[3] = fmt.Sprintf("%s%s%s%s%s", leftCon, leftSpacer, text, rightSpacer, rightCon)
+	box[4] = fmt.Sprintf("  %s%s%s%s%s  ", config.VL, leftSpacer, empty, rightSpacer, config.VL)
+	box[5] = fmt.Sprintf("  %s%s%s%s%s  ", config.BBL, horLine, bottomCon, horLine, config.BBR)
+	box[6] = fmt.Sprintf("  %s%s%s  ", conSpacer, lowerCon, conSpacer)
 	return
 }
 
-//func topCon(box int) {
-//	if areas[box][0] == 0 {
-//
-//}
-
-func drawMap(x, y int, locations []string) {
+func drawMap(x, y int, locations []string, overwrites []mapOverwrites) {
 	if x > 7 {
 		x = 7
 	}
@@ -125,18 +147,31 @@ func drawMap(x, y int, locations []string) {
 		y = 8
 	}
 	boxLen := getBoxLen(locations)
-	spacer := strings.Repeat(" ", boxLen/2)
+	//spacer := strings.Repeat(" ", boxLen/2)
 	for i := y; i < y+4; i++ {
 		box1 := drawBox(config.AreaMap[i][x], boxLen, locations)
-		box2 := drawBox(config.AreaMap[i][x+1], boxLen, locations)
-		box3 := drawBox(config.AreaMap[i][x+2], boxLen, locations)
-		fmt.Printf("%s\u2503%s    %s\u2503%s    %s\u2503%s\n", spacer, spacer, spacer, spacer, spacer, spacer)
-		fmt.Printf("%s    %s    %s\n", box1[0], box2[0], box3[0])
-		fmt.Printf("%s    %s    %s\n", box1[1], box2[1], box3[1])
-		fmt.Printf("%s\u2501\u2501\u2501\u25b6%s\u2501\u2513  %s\n", box1[2], box2[2], box3[2])
-		fmt.Printf("%s    %s\u25c4\u251B  %s\n", box1[3], box2[3], box3[3])
-		fmt.Printf("%s    %s    %s\n", box1[4], box2[4], box3[4])
-		fmt.Printf("%s\u25B2%s    %s\u2503%s    %s\u2503%s\n", spacer, spacer, spacer, spacer, spacer, spacer)
+		var box2 [7]string
+		if config.AreaMap[i][x+1] == 7 {
+			box2 = overwrites[0].Content
+		} else if config.AreaMap[i][x+1] == 8 {
+			box2 = overwrites[1].Content
+		} else {
+			box2 = drawBox(config.AreaMap[i][x+1], boxLen, locations)
+		}
+		//box3 := drawBox(config.AreaMap[i][x+2], boxLen, locations)
+		for l := 0; l < 7; l++ {
+			//fmt.Printf("%s%s%s\n", box1[l], box2[l], box3[l])
+			fmt.Printf("%s%s\n", box1[l], box2[l])
+		}
+		/*
+			fmt.Printf("%s\u2503%s   %s\u2503%s   %s\u2503%s\n", spacer, spacer, spacer, spacer, spacer, spacer)
+			fmt.Printf("%s   %s   %s\n", box1[0], box2[0], box3[0])
+			fmt.Printf("%s   %s   %s\n", box1[1], box2[1], box3[1])
+			fmt.Printf("%s\u2501\u2501\u25b6%s\u2501\u2513 %s\n", box1[2], box2[2], box3[2])
+			fmt.Printf("%s   %s\u25c4\u251B %s\n", box1[3], box2[3], box3[3])
+			fmt.Printf("%s   %s   %s\n", box1[4], box2[4], box3[4])
+			fmt.Printf("%s\u25B2%s   %s\u2503%s   %s\u2503%s\n", spacer, spacer, spacer, spacer, spacer, spacer)
+		*/
 	}
 }
 
@@ -202,7 +237,6 @@ func surroundings(area int, locations []string, objects []string) (text []string
 	//	ifoa=30thenge(40)=30:ge$(40)="eine tuer im sueden"
 	//fmt.Printf("Ich bin %s\n", locations[area-1])
 	//var text []string
-	text = append(text, fmt.Sprintf("%sArea: %d [N:%d,S:%d,O:%d,W:%d]", config.WHITE, area, config.Areas[area][0], config.Areas[area][1], config.Areas[area][2], config.Areas[area][3]))
 	text = append(text, fmt.Sprintf("%sIch bin %s", config.YELLOW, locations[area-1]))
 	//appendText(&text, fmt.Sprintf("Ich bin %s", locations[area-1]), yellow)
 	var items []string
@@ -228,6 +262,22 @@ func surroundings(area int, locations []string, objects []string) (text []string
 		}
 		text = append(text, config.NEUTRAL)
 	}
+	var directions []string
+	for d := 0; d < 4; d++ {
+		if config.Areas[area][d] != 0 {
+			switch d {
+			case 0: // N
+				directions = append(directions, "Norden")
+			case 1: // S
+				directions = append(directions, "Süden")
+			case 2: // O
+				directions = append(directions, "Osten")
+			case 3: // W
+				directions = append(directions, "Westen")
+			}
+		}
+	}
+	text = append(text, fmt.Sprintf("%sRaum: %d, Richtungen: %s", config.WHITE, area, strings.Join(directions, ", ")))
 	printScreen(text)
 	return
 	//appendText(&text, "Ich sehe:", blue)
@@ -321,8 +371,12 @@ func main() {
 	objects := c.Objects
 	c.getConf("locations.yaml")
 	locations := c.Locations
+	c.getConf("map_overwrites.yaml")
+	overwrites := c.Overwrites
+	//fmt.Println(overwrites)
 
-	drawMap(0, 7, locations)
+	//drawMap(0, 7, locations)
+	drawMap(0, 7, locations, overwrites)
 	return
 
 	/*
