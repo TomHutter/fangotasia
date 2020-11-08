@@ -32,6 +32,8 @@ type conf struct {
 	Overwrites []mapOverwrites `yaml:"overwrites"`
 }
 
+var visibleMap [12][10]int
+
 func (c *conf) getConf(filename string) {
 	yamlFile, err := ioutil.ReadFile(filename)
 	if err != nil {
@@ -158,9 +160,9 @@ func drawMap(x, y int, locations []string, overwrites [][]string) {
 	boxLen := getBoxLen(locations)
 	//spacer := strings.Repeat(" ", boxLen/2)
 	for i := y; i < y+4; i++ {
-		box1 := drawBox(config.AreaMap[i][x], boxLen, locations, overwrites)
-		box2 := drawBox(config.AreaMap[i][x+1], boxLen, locations, overwrites)
-		box3 := drawBox(config.AreaMap[i][x+2], boxLen, locations, overwrites)
+		box1 := drawBox(visibleMap[i][x], boxLen, locations, overwrites)
+		box2 := drawBox(visibleMap[i][x+1], boxLen, locations, overwrites)
+		box3 := drawBox(visibleMap[i][x+2], boxLen, locations, overwrites)
 		/*
 			var box2 [7]string
 			if len(overwrites[config.AreaMap[i][x+1]]) > 0 {
@@ -389,9 +391,16 @@ func main() {
 	var overwrites [][]string
 	for _, v := range c.Overwrites {
 		if v.Area < len(overwrites) {
-			for line, val := range v.Content {
-				overwrites[v.Area][line] = strings.TrimSuffix(val, "\n")
+			var dummy []string
+			for _, line := range v.Content {
+				dummy = append(dummy, line)
+				//dummy = append(dummy, strings.TrimSuffix(line, "\n")
 			}
+			overwrites[v.Area] = dummy
+			//overwrites = append(overwrites, dummy)
+			//for line, val := range v.Content {
+			//	overwrites[v.Area][line] = strings.TrimSuffix(val, "\n")
+			//}
 		}
 		if v.Area > len(overwrites) {
 			var dummy = make([][]string, v.Area)
@@ -410,8 +419,16 @@ func main() {
 	//overwrites := c.Overwrites
 	//fmt.Println(overwrites)
 
+	for y := 0; y < 12; y++ {
+		for x := 0; x < 10; x++ {
+			visibleMap[y][x] = config.AreaMap[y][x]
+		}
+	}
+	visibleMap[9][2] = 53
+	visibleMap[9][3] = 31
+	visibleMap[10][2] = 54
 	//drawMap(0, 7, locations)
-	drawMap(0, 7, locations, overwrites)
+	drawMap(1, 7, locations, overwrites)
 	//drawMap(10, 0, locations, overwrites)
 	return
 
