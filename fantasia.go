@@ -73,7 +73,7 @@ func getBoxLen(locations []string) int {
 	return boxLen + 4 // one blank and border left and right
 }
 
-func drawBox(area int, boxLen int, locations []string) (box [7]string) {
+func drawBox(area int, boxLen int, locations []string, overwrites [][]string) (box [7]string) {
 	// draw emty field, if area == 0
 	if area == 0 {
 		// boxlen + left an right connection
@@ -81,6 +81,15 @@ func drawBox(area int, boxLen int, locations []string) (box [7]string) {
 		for l := 0; l < 7; l++ {
 			box[l] = fmt.Sprintf("%s", spacer)
 		}
+		return
+	}
+	// we have an overwrite for this box?
+	if len(overwrites) >= area && len(overwrites[area]) > 0 {
+		var dummy [7]string
+		for i, v := range overwrites[area] {
+			dummy[i] = v
+		}
+		box = dummy
 		return
 	}
 	var leftCon, rightCon, upperCon, topCon, lowerCon, bottomCon string
@@ -139,7 +148,7 @@ func drawBox(area int, boxLen int, locations []string) (box [7]string) {
 	return
 }
 
-func drawMap(x, y int, locations []string, overwrites []mapOverwrites) {
+func drawMap(x, y int, locations []string, overwrites [][]string) {
 	if x > 7 {
 		x = 7
 	}
@@ -149,16 +158,20 @@ func drawMap(x, y int, locations []string, overwrites []mapOverwrites) {
 	boxLen := getBoxLen(locations)
 	//spacer := strings.Repeat(" ", boxLen/2)
 	for i := y; i < y+4; i++ {
-		box1 := drawBox(config.AreaMap[i][x], boxLen, locations)
-		var box2 [7]string
-		if config.AreaMap[i][x+1] == 7 {
-			box2 = overwrites[0].Content
-		} else if config.AreaMap[i][x+1] == 8 {
-			box2 = overwrites[1].Content
-		} else {
-			box2 = drawBox(config.AreaMap[i][x+1], boxLen, locations)
-		}
-		//box3 := drawBox(config.AreaMap[i][x+2], boxLen, locations)
+		box1 := drawBox(config.AreaMap[i][x], boxLen, locations, overwrites)
+		box2 := drawBox(config.AreaMap[i][x+1], boxLen, locations, overwrites)
+		/*
+			var box2 [7]string
+			if len(overwrites[config.AreaMap[i][x+1]]) > 0 {
+				box2 = overwrites[config.AreaMap[i][x+1]]
+			}
+			} else if config.AreaMap[i][x+1] == 8 {
+				box2 = overwrites[1].Content
+			} else {
+				box2 = drawBox(config.AreaMap[i][x+1], boxLen, locations)
+			}
+			//box3 := drawBox(config.AreaMap[i][x+2], boxLen, locations)
+		*/
 		for l := 0; l < 7; l++ {
 			//fmt.Printf("%s%s%s\n", box1[l], box2[l], box3[l])
 			fmt.Printf("%s%s\n", box1[l], box2[l])
@@ -372,7 +385,28 @@ func main() {
 	c.getConf("locations.yaml")
 	locations := c.Locations
 	c.getConf("map_overwrites.yaml")
-	overwrites := c.Overwrites
+	var overwrites [][]string
+	for _, v := range c.Overwrites {
+		if v.Area < len(overwrites) {
+			for line, val := range v.Content {
+				overwrites[v.Area][line] = strings.TrimSuffix(val, "\n")
+			}
+		}
+		if v.Area > len(overwrites) {
+			var dummy = make([][]string, v.Area)
+			copy(dummy, overwrites)
+			overwrites = dummy
+		}
+		if v.Area == len(overwrites) {
+			var dummy []string
+			for _, line := range v.Content {
+				dummy = append(dummy, line)
+				//dummy = append(dummy, strings.TrimSuffix(line, "\n")
+			}
+			overwrites = append(overwrites, dummy)
+		}
+	}
+	//overwrites := c.Overwrites
 	//fmt.Println(overwrites)
 
 	//drawMap(0, 7, locations)
