@@ -34,6 +34,71 @@ type conf struct {
 
 var visibleMap [12][10]int
 
+var objects []string
+var locations []string
+var overwrites [][7]string
+
+func getMapOverwrites() (overwrites [][7]string) {
+	var c conf
+	c.getConf("map_overwrites.yaml")
+	for _, v := range c.Overwrites {
+		// overwrites is already large enough to address v.Area
+		if v.Area < len(overwrites) {
+			var dummy [7]string
+			for i, line := range v.Content {
+				dummy[i] = line
+			}
+			overwrites[v.Area] = dummy
+		}
+		// overwrites needs expansion to address v.Area
+		if v.Area > len(overwrites) {
+			var dummy = make([][7]string, v.Area)
+			copy(dummy, overwrites)
+			overwrites = dummy
+		}
+		if v.Area == len(overwrites) {
+			var dummy [7]string
+			for i, line := range v.Content {
+				dummy[i] = line
+			}
+			overwrites = append(overwrites, dummy)
+		}
+	}
+	return
+}
+
+func initVisibleAreas() {
+	// set all areas to invisible
+	for y := 0; y < 12; y++ {
+		for x := 0; x < 10; x++ {
+			visibleMap[y][x] = 0
+		}
+	}
+	// show first area
+	visibleMap[11][0] = 1
+}
+
+func areaVisible(area int) bool {
+	coordinates := config.AreaCoordinates[area]
+	return visibleMap[coordinates.Y][coordinates.X] != 0
+}
+
+func revealArea(area int) {
+	coordinates := config.AreaCoordinates[area]
+	visibleMap[coordinates.Y][coordinates.X] = area
+	switch area {
+	//case 15:
+	//	visibleMap[9][2] = 52
+	case 31:
+		if areaVisible(15) {
+			visibleMap[9][2] = 54
+		} else {
+			visibleMap[9][2] = 53
+		}
+		visibleMap[10][2] = 55
+	}
+}
+
 func (c *conf) getConf(filename string) {
 	yamlFile, err := ioutil.ReadFile(filename)
 	if err != nil {
@@ -75,7 +140,7 @@ func getBoxLen(locations []string) int {
 	return boxLen + 2 // one blank and border left and right
 }
 
-func drawBox(area int, boxLen int, locations []string, overwrites [][]string) (box [7]string) {
+func drawBox(area int, boxLen int) (box [7]string) {
 	// draw emty field, if area == 0
 	if area == 0 {
 		// boxlen + left an right connection
@@ -150,19 +215,47 @@ func drawBox(area int, boxLen int, locations []string, overwrites [][]string) (b
 	return
 }
 
-func drawMap(x, y int, locations []string, overwrites [][]string) {
+func drawMap(area int) (text []string) {
+	coordinates := config.AreaCoordinates[area]
+	x := coordinates.X
+	y := coordinates.Y
+	// max x = 9, don't go further east than 8
 	if x > 8 {
 		x = 8
 	}
-	if y > 8 {
-		y = 8
-	}
+	// max y = 11, don't go further south than 8
+	//if y > 8 {
+	//	y = 8
+	//}
 	boxLen := getBoxLen(locations)
 	//spacer := strings.Repeat(" ", boxLen/2)
-	for i := y; i < y+4; i++ {
-		box1 := drawBox(visibleMap[i][x], boxLen, locations, overwrites)
-		box2 := drawBox(visibleMap[i][x+1], boxLen, locations, overwrites)
-		box3 := drawBox(visibleMap[i][x+2], boxLen, locations, overwrites)
+	var box1 [7]string
+	var box2 [7]string
+	var box3 [7]string
+	for i := y - 2; i < y+2; i++ {
+		// outside y range => draw empty boxes
+		if i < 0 || i > 11 {
+			box1 = drawBox(0, boxLen)
+			box2 = drawBox(0, boxLen)
+			box3 = drawBox(0, boxLen)
+		} else {
+			if x == 0 {
+				box1 = drawBox(0, boxLen)
+			} else {
+				v := visibleMap[i][x-1]
+				//if len(overwrites[v]) > 0 {
+				//	box1 = overwrites[v]
+				//} else {
+				box1 = drawBox(v, boxLen)
+				//}
+			}
+			box2 = drawBox(visibleMap[i][x], boxLen)
+			if x == 9 {
+				box1 = drawBox(0, boxLen)
+			} else {
+				box3 = drawBox(visibleMap[i][x+1], boxLen)
+			}
+		}
 		/*
 			var box2 [7]string
 			if len(overwrites[config.AreaMap[i][x+1]]) > 0 {
@@ -176,7 +269,13 @@ func drawMap(x, y int, locations []string, overwrites [][]string) {
 			//box3 := drawBox(config.AreaMap[i][x+2], boxLen, locations)
 		*/
 		for l := 0; l < 7; l++ {
-			fmt.Printf("%s%s%s\n", box1[l], box2[l], box3[l])
+			if i == y {
+				text = append(text, fmt.Sprintf("%s%s%s%s%s%s", config.NEUTRAL, box1[l],
+					config.YELLOW, box2[l],
+					config.NEUTRAL, box3[l]))
+			} else {
+				text = append(text, fmt.Sprintf("%s%s%s%s", config.NEUTRAL, box1[l], box2[l], box3[l]))
+			}
 			//fmt.Printf("%s%s\n", box1[l], box2[l])
 		}
 		/*
@@ -189,6 +288,8 @@ func drawMap(x, y int, locations []string, overwrites [][]string) {
 			fmt.Printf("%s\u25B2%s   %s\u2503%s   %s\u2503%s\n", spacer, spacer, spacer, spacer, spacer, spacer)
 		*/
 	}
+	printScreen(text)
+	return
 }
 
 // Setup keyboard scanning
@@ -233,7 +334,7 @@ func flash(text []string, err string) {
 	flashText := make([]string, len(text))
 	copy(flashText, text)
 	flashText = append(text, "")
-	flashText = append(text, fmt.Sprintf("%s%s", config.RED, err))
+	flashText = append(text, fmt.Sprintf("%s%s%s", config.RED, err, config.NEUTRAL))
 	printScreen(flashText)
 	time.Sleep(2 * time.Second)
 	printScreen(text)
@@ -341,7 +442,8 @@ func move(area int, direction int, text []string) int {
 	//if direction == 0 {
 	//	return 0, "Ich brauche eine Richtung."
 	//}
-	if config.Areas[area][direction] == 0 {
+	newArea := config.Areas[area][direction]
+	if newArea == 0 {
 		flash(text, "In diese Richtung führt kein Weg.")
 		return area
 	}
@@ -350,7 +452,8 @@ func move(area int, direction int, text []string) int {
 		flash(text, "Die Tür ist versperrt.")
 		return area
 	}
-	return config.Areas[area][direction]
+	revealArea(newArea)
+	return newArea
 }
 
 func useDoor() {
@@ -379,58 +482,33 @@ func use(object int, area int) {
 
 func main() {
 	var c conf
+	visibleMap[11][0] = 1
+	//var visibleAreas [51]int
+	//initVisibleAreas()
 	//c.getConf("verbs.yaml")
 	//verbs := c.Verbs
 	//c.getConf("nouns.yaml")
 	//nouns := c.Nouns
 	c.getConf("objects.yaml")
-	objects := c.Objects
+	objects = c.Objects
 	c.getConf("locations.yaml")
-	locations := c.Locations
-	c.getConf("map_overwrites.yaml")
-	var overwrites [][]string
-	for _, v := range c.Overwrites {
-		if v.Area < len(overwrites) {
-			var dummy []string
-			for _, line := range v.Content {
-				dummy = append(dummy, line)
-				//dummy = append(dummy, strings.TrimSuffix(line, "\n")
-			}
-			overwrites[v.Area] = dummy
-			//overwrites = append(overwrites, dummy)
-			//for line, val := range v.Content {
-			//	overwrites[v.Area][line] = strings.TrimSuffix(val, "\n")
-			//}
-		}
-		if v.Area > len(overwrites) {
-			var dummy = make([][]string, v.Area)
-			copy(dummy, overwrites)
-			overwrites = dummy
-		}
-		if v.Area == len(overwrites) {
-			var dummy []string
-			for _, line := range v.Content {
-				dummy = append(dummy, line)
-				//dummy = append(dummy, strings.TrimSuffix(line, "\n")
-			}
-			overwrites = append(overwrites, dummy)
-		}
-	}
-	//overwrites := c.Overwrites
-	//fmt.Println(overwrites)
+	locations = c.Locations
+	//overwrites = getMapOverwrites()
 
-	for y := 0; y < 12; y++ {
-		for x := 0; x < 10; x++ {
-			visibleMap[y][x] = config.AreaMap[y][x]
+	/*
+		for y := 0; y < 12; y++ {
+			for x := 0; x < 10; x++ {
+				visibleMap[y][x] = config.AreaMap[y][x]
+			}
 		}
-	}
-	visibleMap[9][2] = 53
-	visibleMap[9][3] = 31
-	visibleMap[10][2] = 54
+	*/
+	//visibleMap[9][2] = 53
+	//visibleMap[9][3] = 31
+	//visibleMap[10][2] = 54
 	//drawMap(0, 7, locations)
-	drawMap(1, 7, locations, overwrites)
+	//visibleMap[9][2] = 53
 	//drawMap(10, 0, locations, overwrites)
-	return
+	//return
 
 	/*
 		box1 := drawBox(1, boxLen, locations)
@@ -456,7 +534,8 @@ func main() {
 	var dir rune
 	var direction int
 	var text []string
-	text = surroundings(area, locations, objects)
+	//text = surroundings(area, locations, objects)
+	text = drawMap(1)
 	for {
 		dir = scanner()
 		switch int(dir) {
@@ -471,7 +550,8 @@ func main() {
 		}
 
 		area = move(area, direction, text)
-		text = surroundings(area, locations, objects)
+		drawMap(area)
+		//text = surroundings(area, locations, objects)
 	}
 	//scanner()
 
