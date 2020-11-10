@@ -23,8 +23,8 @@ const (
 	BC  = "\u2533"
 	AR  = "\u2BC8"
 	AL  = "\u2BC7"
-	AT  = "\u2BC5"
-	AB  = "\u2BC6"
+	AU  = "\u2BC5"
+	AD  = "\u2BC6"
 )
 
 var Areas = [52][4]int{

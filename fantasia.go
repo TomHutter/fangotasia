@@ -92,6 +92,12 @@ func revealArea(area int) {
 	coordinates := config.AreaCoordinates[area]
 	visibleMap[coordinates.Y][coordinates.X] = area
 	switch area {
+	case 5:
+		if areaVisible(36) {
+			visibleMap[11][4] = 57
+			visibleMap[11][5] = 58
+			visibleMap[5][5] = 59
+		}
 	case 6:
 		if areaVisible(7) {
 			visibleMap[9][1] = 52
@@ -117,6 +123,44 @@ func revealArea(area int) {
 		} else {
 			visibleMap[9][2] = 56
 		}
+	case 32:
+		if areaVisible(37) {
+			visibleMap[4][5] = 60
+		} else {
+			visibleMap[4][5] = 53
+		}
+		if visibleMap[11][5] != 0 {
+			visibleMap[5][5] = 59
+		} else {
+			visibleMap[5][5] = 53
+		}
+	case 37:
+		visibleMap[4][5] = 60
+		if areaVisible(40) {
+			visibleMap[3][6] = 61
+			visibleMap[4][6] = 62
+		}
+	case 38:
+		if areaVisible(40) {
+			visibleMap[5][6] = 63
+			visibleMap[6][6] = 64
+		} else {
+			visibleMap[5][6] = 0
+		}
+	case 39:
+		if areaVisible(40) {
+			visibleMap[4][7] = 65
+			visibleMap[5][7] = 64
+		} else {
+			visibleMap[4][7] = 0
+		}
+	case 40:
+		visibleMap[3][6] = 61
+		visibleMap[4][6] = 62
+		visibleMap[5][6] = 63
+		visibleMap[6][6] = 64
+		visibleMap[4][7] = 65
+		visibleMap[5][7] = 64
 	}
 }
 
@@ -241,7 +285,7 @@ func drawMap(area int) (text []string) {
 	boxLen := getBoxLen(locations)
 	//spacer := strings.Repeat(" ", boxLen/2)
 	var boxes [5][3]string
-	for i := 0; i < 5; i++ {
+	for i := 0; i < 6; i++ {
 		iy := y + i - 2
 		// outside y range => draw empty boxes
 		if iy < 0 || iy > 11 {
