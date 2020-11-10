@@ -23,19 +23,24 @@ type mapOverwrites struct {
 	Content [7]string
 }
 
+type places struct {
+	Long  string
+	Short string
+}
+
 type conf struct {
 	Verbs      []string        `yaml:"verbs"`
 	Nouns      []string        `yaml:"nouns"`
 	Objects    []string        `yaml:"objects"`
 	Answers    []string        `yaml:"answers"`
-	Locations  []string        `yaml:"locations"`
+	Locations  []places        `yaml:"locations"`
 	Overwrites []mapOverwrites `yaml:"overwrites"`
 }
 
 var visibleMap [12][10]int
 
 var objects []string
-var locations []string
+var locations []places
 var overwrites [][7]string
 
 func getMapOverwrites() (overwrites [][7]string) {
@@ -87,8 +92,8 @@ func revealArea(area int) {
 	coordinates := config.AreaCoordinates[area]
 	visibleMap[coordinates.Y][coordinates.X] = area
 	switch area {
-	//case 15:
-	//	visibleMap[9][2] = 52
+	case 15:
+		visibleMap[9][2] = 52
 	case 31:
 		if areaVisible(15) {
 			visibleMap[9][2] = 54
@@ -125,10 +130,10 @@ func printScreen(text []string) {
 	fmt.Println(block)
 }
 
-func getBoxLen(locations []string) int {
+func getBoxLen(locations []places) int {
 	boxLen := 0
 	for _, v := range locations {
-		lineLen := len([]rune(strings.Split(v, "\n")[0]))
+		lineLen := len([]rune(strings.Split(v.Short, "\n")[0]))
 		if lineLen > boxLen {
 			boxLen = lineLen
 		}
@@ -151,7 +156,7 @@ func drawBox(area int, boxLen int) (box [7]string) {
 		return
 	}
 	// we have an overwrite for this box?
-	if len(overwrites) >= area && len(overwrites[area]) > 0 {
+	if len(overwrites) >= area && len(overwrites[area][0]) > 0 {
 		var dummy [7]string
 		for i, v := range overwrites[area] {
 			dummy[i] = v
@@ -161,7 +166,7 @@ func drawBox(area int, boxLen int) (box [7]string) {
 	}
 	var leftCon, rightCon, upperCon, topCon, lowerCon, bottomCon string
 	// get first line of area from locations
-	text := strings.Split(locations[area-1], "\n")[0]
+	text := strings.Split(locations[area-1].Short, "\n")[0]
 	textLen := len([]rune(text)) + 2 // two space left and right
 	leftSpacer := strings.Repeat(" ", (boxLen-textLen)/2)
 	conSpacer := strings.Repeat(" ", (boxLen-1)/2)
@@ -229,31 +234,35 @@ func drawMap(area int) (text []string) {
 	//}
 	boxLen := getBoxLen(locations)
 	//spacer := strings.Repeat(" ", boxLen/2)
-	var box1 [7]string
-	var box2 [7]string
-	var box3 [7]string
-	for i := y - 2; i < y+2; i++ {
+	var boxes [5][7]string
+	for i := 0; i < 5; i++ {
+		iy := y + i - 2
 		// outside y range => draw empty boxes
-		if i < 0 || i > 11 {
-			box1 = drawBox(0, boxLen)
-			box2 = drawBox(0, boxLen)
-			box3 = drawBox(0, boxLen)
-		} else {
-			if x == 0 {
-				box1 = drawBox(0, boxLen)
-			} else {
-				v := visibleMap[i][x-1]
-				//if len(overwrites[v]) > 0 {
-				//	box1 = overwrites[v]
-				//} else {
-				box1 = drawBox(v, boxLen)
-				//}
+		if iy < 0 || iy > 11 {
+			for j := 0; j < 5; j++ {
+				boxes[j] = drawBox(0, boxLen)
 			}
-			box2 = drawBox(visibleMap[i][x], boxLen)
-			if x == 9 {
-				box1 = drawBox(0, boxLen)
-			} else {
-				box3 = drawBox(visibleMap[i][x+1], boxLen)
+		} else {
+			for j := 0; j < 5; j++ {
+				//for j := x - 2; j < x+3; j++ {
+				ix := x + j - 2
+				if ix < 0 || ix > 9 {
+					boxes[j] = drawBox(0, boxLen)
+				} else {
+					v := visibleMap[iy][ix]
+					//if len(overwrites[v]) > 0 {
+					//	box1 = overwrites[v]
+					//} else {
+					boxes[j] = drawBox(v, boxLen)
+					//}
+				}
+				/*
+					box2 = drawBox(visibleMap[i][x], boxLen)
+					if x == 9 {
+						box1 = drawBox(0, boxLen)
+					} else {
+						box3 = drawBox(visibleMap[i][x+1], boxLen)
+				*/
 			}
 		}
 		/*
@@ -269,12 +278,14 @@ func drawMap(area int) (text []string) {
 			//box3 := drawBox(config.AreaMap[i][x+2], boxLen, locations)
 		*/
 		for l := 0; l < 7; l++ {
-			if i == y {
-				text = append(text, fmt.Sprintf("%s%s%s%s%s%s", config.NEUTRAL, box1[l],
-					config.YELLOW, box2[l],
-					config.NEUTRAL, box3[l]))
+			if iy == y {
+				text = append(text, fmt.Sprintf("%s%s%s%s%s%s%s%s", config.NEUTRAL, boxes[0][l], boxes[1][l],
+					config.YELLOW, boxes[2][l],
+					config.NEUTRAL, boxes[3][l], boxes[4][l]))
 			} else {
-				text = append(text, fmt.Sprintf("%s%s%s%s", config.NEUTRAL, box1[l], box2[l], box3[l]))
+				text = append(text, fmt.Sprintf("%s%s%s%s%s%s", config.NEUTRAL, boxes[0][l],
+					boxes[1][l], boxes[2][l],
+					boxes[3][l], boxes[4][l]))
 			}
 			//fmt.Printf("%s%s\n", box1[l], box2[l])
 		}
@@ -482,7 +493,16 @@ func use(object int, area int) {
 
 func main() {
 	var c conf
-	visibleMap[11][0] = 1
+	/*
+		visibleMap[11][1] = 2
+		visibleMap[11][2] = 3
+		visibleMap[10][1] = 8
+		visibleMap[10][2] = 9
+		visibleMap[9][0] = 6
+		visibleMap[9][1] = 7
+		visibleMap[9][3] = 52
+	*/
+
 	//var visibleAreas [51]int
 	//initVisibleAreas()
 	//c.getConf("verbs.yaml")
@@ -493,7 +513,7 @@ func main() {
 	objects = c.Objects
 	c.getConf("locations.yaml")
 	locations = c.Locations
-	//overwrites = getMapOverwrites()
+	overwrites = getMapOverwrites()
 
 	/*
 		for y := 0; y < 12; y++ {
@@ -502,6 +522,7 @@ func main() {
 			}
 		}
 	*/
+	//visibleMap[11][0] = 1
 	//visibleMap[9][2] = 53
 	//visibleMap[9][3] = 31
 	//visibleMap[10][2] = 54
@@ -531,11 +552,12 @@ func main() {
 	prelude()
 	scanner()
 	area := 1
+	revealArea(area)
 	var dir rune
 	var direction int
 	var text []string
 	//text = surroundings(area, locations, objects)
-	text = drawMap(1)
+	text = drawMap(area)
 	for {
 		dir = scanner()
 		switch int(dir) {
@@ -550,7 +572,7 @@ func main() {
 		}
 
 		area = move(area, direction, text)
-		drawMap(area)
+		text = drawMap(area)
 		//text = surroundings(area, locations, objects)
 	}
 	//scanner()

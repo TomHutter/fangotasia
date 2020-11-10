@@ -1,52 +1,103 @@
 locations:
-  - "vor einem riesigem Torbogen."
-  - "auf einer Blumenwiese."
-  - "an einem Seerosenteich."
-  - "in einer trostlosen Einöde."
-  - "in einem nebligem Moor."
-  - "in einer feenhaften Grotte."
-  - "an einer zerklüfteten Felswand."
-  - "in einem lichten Auwald."
-  - "auf einer blühenden Heide."
-  - "in einer verdorrten Steppe."
-  - "auf dem Versammlungsplatz der Gnome."
-  - "in der Waffenkammer der Gnome."
-  - "in einer Tropfsteinhöhle."
-  - "am Fuß eines Berges."
-  - "in der Schatzkammer der Elfen."
-  - "auf einer Bergwiese."
-  - "an einer silbernen Quelle."
-  - "in einer Schlucht mit vielen Farnen."
-  - "in einer Bärenhöhle."
-  - "auf einer schwankenden Hängebrücke."
-  - "an einem Wiesenhang."
-  - "in einer Rosenlaube."
-  - "in einem Kräutergarten."
-  - "auf einem verschlungenen Weg."
-  - "an einer verfallenen Burgruine."
-  - "in einem sonnigen Obsthain."
-  - "in einem verwilderten Park."
-  - "in einer finsteren Hexenküche."
-  - "im Hof einer verlassenen Burg."
-  - "in einem finsteren Burgverlies."
-  - "in der Krone eines Baumes.\n++Ich kann nicht weit sehen.++"
-  - "in einem feuchten Laubwald."
-  - "im Reich der Feen."
-  - "in einer grauen Steinwüste."
-  - "an einem breiten Fluss.\n++Am anderen Ufer bewegt sich etwas.++"
-  - "auf einem dreckigem Pfad."
-  - "in einem Dornengestrüpp.\n++Ich finde mich nicht mehr zurecht.++"
-  - "in einem Dornengestrüpp.\n++Ich finde mich nicht mehr zurecht.++"
-  - "in einem Dornengestrüpp.\n++Ich finde mich nicht mehr zurecht.++"
-  - "auf einem Hohlweg."
-  - "in einem unheimlichen Wald.\n++Man sieht kaum einen Weg. Ob hier ein\nDrache haust?!++"
-  - "in einem unheimlichen Wald.\n++Man sieht kaum einen Weg. Ob hier ein\nDrache haust?!++"
-  - "in einem unheimlichen Wald.\n++Man sieht kaum einen Weg. Ob hier ein\nDrache haust?!++"
-  - "in einem unheimlichen Wald.\n++Man sieht kaum einen Weg. Ob hier ein\nDrache haust?!++"
-  - "in einem unheimlichen Wald.\n++Man sieht kaum einen Weg. Ob hier ein\nDrache haust?!++"
-  - "in einem unheimlichen Wald.\n++Man sieht kaum einen Weg. Ob hier ein\nDrache haust?!++"
-  - "in einem unheimlichen Wald.\n++Man sieht kaum einen Weg. Ob hier ein\nDrache haust?!++"
-  - "in einem unheimlichen Wald.\n++Man sieht kaum einen Weg. Ob hier ein\nDrache haust?!++"
-  - "in einem unheimlichen Wald.\n++Man sieht kaum einen Weg. Ob hier ein\nDrache haust?!++"
-  - "in einem unheimlichen Wald.\n++Man sieht kaum einen Weg. Ob hier ein\nDrache haust?!++"
-  - "auf einer unzugänglichen Waldlichtung."
+  - long: vor einem riesigem Torbogen.
+    short: Torbogen
+  - long: auf einer Blumenwiese.
+    short: Blumenwiese
+  - long: an einem Seerosenteich.
+    short: Seerosenteich
+  - long: in einer trostlosen Einöde.
+    short: Einöde
+  - long: in einem nebligem Moor.
+    short: Moor
+  - long: in einer feenhaften Grotte.
+    short: Grotte
+  - long: an einer zerklüfteten Felswand.
+    short: Felswand
+  - long: in einem lichten Auwald.
+    short: Auwald
+  - long: auf einer blühenden Heide.
+    short: Heide
+  - long: in einer verdorrten Steppe.
+    short: Steppe
+  - long: auf dem Versammlungsplatz der Gnome.
+    short: Versammlungsplatz
+  - long: in der Waffenkammer der Gnome.
+    short: Waffenkammer
+  - long: in einer Tropfsteinhöhle.
+    short: Tropfsteinhöhle
+  - long: am Fuß eines Berges.
+    short: Berg
+  - long: in der Schatzkammer der Elfen.
+    short: Schatzkammer
+  - long: auf einer Bergwiese.
+    short: Bergwiese
+  - long: an einer silbernen Quelle.
+    short: Quelle
+  - long: in einer Schlucht mit vielen Farnen.
+    short: Schlucht
+  - long: in einer Bärenhöhle.
+    short: Bärenhöhle
+  - long: auf einer schwankenden Hängebrücke.
+    short: Hängebrücke
+  - long: an einem Wiesenhang.
+    short: Wiesenhang
+  - long: in einer Rosenlaube.
+    short: Rosenlaube
+  - long: in einem Kräutergarten.
+    short: Kräutergarten
+  - long: auf einem verschlungenen Weg.
+    short: Weg
+  - long: an einer verfallenen Burgruine.
+    short: Burgruine
+  - long: in einem sonnigen Obsthain.
+    short: Obsthain
+  - long: in einem verwilderten Park.
+    short: Park
+  - long: in einer finsteren Hexenküche.
+    short: Hexenküche
+  - long: im Hof einer verlassenen Burg.
+    short: Burg
+  - long: in einem finsteren Burgverließ.
+    short: Burgverließ
+  - long: in der Krone eines Baumes.\n++Ich kann nicht weit sehen.++
+    short: Baumkrone
+  - long: in einem feuchten Laubwald.
+    short: Laubwald
+  - long: im Reich der Feen.
+    short: Feenreich
+  - long: in einer grauen Steinwüste.
+    short: Steinwüste
+  - long: an einem breiten Fluss.\n++Am anderen Ufer bewegt sich etwas.++
+    short: Fluss
+  - long: auf einem dreckigem Pfad.
+    short: Pfad
+  - long: in einem Dornengestrüpp.\n++Ich finde mich nicht mehr zurecht.++
+    short: Dornengestrüpp
+  - long: in einem Dornengestrüpp.\n++Ich finde mich nicht mehr zurecht.++
+    short: Dornengestrüpp
+  - long: in einem Dornengestrüpp.\n++Ich finde mich nicht mehr zurecht.++
+    short: Dornengestrüpp
+  - long: auf einem Hohlweg.
+    short: Hohlweg
+  - long: in einem unheimlichen Wald.\n++Man sieht kaum einen Weg. Ob hier ein\nDrache haust?!++
+    short: Wald
+  - long: in einem unheimlichen Wald.\n++Man sieht kaum einen Weg. Ob hier ein\nDrache haust?!++
+    short: Wald
+  - long: in einem unheimlichen Wald.\n++Man sieht kaum einen Weg. Ob hier ein\nDrache haust?!++
+    short: Wald
+  - long: in einem unheimlichen Wald.\n++Man sieht kaum einen Weg. Ob hier ein\nDrache haust?!++
+    short: Wald
+  - long: in einem unheimlichen Wald.\n++Man sieht kaum einen Weg. Ob hier ein\nDrache haust?!++
+    short: Wald
+  - long: in einem unheimlichen Wald.\n++Man sieht kaum einen Weg. Ob hier ein\nDrache haust?!++
+    short: Wald
+  - long: in einem unheimlichen Wald.\n++Man sieht kaum einen Weg. Ob hier ein\nDrache haust?!++
+    short: Wald
+  - long: in einem unheimlichen Wald.\n++Man sieht kaum einen Weg. Ob hier ein\nDrache haust?!++
+    short: Wald
+  - long: in einem unheimlichen Wald.\n++Man sieht kaum einen Weg. Ob hier ein\nDrache haust?!++
+    short: Wald
+  - long: in einem unheimlichen Wald.\n++Man sieht kaum einen Weg. Ob hier ein\nDrache haust?!++
+    short: Wald
+  - long: auf einer unzugänglichen Waldlichtung.
+    short: Waldlichtung
