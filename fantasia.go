@@ -20,7 +20,7 @@ var doorOpen = false
 
 type mapOverwrites struct {
 	Area    int
-	Content [7]string
+	Content [3]string
 }
 
 type places struct {
@@ -41,15 +41,15 @@ var visibleMap [12][10]int
 
 var objects []string
 var locations []places
-var overwrites [][7]string
+var overwrites [][3]string
 
-func getMapOverwrites() (overwrites [][7]string) {
+func getMapOverwrites() (overwrites [][3]string) {
 	var c conf
 	c.getConf("map_overwrites.yaml")
 	for _, v := range c.Overwrites {
 		// overwrites is already large enough to address v.Area
 		if v.Area < len(overwrites) {
-			var dummy [7]string
+			var dummy [3]string
 			for i, line := range v.Content {
 				dummy[i] = line
 			}
@@ -57,12 +57,12 @@ func getMapOverwrites() (overwrites [][7]string) {
 		}
 		// overwrites needs expansion to address v.Area
 		if v.Area > len(overwrites) {
-			var dummy = make([][7]string, v.Area)
+			var dummy = make([][3]string, v.Area)
 			copy(dummy, overwrites)
 			overwrites = dummy
 		}
 		if v.Area == len(overwrites) {
-			var dummy [7]string
+			var dummy [3]string
 			for i, line := range v.Content {
 				dummy[i] = line
 			}
@@ -92,15 +92,31 @@ func revealArea(area int) {
 	coordinates := config.AreaCoordinates[area]
 	visibleMap[coordinates.Y][coordinates.X] = area
 	switch area {
+	case 6:
+		if areaVisible(7) {
+			visibleMap[9][1] = 52
+		}
+	case 7:
+		if areaVisible(6) {
+			visibleMap[9][1] = 52
+		}
+	case 9:
+		if areaVisible(31) {
+			visibleMap[10][2] = 54
+		}
 	case 15:
-		visibleMap[9][2] = 52
-	case 31:
-		if areaVisible(15) {
-			visibleMap[9][2] = 54
+		if areaVisible(31) {
+			visibleMap[9][2] = 55
 		} else {
 			visibleMap[9][2] = 53
 		}
-		visibleMap[10][2] = 55
+	case 31:
+		visibleMap[10][2] = 54
+		if areaVisible(15) {
+			visibleMap[9][2] = 55
+		} else {
+			visibleMap[9][2] = 56
+		}
 	}
 }
 
@@ -145,78 +161,68 @@ func getBoxLen(locations []places) int {
 	return boxLen + 2 // one blank and border left and right
 }
 
-func drawBox(area int, boxLen int) (box [7]string) {
+func drawBox(area int, boxLen int) (box [3]string) {
 	// draw emty field, if area == 0
 	if area == 0 {
 		// boxlen + left an right connection
-		spacer := strings.Repeat(" ", boxLen+4)
-		for l := 0; l < 7; l++ {
+		spacer := strings.Repeat(" ", boxLen+2)
+		for l := 0; l < 3; l++ {
 			box[l] = fmt.Sprintf("%s", spacer)
 		}
 		return
 	}
 	// we have an overwrite for this box?
 	if len(overwrites) >= area && len(overwrites[area][0]) > 0 {
-		var dummy [7]string
+		var dummy [3]string
 		for i, v := range overwrites[area] {
 			dummy[i] = v
 		}
 		box = dummy
 		return
 	}
-	var leftCon, rightCon, upperCon, topCon, lowerCon, bottomCon string
+	var leftCon, rightCon, topCon, bottomCon string
 	// get first line of area from locations
 	text := strings.Split(locations[area-1].Short, "\n")[0]
 	textLen := len([]rune(text)) + 2 // two space left and right
 	leftSpacer := strings.Repeat(" ", (boxLen-textLen)/2)
-	conSpacer := strings.Repeat(" ", (boxLen-1)/2)
 	rightSpacer := strings.Repeat(" ", boxLen-len(leftSpacer)-textLen)
-	empty := strings.Repeat(" ", textLen-2)
 	// horizontal line - left/right corner and middle connection element
 	horLine := strings.Repeat(config.HL, (boxLen-3)/2)
 	// can we walk to the north?
 	if config.Areas[area][0] == 0 {
 		// no => draw a hoizontal line
-		upperCon = " "
 		topCon = config.HL
 	} else {
 		// yes => draw a connection to north
-		upperCon = config.VL
 		topCon = config.TC
 	}
 	// can we walk to the south?
 	if config.Areas[area][1] == 0 {
 		// no => draw a hoizontal line
 		bottomCon = config.HL
-		lowerCon = " "
 	} else {
 		// yes => draw a connection to south
 		bottomCon = config.BC
-		lowerCon = config.VL
 	}
 	// can we walk to the east?
 	if config.Areas[area][2] == 0 {
 		// no => draw a vertical line
-		rightCon = fmt.Sprintf("%s  ", config.VL)
+		rightCon = fmt.Sprintf("%s ", config.VL)
 	} else {
 		// yes => draw a connection to west
-		rightCon = fmt.Sprintf("%s%s%s", config.RC, config.HL, config.HL)
+		rightCon = fmt.Sprintf("%s%s", config.RC, config.HL)
 	}
 	// can we walk to the west?
 	if config.Areas[area][3] == 0 {
 		// no => draw a vertical line
-		leftCon = fmt.Sprintf("  %s", config.VL)
+		leftCon = fmt.Sprintf(" %s", config.VL)
 	} else {
 		// yes => draw a connection to west
-		leftCon = fmt.Sprintf("%s%s%s", config.HL, config.HL, config.LC)
+		leftCon = fmt.Sprintf("%s%s", config.HL, config.LC)
 	}
-	box[0] = fmt.Sprintf("  %s%s%s  ", conSpacer, upperCon, conSpacer)
-	box[1] = fmt.Sprintf("  %s%s%s%s%s  ", config.BTL, horLine, topCon, horLine, config.BTR)
-	box[2] = fmt.Sprintf("  %s%s%s%s%s  ", config.VL, leftSpacer, empty, rightSpacer, config.VL)
-	box[3] = fmt.Sprintf("%s%s%s%s%s", leftCon, leftSpacer, text, rightSpacer, rightCon)
-	box[4] = fmt.Sprintf("  %s%s%s%s%s  ", config.VL, leftSpacer, empty, rightSpacer, config.VL)
-	box[5] = fmt.Sprintf("  %s%s%s%s%s  ", config.BBL, horLine, bottomCon, horLine, config.BBR)
-	box[6] = fmt.Sprintf("  %s%s%s  ", conSpacer, lowerCon, conSpacer)
+	box[0] = fmt.Sprintf(" %s%s%s%s%s ", config.BTL, horLine, topCon, horLine, config.BTR)
+	box[1] = fmt.Sprintf("%s%s%s%s%s", leftCon, leftSpacer, text, rightSpacer, rightCon)
+	box[2] = fmt.Sprintf(" %s%s%s%s%s ", config.BBL, horLine, bottomCon, horLine, config.BBR)
 	return
 }
 
@@ -234,7 +240,7 @@ func drawMap(area int) (text []string) {
 	//}
 	boxLen := getBoxLen(locations)
 	//spacer := strings.Repeat(" ", boxLen/2)
-	var boxes [5][7]string
+	var boxes [5][3]string
 	for i := 0; i < 5; i++ {
 		iy := y + i - 2
 		// outside y range => draw empty boxes
@@ -277,7 +283,7 @@ func drawMap(area int) (text []string) {
 			}
 			//box3 := drawBox(config.AreaMap[i][x+2], boxLen, locations)
 		*/
-		for l := 0; l < 7; l++ {
+		for l := 0; l < 3; l++ {
 			if iy == y {
 				text = append(text, fmt.Sprintf("%s%s%s%s%s%s%s%s", config.NEUTRAL, boxes[0][l], boxes[1][l],
 					config.YELLOW, boxes[2][l],

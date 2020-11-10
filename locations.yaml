@@ -57,8 +57,8 @@ locations:
     short: Hexenküche
   - long: im Hof einer verlassenen Burg.
     short: Burg
-  - long: in einem finsteren Burgverließ.
-    short: Burgverließ
+  - long: in einem finsteren Burgverlies.
+    short: Burgverlies
   - long: in der Krone eines Baumes.\n++Ich kann nicht weit sehen.++
     short: Baumkrone
   - long: in einem feuchten Laubwald.
