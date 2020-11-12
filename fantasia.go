@@ -161,6 +161,31 @@ func revealArea(area int) {
 		visibleMap[6][6] = 64
 		visibleMap[4][7] = 65
 		visibleMap[5][7] = 64
+	case 41:
+		if areaVisible(40) {
+			visibleMap[2][6] = 66
+			visibleMap[3][6] = 64
+		} else {
+			visibleMap[3][6] = 0
+		}
+	case 42:
+		if areaVisible(40) {
+			visibleMap[2][7] = 67
+		} else {
+			visibleMap[3][7] = 0
+		}
+	case 43:
+		if areaVisible(40) {
+			visibleMap[1][6] = 68
+		} else {
+			visibleMap[2][6] = 0
+		}
+	case 44:
+		if areaVisible(40) {
+			visibleMap[1][7] = 69
+		} else {
+			visibleMap[1][7] = 0
+		}
 	}
 }
 
@@ -278,12 +303,7 @@ func drawMap(area int) (text []string) {
 	if x > 8 {
 		x = 8
 	}
-	// max y = 11, don't go further south than 8
-	//if y > 8 {
-	//	y = 8
-	//}
 	boxLen := getBoxLen(locations)
-	//spacer := strings.Repeat(" ", boxLen/2)
 	var boxes [5][3]string
 	for i := 0; i < 6; i++ {
 		iy := y + i - 2
@@ -294,39 +314,15 @@ func drawMap(area int) (text []string) {
 			}
 		} else {
 			for j := 0; j < 5; j++ {
-				//for j := x - 2; j < x+3; j++ {
 				ix := x + j - 2
 				if ix < 0 || ix > 9 {
 					boxes[j] = drawBox(0, boxLen)
 				} else {
 					v := visibleMap[iy][ix]
-					//if len(overwrites[v]) > 0 {
-					//	box1 = overwrites[v]
-					//} else {
 					boxes[j] = drawBox(v, boxLen)
-					//}
 				}
-				/*
-					box2 = drawBox(visibleMap[i][x], boxLen)
-					if x == 9 {
-						box1 = drawBox(0, boxLen)
-					} else {
-						box3 = drawBox(visibleMap[i][x+1], boxLen)
-				*/
 			}
 		}
-		/*
-			var box2 [7]string
-			if len(overwrites[config.AreaMap[i][x+1]]) > 0 {
-				box2 = overwrites[config.AreaMap[i][x+1]]
-			}
-			} else if config.AreaMap[i][x+1] == 8 {
-				box2 = overwrites[1].Content
-			} else {
-				box2 = drawBox(config.AreaMap[i][x+1], boxLen, locations)
-			}
-			//box3 := drawBox(config.AreaMap[i][x+2], boxLen, locations)
-		*/
 		for l := 0; l < 3; l++ {
 			if iy == y {
 				text = append(text, fmt.Sprintf("%s%s%s%s%s%s%s%s", config.NEUTRAL, boxes[0][l], boxes[1][l],
@@ -337,19 +333,9 @@ func drawMap(area int) (text []string) {
 					boxes[1][l], boxes[2][l],
 					boxes[3][l], boxes[4][l]))
 			}
-			//fmt.Printf("%s%s\n", box1[l], box2[l])
 		}
-		/*
-			fmt.Printf("%s\u2503%s   %s\u2503%s   %s\u2503%s\n", spacer, spacer, spacer, spacer, spacer, spacer)
-			fmt.Printf("%s   %s   %s\n", box1[0], box2[0], box3[0])
-			fmt.Printf("%s   %s   %s\n", box1[1], box2[1], box3[1])
-			fmt.Printf("%s\u2501\u2501\u25b6%s\u2501\u2513 %s\n", box1[2], box2[2], box3[2])
-			fmt.Printf("%s   %s\u25c4\u251B %s\n", box1[3], box2[3], box3[3])
-			fmt.Printf("%s   %s   %s\n", box1[4], box2[4], box3[4])
-			fmt.Printf("%s\u25B2%s   %s\u2503%s   %s\u2503%s\n", spacer, spacer, spacer, spacer, spacer, spacer)
-		*/
 	}
-	printScreen(text)
+	//printScreen(text)
 	return
 }
 
@@ -401,7 +387,7 @@ func flash(text []string, err string) {
 	printScreen(text)
 }
 
-func surroundings(area int, locations []string, objects []string) (text []string) {
+func surroundings(area int, locations []places, objects []string) (text []string) {
 	if area == 25 {
 		config.ObjectsInArea[40][0] = 25
 		objects[40-9] = "eine Tür im Norden"
@@ -415,7 +401,7 @@ func surroundings(area int, locations []string, objects []string) (text []string
 	//	ifoa=30thenge(40)=30:ge$(40)="eine tuer im sueden"
 	//fmt.Printf("Ich bin %s\n", locations[area-1])
 	//var text []string
-	text = append(text, fmt.Sprintf("%sIch bin %s", config.YELLOW, locations[area-1]))
+	text = append(text, fmt.Sprintf("%sIch bin %s", config.YELLOW, locations[area-1].Long))
 	//appendText(&text, fmt.Sprintf("Ich bin %s", locations[area-1]), yellow)
 	var items []string
 	for i, v := range config.ObjectsInArea {
@@ -456,7 +442,7 @@ func surroundings(area int, locations []string, objects []string) (text []string
 		}
 	}
 	text = append(text, fmt.Sprintf("%sRaum: %d, Richtungen: %s", config.WHITE, area, strings.Join(directions, ", ")))
-	printScreen(text)
+	//printScreen(text)
 	return
 	//appendText(&text, "Ich sehe:", blue)
 	/*if v[1] == area {
@@ -602,12 +588,15 @@ func main() {
 	prelude()
 	scanner()
 	area := 1
+	oldArea := area
 	revealArea(area)
 	var dir rune
 	var direction int
 	var text []string
 	//text = surroundings(area, locations, objects)
 	text = drawMap(area)
+	text = append(text, surroundings(area, locations, objects)...)
+	printScreen(text)
 	for {
 		dir = scanner()
 		switch int(dir) {
@@ -620,9 +609,20 @@ func main() {
 		case 119: // W
 			direction = 3
 		}
-
 		area = move(area, direction, text)
-		text = drawMap(area)
+		// are we lost? (show old area)
+		if !areaVisible(area) {
+			text = drawMap(oldArea)
+			text = append(text, surroundings(oldArea, locations, objects)...)
+			printScreen(text)
+		} else {
+			//text = drawMap(area)
+			//text = surroundings(area, locations, objects)
+			text = drawMap(area)
+			text = append(text, surroundings(area, locations, objects)...)
+			oldArea = area
+			printScreen(text)
+		}
 		//text = surroundings(area, locations, objects)
 	}
 	//scanner()
