@@ -109,75 +109,42 @@ overwrites:
 
   - area: 67
     content:
-    - " ┏━━━━━━━━┻━━━━━━━━┓ "
-    - "━┫      Wald       ┣┓"
-    - " ┗━━━━━━━━┳━━━━━━━━◄┛"
+    - "        ┗━┛          "
+    - "                     "
+    - "          ┏━┓        "
 
   - area: 68
     content:
-    - "┏▶ ━━━━━━━┻━━━━━━━━┓ "
-    - "┗┫      Wald       ┣┓"
+    - " ┏━━━━━━━━┻━━━━━━━━┓ "
+    - "━┫      Wald       ┣┓"
     - " ┗━━━━━━━━┳━━━━━━━━◄┛"
 
   - area: 69
     content:
     - "┏▶ ━━━━━━━┻━━━━━━━━┓ "
+    - "┗┫      Wald       ┣┓"
+    - " ┗━━━━━━━━┳━━━━━━━━◄┛"
+
+  - area: 70
+    content:
+    - "┏▶ ━━━━━━━┻━━━━━━━━┓ "
     - "┗┫      Wald       ┣━"
     - " ┗━━━━━━━━┳━━━━━━━━┛ "
 
-    #- "                      ┃                      "
-    #- "  ┏━━━━━━━━━━━━━━━━━━━┻━━━━━━━━━━━━━━━━━━━┓  "
-    #- "  ┃                                       ┃  "
-    #- "  ┃       an einer silbernen Quelle.      ┣━┓"
-    #- "  ┃                                       ┃◄┛"
-    #- "  ┗━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━┛  "
-    #- "                      ┃                      "
+  - area: 71
+    content:
+    - " ┏━━━━━━━━┻━━━━━━━━┓ "
+    - "━┫      Wald       ┣┓"
+    - " ┗━━━━━ ⯅ ┳━━━━━━━━◄┛"
 
+  - area: 72
+    content:
+    - "┏▶ ━━━━━━━━━━━━━━━━┓ "
+    - "┗┫      Wald       ┣━"
+    - " ┗━━━━━━━━┳━━━━━━━━┛ "
 
-#  - area: 31
-#    content:
-#    - "                                             "
-#    - "━━━━━━━━━━━━━━━━━━━━┓                        "
-#    - "                    ┃                        "
-#    - " eines Baumes.      ┃                        "
-#    - "                    ┃                        "
-#    - "━━━━━━━━━━━━━━━━━━━━┛                        "
-#    - "                                             "
-#
-#    #- "                                             "
-#    #- "  ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓  "
-#    #- "  ┃                                       ┃  "
-#    #- "  ┃       in der Krone eines Baumes.      ┃  "
-#    #- "  ┃                                       ┃  "
-#    #- "  ┗┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛  "
-#    #- "\u2571━━┛                                         "
-#
-#  - area: 52
-#    content:
-#    - "           ┃           "
-#    - "           ┃           "
-#    - "           ┃           "
-#    - "           ┃           "
-#    - "           ┃           "
-#    - "           ┃           "
-#    - "           ┃           "
-#
-#
-#  - area: 56
-#    content:
-#    - "                                             "
-#    - "  ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓  "
-#    - "  ┃                                       ┃  "
-#    - "━▶┃    an einer zerklüfteten Felswand.    ┃  "
-#    - "  ┃                                       ┃  "
-#    - "  ┗━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━┛  "
-#    - "                      ┃                      "
-#    # ┃━┓                                            
-#    # ┃◄┛
-#    # box[0] = fmt.Sprintf(" %s%s%s ", conSpacer, upperCon, conSpacer)
-    # box[1] = fmt.Sprintf(" %s%s%s%s%s ", config.BTL, horLine, topCon, horLine, config.BTR)
-    # box[2] = fmt.Sprintf(" %s%s%s%s%s ", config.VL, leftSpacer, empty, rightSpacer, config.VL)
-    # box[3] = fmt.Sprintf("%s%s%s%s%s", leftCon, leftSpacer, text, rightSpacer, rightCon)
-    # box[4] = fmt.Sprintf(" %s%s%s%s%s ", config.VL, leftSpacer, empty, rightSpacer, config.VL)
-    # box[5] = fmt.Sprintf(" %s%s%s%s%s ", config.BBL, horLine, bottomCon, horLine, config.BBR)
-    # box[6] = fmt.Sprintf(" %s%s%s ", conSpacer, lowerCon, conSpacer)
+  - area: 73
+    content:
+    - " ┏━━━━━━━━━━━━━━━━━┓ "
+    - "━┫      Wald       ┣┓"
+    - " ┗━━━━━━━━┳━━━━━━━━◄┛"

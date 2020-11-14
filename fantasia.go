@@ -162,30 +162,78 @@ func revealArea(area int) {
 		visibleMap[4][7] = 65
 		visibleMap[5][7] = 64
 	case 41:
-		if areaVisible(40) {
+		if areaVisible(51) {
 			visibleMap[2][6] = 66
-			visibleMap[3][6] = 64
-		} else {
-			visibleMap[3][6] = 0
+			if areaVisible(40) {
+				visibleMap[3][6] = 64
+			} else {
+				visibleMap[3][6] = 67
+			}
 		}
 	case 42:
-		if areaVisible(40) {
-			visibleMap[2][7] = 67
+		if areaVisible(51) {
+			visibleMap[2][7] = 68
 		} else {
-			visibleMap[3][7] = 0
+			visibleMap[2][7] = 42
 		}
 	case 43:
-		if areaVisible(40) {
-			visibleMap[1][6] = 68
+		if areaVisible(51) {
+			visibleMap[1][6] = 69
 		} else {
-			visibleMap[2][6] = 0
+			visibleMap[1][6] = 0
 		}
 	case 44:
-		if areaVisible(40) {
-			visibleMap[1][7] = 69
+		if areaVisible(51) {
+			visibleMap[1][7] = 70
 		} else {
 			visibleMap[1][7] = 0
 		}
+	case 45:
+		if areaVisible(51) {
+			visibleMap[1][8] = 71
+			visibleMap[2][8] = 64
+		} else {
+			visibleMap[1][8] = 0
+			visibleMap[2][8] = 0
+		}
+	case 46:
+		if !areaVisible(51) {
+			visibleMap[1][9] = 0
+		}
+	case 47:
+		if areaVisible(51) {
+			visibleMap[0][6] = 72
+		} else {
+			visibleMap[0][6] = 0
+		}
+	case 48:
+		if areaVisible(51) {
+			visibleMap[0][7] = 73
+		} else {
+			visibleMap[0][7] = 0
+		}
+	case 49:
+		if !areaVisible(51) {
+			visibleMap[0][8] = 0
+		}
+	case 50:
+		if !areaVisible(51) {
+			visibleMap[0][9] = 0
+		}
+	case 51:
+		visibleMap[2][6] = 66
+		visibleMap[3][6] = 67
+		visibleMap[2][7] = 68
+		visibleMap[2][7] = 68
+		visibleMap[1][6] = 69
+		visibleMap[1][7] = 70
+		visibleMap[1][8] = 71
+		visibleMap[2][8] = 64
+		visibleMap[0][6] = 72
+		visibleMap[0][7] = 73
+		visibleMap[1][9] = 46
+		visibleMap[0][8] = 49
+		visibleMap[0][9] = 50
 	}
 }
 
@@ -300,9 +348,11 @@ func drawMap(area int) (text []string) {
 	x := coordinates.X
 	y := coordinates.Y
 	// max x = 9, don't go further east than 8
-	if x > 8 {
-		x = 8
-	}
+	/*
+		if x > 8 {
+			x = 8
+		}
+	*/
 	boxLen := getBoxLen(locations)
 	var boxes [5][3]string
 	for i := 0; i < 6; i++ {
@@ -587,7 +637,7 @@ func main() {
 	setupCloseHandler()
 	prelude()
 	scanner()
-	area := 1
+	area := 40
 	oldArea := area
 	revealArea(area)
 	var dir rune
@@ -595,6 +645,7 @@ func main() {
 	var text []string
 	//text = surroundings(area, locations, objects)
 	text = drawMap(area)
+	text = append(text, "\n", "\n", "\n")
 	text = append(text, surroundings(area, locations, objects)...)
 	printScreen(text)
 	for {
@@ -613,12 +664,14 @@ func main() {
 		// are we lost? (show old area)
 		if !areaVisible(area) {
 			text = drawMap(oldArea)
+			text = append(text, "\n", "\n", "\n")
 			text = append(text, surroundings(oldArea, locations, objects)...)
 			printScreen(text)
 		} else {
 			//text = drawMap(area)
 			//text = surroundings(area, locations, objects)
 			text = drawMap(area)
+			text = append(text, "\n", "\n", "\n")
 			text = append(text, surroundings(area, locations, objects)...)
 			oldArea = area
 			printScreen(text)
