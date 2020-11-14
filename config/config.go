@@ -1,15 +1,18 @@
 package config
 
+// Make life more colorful :-)
 const (
 	// https://en.wikipedia.org/wiki/ANSI_escape_code
 	RED     = "\033[01;31m"
 	GREEN   = "\033[01;32m"
 	YELLOW  = "\033[01;33m"
+	CYAN    = "\033[01;96m"
 	BLUE    = "\033[01;34m"
 	WHITE   = "\033[01;97m"
 	NEUTRAL = "\033[0m"
 )
 
+// Runes for creating boxes
 const (
 	BTL = "\u250F"
 	BTR = "\u2513"
@@ -27,6 +30,8 @@ const (
 	AD  = "\u2BC6"
 )
 
+// Areas start at 1 in the original game.
+// Kept it like this to adapt game more easily.
 var Areas = [52][4]int{
 	{}, {0, 0, 2, 0}, {8, 0, 3, 1}, {9, 0, 0, 2}, {10, 0, 5, 0},
 	{11, 0, 0, 4}, {13, 0, 7, 0}, {0, 8, 0, 0}, {7, 2, 9, 0},
@@ -43,6 +48,7 @@ var Areas = [52][4]int{
 	{0, 45, 50, 0}, {0, 46, 0, 49}, {46, 0, 0, 0},
 }
 
+/*
 var AreaMap = [12][10]int{
 	{0, 0, 0, 0, 0, 0, 47, 48, 49, 50},
 	{0, 0, 0, 0, 0, 0, 43, 44, 45, 46},
@@ -57,7 +63,11 @@ var AreaMap = [12][10]int{
 	{0, 8, 9, 10, 11, 12, 0, 0, 0, 0},
 	{1, 2, 3, 4, 5, 0, 0, 0, 0, 0},
 }
+*/
 
+// AreaCoordinates  Array with the coordinates [x,y] for each area
+// in a field [0..11][0..9]
+// Again: First area starts with 1
 var AreaCoordinates = [52]Coordinates{
 	{}, {11, 0}, {11, 1}, {11, 2}, {11, 3}, {11, 4},
 	{9, 0}, {9, 1},
@@ -98,6 +108,7 @@ var MapOverwrite = [52]MapSpecials{
 MapOverwrite[7] = {
 */
 
+// ObjectsInArea contains the coordinates for each object on the map.
 var ObjectsInArea = [45][2]int{
 	{-1, 0}, {}, {}, {}, {}, {}, {}, {}, {},
 	{28, 0}, {29, 0}, {8, 0}, {24, 0}, {2, 0}, {26, 0}, {20, 10}, {19, 0}, {19, 22},

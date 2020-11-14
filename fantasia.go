@@ -45,7 +45,7 @@ var overwrites [][3]string
 
 func getMapOverwrites() (overwrites [][3]string) {
 	var c conf
-	c.getConf("map_overwrites.yaml")
+	c.getConf("config/map_overwrites.yaml")
 	for _, v := range c.Overwrites {
 		// overwrites is already large enough to address v.Area
 		if v.Area < len(overwrites) {
@@ -451,7 +451,19 @@ func surroundings(area int, locations []places, objects []string) (text []string
 	//	ifoa=30thenge(40)=30:ge$(40)="eine tuer im sueden"
 	//fmt.Printf("Ich bin %s\n", locations[area-1])
 	//var text []string
-	text = append(text, fmt.Sprintf("%sIch bin %s", config.YELLOW, locations[area-1].Long))
+	desc := strings.Split(locations[area-1].Long, "\\n")
+	desc0, desc := desc[0], desc[1:]
+	text = append(text, fmt.Sprintf("%sIch bin %s", config.YELLOW, desc0))
+	for _, v := range desc {
+		if strings.Contains(v, "++") {
+			v = strings.ReplaceAll(v, "++", "")
+			text = append(text, fmt.Sprintf("%s%s", config.CYAN, v))
+		} else {
+			text = append(text, fmt.Sprintf("%s%s", config.YELLOW, v))
+		}
+		//text = append(text, v)
+	}
+	text = append(text, config.NEUTRAL)
 	//appendText(&text, fmt.Sprintf("Ich bin %s", locations[area-1]), yellow)
 	var items []string
 	for i, v := range config.ObjectsInArea {
@@ -469,7 +481,7 @@ func surroundings(area int, locations []places, objects []string) (text []string
 		}
 	}
 	if len(items) > 0 {
-		text = append(text, "")
+		//text = append(text, "")
 		text = append(text, fmt.Sprintf("%sIch sehe:", config.BLUE))
 		for _, item := range items {
 			text = append(text, item)
@@ -491,6 +503,7 @@ func surroundings(area int, locations []places, objects []string) (text []string
 			}
 		}
 	}
+	//text = append(text, "")
 	text = append(text, fmt.Sprintf("%sRaum: %d, Richtungen: %s", config.WHITE, area, strings.Join(directions, ", ")))
 	//printScreen(text)
 	return
@@ -595,9 +608,9 @@ func main() {
 	//verbs := c.Verbs
 	//c.getConf("nouns.yaml")
 	//nouns := c.Nouns
-	c.getConf("objects.yaml")
+	c.getConf("config/objects.yaml")
 	objects = c.Objects
-	c.getConf("locations.yaml")
+	c.getConf("config/locations.yaml")
 	locations = c.Locations
 	overwrites = getMapOverwrites()
 
@@ -637,7 +650,7 @@ func main() {
 	setupCloseHandler()
 	prelude()
 	scanner()
-	area := 40
+	area := 35
 	oldArea := area
 	revealArea(area)
 	var dir rune
