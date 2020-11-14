@@ -1,5 +1,39 @@
 package config
 
+import (
+	"io/ioutil"
+	"log"
+	"strings"
+
+	"gopkg.in/yaml.v2"
+)
+
+var Objects []string
+var Locations []places
+var Overwrites [][3]string
+var BoxLen int
+
+// Conf : Struct to read from yaml config files
+type conf struct {
+	Verbs      []string        `yaml:"verbs"`
+	Nouns      []string        `yaml:"nouns"`
+	Objects    []string        `yaml:"objects"`
+	Answers    []string        `yaml:"answers"`
+	Locations  []places        `yaml:"locations"`
+	Overwrites []mapOverwrites `yaml:"overwrites"`
+}
+
+// Places : Contains long and short description of locations.
+type places struct {
+	Long  string
+	Short string
+}
+
+type mapOverwrites struct {
+	Area    int
+	Content [3]string
+}
+
 // Make life more colorful :-)
 const (
 	// https://en.wikipedia.org/wiki/ANSI_escape_code
@@ -115,4 +149,70 @@ var ObjectsInArea = [45][2]int{
 	{18, 0}, {18, 20}, {16, 0}, {13, 0}, {14, 0}, {0, 0}, {0, 26}, {15, 5}, {8, 5},
 	{9, 0}, {11, 0}, {12, 0}, {1, 0}, {1, 0}, {1, 0}, {3, 7}, {4, 0}, {4, 0},
 	{4, 0}, {0, 0}, {0, 0}, {0, 18}, {30, 0}, {33, 10}, {51, 0}, {40, 0}, {51, 47},
+}
+
+// GetConf : Read yaml config files into struct Conf
+func (c *conf) getConf(filename string) {
+	yamlFile, err := ioutil.ReadFile(filename)
+	if err != nil {
+		log.Printf("yamlFile.Get err   #%v ", err)
+	}
+	err = yaml.Unmarshal(yamlFile, c)
+	if err != nil {
+		log.Fatalf("Unmarshal: %v", err)
+	}
+}
+
+func getMapOverwrites() (overwrites [][3]string) {
+	var c conf
+	c.getConf("config/map_overwrites.yaml")
+	for _, v := range c.Overwrites {
+		// overwrites is already large enough to address v.Area
+		if v.Area < len(overwrites) {
+			var dummy [3]string
+			for i, line := range v.Content {
+				dummy[i] = line
+			}
+			overwrites[v.Area] = dummy
+		}
+		// overwrites needs expansion to address v.Area
+		if v.Area > len(overwrites) {
+			var dummy = make([][3]string, v.Area)
+			copy(dummy, overwrites)
+			overwrites = dummy
+		}
+		if v.Area == len(overwrites) {
+			var dummy [3]string
+			for i, line := range v.Content {
+				dummy[i] = line
+			}
+			overwrites = append(overwrites, dummy)
+		}
+	}
+	return
+}
+
+// InitBoxLen : Get min length for boxes to fit all short descriptions of locations
+func InitBoxLen() {
+	BoxLen = 0
+	for _, v := range Locations {
+		lineLen := len([]rune(strings.Split(v.Short, "\n")[0]))
+		if lineLen > BoxLen {
+			BoxLen = lineLen
+		}
+	}
+	// make boxLen odd for middle connection piece
+	if BoxLen%2 == 0 {
+		BoxLen++
+	}
+	BoxLen = BoxLen + 2 // one blank and border left and right
+}
+
+func Init() {
+	var c conf
+	c.getConf("config/objects.yaml")
+	Objects = c.Objects
+	c.getConf("config/locations.yaml")
+	Locations = c.Locations
+	Overwrites = getMapOverwrites()
 }
