@@ -1,31 +1,61 @@
 package actions
 
 import (
-	"bufio"
 	"fantasia/config"
 	"fmt"
-	"os"
+	"reflect"
+	"regexp"
+	"strings"
 )
 
 var inventory []config.Object
 var inUse []config.Object
+var object string
 
-func Parse() {
+type verb config.Verb
+
+//type command struct{}
+
+func Parse(input string) {
+
+	var command string
+	var order verb
+	//var com command
+	//command = {}
+	//var verb, object, subject string
+	//var singleVerbs = []config.Verb{"ende", "schau", "hilfe", "simsalabim", "spring", "o", "w", "n", "s", "verben"}
+
+	re := regexp.MustCompile("\\s+")
+
+	parts := re.Split(input, -1)
+	command = strings.ToLower(parts[0])
+
+	fmt.Println(parts) // ["Have", "a", "great", "day!"]
+	//parts := strings.r  Split(input, )
+	for _, v := range config.Verbs {
+		if v.Name == command {
+			fmt.Printf("Valid verb '%s' found.\n", v.Name)
+			val := reflect.ValueOf(&order).MethodByName(v.Func).Call([]reflect.Value{})
+			fmt.Println(val[0])
+		}
+	}
+
 	/*
-		reader := bufio.NewReader(os.Stdin)
-		for {
-			fmt.Printf("%s> ", config.NEUTRAL)
-			text, _ := reader.ReadString('\n')
-			// convert CRLF to LF
-			text = strings.Replace(text, "\n", "", -1)
-
-			fmt.Println(text)
+		for _, v := range singleVerbs {
+			if v == verb {
+				command = "verben"
+				val := reflect.ValueOf(&verb).MethodByName("verben").Call([]reflect.Value{})
+				fmt.Println(val)
+				return
+				val := reflect.ValueOf(&com).MethodByName("Verben").Call(nil)
+				fmt.Println(val[0])
+				return
+			}
 		}
 	*/
-	scanner := bufio.NewScanner(os.Stdin)
-	for scanner.Scan() {
-		fmt.Println(scanner.Text())
-	}
+	//switch verb {
+	//	case
+	//fmt.Printf("'%s' kenne ich nicht.\nDas Kommando 'Verben' gibt eine Liste aller verfügbaren Verben aus.\n", verb)
 
 	/*
 			279 rem ** kommandoabfrage ************
@@ -181,3 +211,35 @@ func use(object int, area int) {
 		if objectsInArea[object][0] != area
 	*/
 }
+
+func (v *verb) Verbs() (verbs []string) {
+	//func (c *command) Verben() {
+	fmt.Println("Verben, die ich kenne: ")
+	verbs = append(verbs, "Verben, die ich kenne: ")
+	var line []string
+	for i, val := range config.Verbs {
+		if i > 1 && i%10 == 0 {
+			verbs = append(verbs, strings.Join(line, ", "))
+			line = make([]string, 0)
+		}
+		line = append(line, string(val.Name))
+	}
+	verbs = append(verbs, strings.Join(line, ", "))
+	return
+}
+
+func (c *verb) Inventory() (inv []string) {
+	if len(inventory) == 0 {
+		fmt.Println("Ich habe nichts dabei.")
+		inv = append(inv, "Ich habe nichts dabei.")
+		return
+	}
+
+	for _, i := range inventory {
+		inv = append(inv, i.Description.Short)
+	}
+	return
+}
+
+//func (obj object) hit(inv []string) {
+//}

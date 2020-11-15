@@ -12,12 +12,19 @@ var GameObjects []Object
 var Locations []description
 var Overwrites [][3]string
 var Answers []string
-var Verbs []string
+
+type Verb struct {
+	Name   string
+	Func   string
+	Single bool
+}
+
+var Verbs []Verb
 var BoxLen int
 
 // Conf : Struct to read from yaml config files
 type conf struct {
-	Verbs      []string        `yaml:"verbs"`
+	Verbs      []Verb          `yaml:"verbs"`
 	Nouns      []string        `yaml:"nouns"`
 	Objects    []Object        `yaml:"objects"`
 	Answers    []string        `yaml:"answers"`

@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fantasia/actions"
 	"fantasia/config"
 	"fantasia/movement"
 	"fantasia/view"
@@ -112,7 +113,7 @@ func main() {
 	// Setup our Ctrl+C handler
 	setupCloseHandler()
 	prelude()
-	view.Scanner(true)
+	view.Scanner("once: true")
 	area := 1
 	//oldArea := area
 	movement.RevealArea(area)
@@ -124,41 +125,44 @@ func main() {
 	//text = append(text, "\n", "\n", "\n")
 	text = append(text, movement.Surroundings(area)...)
 	//view.Input()
-	view.PrintScreen(text, "und nun? > ")
+	view.PrintScreen(text)
 	//actions.Parse()
-	for {
-		input := view.Scanner()
-		fmt.Printf("\ninput: %s\n", string(input))
-		/*
-			switch int(dir) {
-			case 110: // N
-				direction = 0
-			case 115: // S
-				direction = 1
-			case 111: // O
-				direction = 2
-			case 119: // W
-				direction = 3
-			}
-			area = movement.Move(area, direction, text)
-			// are we lost? (show old area)
-			if !movement.AreaVisible(area) {
-				text = movement.DrawMap(oldArea)
-				//text = append(text, "\n", "\n", "\n")
-				text = append(text, movement.Surroundings(oldArea)...)
-				view.PrintScreen(text)
-			} else {
-				//text = drawMap(area)
-				//text = surroundings(area, locations, objects)
-				text = movement.DrawMap(area)
-				//text = append(text, "\n", "\n", "\n")
-				text = append(text, movement.Surroundings(area)...)
-				oldArea = area
-				view.PrintScreen(text)
-			}
-		*/
-		//text = surroundings(area, locations, objects)
-	}
+	actions.Parse("verben")
+	/*
+		for {
+			//actions.Parse(view.Scanner("prompt: und nun? > "))
+			actions.Parse("verben")
+			//fmt.Printf("\ninput: %s\n", string(input))
+			/*
+				switch int(dir) {
+				case 110: // N
+					direction = 0
+				case 115: // S
+					direction = 1
+				case 111: // O
+					direction = 2
+				case 119: // W
+					direction = 3
+				}
+				area = movement.Move(area, direction, text)
+				// are we lost? (show old area)
+				if !movement.AreaVisible(area) {
+					text = movement.DrawMap(oldArea)
+					//text = append(text, "\n", "\n", "\n")
+					text = append(text, movement.Surroundings(oldArea)...)
+					view.PrintScreen(text)
+				} else {
+					//text = drawMap(area)
+					//text = surroundings(area, locations, objects)
+					text = movement.DrawMap(area)
+					//text = append(text, "\n", "\n", "\n")
+					text = append(text, movement.Surroundings(area)...)
+					oldArea = area
+					view.PrintScreen(text)
+				}
+			//text = surroundings(area, locations, objects)
+		}
+	*/
 	//scanner()
 
 	//surroundings(8, locations, objects)

@@ -1,32 +1,109 @@
 verbs:
-  - gehe
-  - stich
-  - sieh
-  - inventar
-  - save
-  - load
-  - fantasia
-  - ende
-  - wirf
-  - töte
-  - lies
-  - fülle
-  - öffne
-  - benutze
-  - simsalabim
-  - sage
-  - gieße
-  - schieße
-  - füttere
-  - schneide
-  - sperre
-  - hilfe
-  - klettere
-  - schleudere
-  - iss
-  - nimm
-  - verjage
-  - lege
-  - drehe
-  - springe
-  - trinke
+  - name: gehe
+    func: Go
+    single: false
+  - name: stich
+    func: Stab
+    single: false
+  - name: schau
+    func: Look
+    single: true
+  - name: inventar
+    func: Inventory
+    single: true
+  - name: save
+    func: Save
+    single: true
+  - name: load
+    func: Load
+    single: true
+  - name: fantasia
+    func: Fantasia
+    single: true
+  - name: ende
+    func: End
+    single: true
+  - name: wirf
+    func: Throw
+    single: false
+  - name: töte
+    func: Kill
+    single: false
+  - name: lies
+    func: Read
+    single: false
+  - name: fülle
+    func: Fill
+    single: false
+  - name: öffne
+    func: Open
+    single: false
+  - name: benutze
+    func: Use
+    single: false
+  - name: simsalabim
+    func: Simsalabim
+    single: true
+  - name: sage
+    func: Say
+    single: false
+  - name: gieße
+    func: Pour
+    single: false
+  - name: schieße
+    func: Shoot
+    single: false
+  - name: füttere
+    func: Feed
+    single: false
+  - name: schneide
+    func: Cut
+    single: false
+  - name: sperre
+    func: Unlock
+    single: false
+  - name: hilfe
+    func: Help
+    single: true
+  - name: klettere
+    func: Climb
+    single: false
+  - name: schleudere
+    func: Catapult
+    single: false
+  - name: iss
+    func: Eat
+    single: false
+  - name: nimm
+    func: Take
+    single: false
+  - name: verjage
+    func: Chase
+    single: false
+  - name: lege
+    func: Lay
+    single: false
+  - name: drehe
+    func: Turn
+    single: false
+  - name: springe
+    func: Jump
+    single: true
+  - name: trinke
+    func: Drink
+    single: false
+  - name: verben
+    func: Verbs
+    single: true
+  - name: n
+    func: Move
+    single: false
+  - name: s
+    func: Move
+    single: false
+  - name: o
+    func: Move
+    single: false
+  - name: w
+    func: Move
+    single: false

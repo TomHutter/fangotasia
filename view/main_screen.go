@@ -17,9 +17,6 @@ import (
 	"syscall"
 	"time"
 	"unicode/utf8"
-
-	"github.com/gdamore/tcell/v2"
-	"github.com/rivo/tview"
 )
 
 func AppendText(block *[]string, newText string, color ...string) {
@@ -40,16 +37,14 @@ func Flash(text []string, err string) {
 	PrintScreen(text)
 }
 
-func PrintScreen(text []string, input ...string) {
+func PrintScreen(text []string) {
 	// clear screen
 	fmt.Print("\033[H\033[2J")
 	block := strings.Join(text, "\n")
 	fmt.Println(block)
-	if len(input) > 0 {
-		fmt.Printf("\033[36m%s\033[m", input[0])
-	}
 }
 
+/*
 func Input() {
 	verbs := config.Verbs
 	app := tview.NewApplication()
@@ -65,8 +60,8 @@ func Input() {
 			return
 		}
 		for _, word := range verbs {
-			if strings.HasPrefix(strings.ToLower(word), strings.ToLower(currentText)) {
-				entries = append(entries, word)
+			if strings.HasPrefix(strings.ToLower(string(word)), strings.ToLower(currentText)) {
+				entries = append(entries, string(word))
 			}
 		}
 		if len(entries) <= 1 {
@@ -78,6 +73,7 @@ func Input() {
 		panic(err)
 	}
 }
+*/
 
 func setupCloseHandler() {
 	c := make(chan os.Signal)
@@ -90,14 +86,30 @@ func setupCloseHandler() {
 	}()
 }
 
-func Scanner(once ...bool) (line string) {
+func Scanner(params ...string) (line string) {
 	var b []byte = make([]byte, 4)
+	var once bool
+	var prompt string
 
+	if len(params) > 0 {
+		for _, v := range params {
+			val := strings.Split(v, ": ")
+			switch val[0] {
+			case "once":
+				once = strings.ToLower(val[1]) == "true"
+			case "prompt":
+				prompt = val[1]
+			}
+		}
+	}
+	if len(prompt) > 0 {
+		fmt.Printf("\033[36m%s\033[m", prompt)
+	}
 	for {
 		os.Stdin.Read(b)
 		r, _ := utf8.DecodeRune(b)
 		// once set to true => return directly after one keypress
-		if len(once) > 0 && once[0] {
+		if once {
 			line = string(r)
 			return
 		}
