@@ -8,25 +8,35 @@ import (
 	"gopkg.in/yaml.v2"
 )
 
-var Objects []string
-var Locations []places
+var GameObjects []Object
+var Locations []description
 var Overwrites [][3]string
+var Answers []string
+var Verbs []string
 var BoxLen int
 
 // Conf : Struct to read from yaml config files
 type conf struct {
 	Verbs      []string        `yaml:"verbs"`
 	Nouns      []string        `yaml:"nouns"`
-	Objects    []string        `yaml:"objects"`
+	Objects    []Object        `yaml:"objects"`
 	Answers    []string        `yaml:"answers"`
-	Locations  []places        `yaml:"locations"`
+	Locations  []description   `yaml:"locations"`
 	Overwrites []mapOverwrites `yaml:"overwrites"`
 }
 
 // Places : Contains long and short description of locations.
-type places struct {
+type description struct {
 	Long  string
 	Short string
+}
+
+// ObjectProperties : Contains long and short description of locations.
+type Object struct {
+	ID          int
+	Description description
+	Area        int
+	Value       int
 }
 
 type mapOverwrites struct {
@@ -143,6 +153,7 @@ MapOverwrite[7] = {
 */
 
 // ObjectsInArea contains the coordinates for each object on the map.
+/*
 var ObjectsInArea = [45][2]int{
 	{-1, 0}, {}, {}, {}, {}, {}, {}, {}, {},
 	{28, 0}, {29, 0}, {8, 0}, {24, 0}, {2, 0}, {26, 0}, {20, 10}, {19, 0}, {19, 22},
@@ -150,6 +161,7 @@ var ObjectsInArea = [45][2]int{
 	{9, 0}, {11, 0}, {12, 0}, {1, 0}, {1, 0}, {1, 0}, {3, 7}, {4, 0}, {4, 0},
 	{4, 0}, {0, 0}, {0, 0}, {0, 18}, {30, 0}, {33, 10}, {51, 0}, {40, 0}, {51, 47},
 }
+*/
 
 // GetConf : Read yaml config files into struct Conf
 func (c *conf) getConf(filename string) {
@@ -193,7 +205,7 @@ func getMapOverwrites() (overwrites [][3]string) {
 }
 
 // InitBoxLen : Get min length for boxes to fit all short descriptions of locations
-func InitBoxLen() {
+func initBoxLen() {
 	BoxLen = 0
 	for _, v := range Locations {
 		lineLen := len([]rune(strings.Split(v.Short, "\n")[0]))
@@ -211,8 +223,40 @@ func InitBoxLen() {
 func Init() {
 	var c conf
 	c.getConf("config/objects.yaml")
-	Objects = c.Objects
+	GameObjects = c.Objects
 	c.getConf("config/locations.yaml")
 	Locations = c.Locations
+	c.getConf("config/answers.yaml")
+	Answers = c.Answers
+	c.getConf("config/verbs.yaml")
+	Verbs = c.Verbs
 	Overwrites = getMapOverwrites()
+	initBoxLen()
+}
+
+func ObjectsInArea(area int) (objects []Object) {
+	for _, o := range GameObjects {
+		if o.Area == area {
+			objects = append(objects, o)
+		}
+	}
+	return
+}
+
+func GetObjectByName(name string) (object Object) {
+	for _, o := range GameObjects {
+		if strings.ToLower(o.Description.Short) == strings.ToLower(name) {
+			return o
+		}
+	}
+	return
+}
+
+func GetObjectByID(id int) (object Object) {
+	for _, o := range GameObjects {
+		if o.ID == id {
+			return o
+		}
+	}
+	return
 }

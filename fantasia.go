@@ -27,7 +27,7 @@ func prelude() {
 
 	view.AppendText(&text, "fantasia", config.RED)
 	view.AppendText(&text, "- Ein Adventure von Klaus Hartmuth -", config.BLUE)
-	view.AppendText(&text, "- Überarbeitet von Tom Hutter -", config.YELLOW)
+	view.AppendText(&text, "- GO Version von Tom Hutter -", config.YELLOW)
 	view.PrintScreen(text)
 	//scanner()
 }
@@ -49,30 +49,6 @@ func setupCloseHandler() {
 	176 fori=1to51:forj=0to3:readr(i,j):next:next
 */
 //}
-
-func useDoor() {
-	/*
-		495 rem ** sperre *********************
-		496 f=0:gosub605:iffl=1thenfl=0:goto280
-		497 ifno<>40andno<>35thenprinta$(2):goto280
-		498 ifno=35thenprint"versuche 'oeffne'.":goto280
-		499 iftu=1thenprint"ist schon offen !":goto280
-		500 ifge(26)<>-1thenprint"ich habe keinen schluessel.":goto280
-		501 print"gut.":tu=1:goto281
-		502 :
-	*/
-}
-
-func use(object int, area int) {
-	/*
-		604 rem ** unterprogramm **************
-		605 ifge(no)<>oaandge(no)<>-1andge(no)<>-2thenfl=1
-		606 iffl=1thenprint"sehe ich hier nicht.":return
-		607 iffl=1andge(no)<>-1andge(no)<>-2thenprint"habe ich nicht dabei.":fl=1
-		608 return
-		if objectsInArea[object][0] != area
-	*/
-}
 
 func main() {
 	//var c conf
@@ -131,52 +107,56 @@ func main() {
 	// do not display entered characters on the screen
 	exec.Command("stty", "-F", "/dev/tty", "-echo").Run()
 	// reenable display entered characters on the screen
-	defer exec.Command("stty", "-F", "/dev/tty", "echo").Run()
+	//defer exec.Command("stty", "-F", "/dev/tty", "echo").Run()
 
 	// Setup our Ctrl+C handler
 	setupCloseHandler()
-	config.InitBoxLen()
 	prelude()
-	scanner()
-	area := 35
-	oldArea := area
+	view.Scanner(true)
+	area := 1
+	//oldArea := area
 	movement.RevealArea(area)
-	var dir rune
-	var direction int
+	//var dir rune
+	//var direction int
 	var text []string
 	//text = surroundings(area, locations, objects)
 	text = movement.DrawMap(area)
-	text = append(text, "\n", "\n", "\n")
+	//text = append(text, "\n", "\n", "\n")
 	text = append(text, movement.Surroundings(area)...)
-	view.PrintScreen(text)
+	//view.Input()
+	view.PrintScreen(text, "und nun? > ")
+	//actions.Parse()
 	for {
-		dir = scanner()
-		switch int(dir) {
-		case 110: // N
-			direction = 0
-		case 115: // S
-			direction = 1
-		case 111: // O
-			direction = 2
-		case 119: // W
-			direction = 3
-		}
-		area = movement.Move(area, direction, text)
-		// are we lost? (show old area)
-		if !movement.AreaVisible(area) {
-			text = movement.DrawMap(oldArea)
-			text = append(text, "\n", "\n", "\n")
-			text = append(text, movement.Surroundings(oldArea)...)
-			view.PrintScreen(text)
-		} else {
-			//text = drawMap(area)
-			//text = surroundings(area, locations, objects)
-			text = movement.DrawMap(area)
-			text = append(text, "\n", "\n", "\n")
-			text = append(text, movement.Surroundings(area)...)
-			oldArea = area
-			view.PrintScreen(text)
-		}
+		input := view.Scanner()
+		fmt.Printf("\ninput: %s\n", string(input))
+		/*
+			switch int(dir) {
+			case 110: // N
+				direction = 0
+			case 115: // S
+				direction = 1
+			case 111: // O
+				direction = 2
+			case 119: // W
+				direction = 3
+			}
+			area = movement.Move(area, direction, text)
+			// are we lost? (show old area)
+			if !movement.AreaVisible(area) {
+				text = movement.DrawMap(oldArea)
+				//text = append(text, "\n", "\n", "\n")
+				text = append(text, movement.Surroundings(oldArea)...)
+				view.PrintScreen(text)
+			} else {
+				//text = drawMap(area)
+				//text = surroundings(area, locations, objects)
+				text = movement.DrawMap(area)
+				//text = append(text, "\n", "\n", "\n")
+				text = append(text, movement.Surroundings(area)...)
+				oldArea = area
+				view.PrintScreen(text)
+			}
+		*/
 		//text = surroundings(area, locations, objects)
 	}
 	//scanner()

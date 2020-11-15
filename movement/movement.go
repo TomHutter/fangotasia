@@ -10,14 +10,16 @@ import (
 var doorOpen = false
 
 func Surroundings(area int) (text []string) {
-	if area == 25 {
-		config.ObjectsInArea[40][0] = 25
-		config.Objects[40-9] = "eine Tür im Norden"
-	}
-	if area == 30 {
-		config.ObjectsInArea[40][0] = 30
-		config.Objects[40-9] = "eine Tür im Süden"
-	}
+	/*
+		if area == 25 {
+			config.ObjectsInArea[40][0] = 25
+			config.Objects[40-9] = "eine Tür im Norden"
+		}
+		if area == 30 {
+			config.ObjectsInArea[40][0] = 30
+			config.Objects[40-9] = "eine Tür im Süden"
+		}
+	*/
 
 	//	thenge(40)=25:ge$(40)="eine tuer im norden"
 	//	ifoa=30thenge(40)=30:ge$(40)="eine tuer im sueden"
@@ -38,18 +40,15 @@ func Surroundings(area int) (text []string) {
 	text = append(text, config.NEUTRAL)
 	//appendText(&text, fmt.Sprintf("Ich bin %s", locations[area-1]), yellow)
 	var items []string
-	for i, v := range config.ObjectsInArea {
-		if v[0] == area {
-			//items = append(items, objects[i-9])
-			item := config.Objects[i-9]
-			if strings.Contains(item, "::") {
-				item = strings.ReplaceAll(item, "::", "")
-				items = append(items, fmt.Sprintf("%s  - %s", config.WHITE, item))
-				//appendText(&text, fmt.Sprintf("  - %s", item), white)
-			} else {
-				items = append(items, fmt.Sprintf("%s  - %s", config.BLUE, item))
-				//appendText(&text, fmt.Sprintf("  - %s", item), blue)
-			}
+	for _, object := range config.ObjectsInArea(area) {
+		item := object.Description.Long
+		if strings.Contains(item, "::") {
+			item = strings.ReplaceAll(item, "::", "")
+			items = append(items, fmt.Sprintf("%s  - %s", config.WHITE, item))
+			//appendText(&text, fmt.Sprintf("  - %s", item), white)
+		} else {
+			items = append(items, fmt.Sprintf("%s  - %s", config.BLUE, item))
+			//appendText(&text, fmt.Sprintf("  - %s", item), blue)
 		}
 	}
 	if len(items) > 0 {

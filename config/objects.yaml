@@ -1,37 +1,223 @@
 objects:
-  - "einen Zauberkuchen"
-  - "eine haarige Raupe"
-  - "ein grünes Buch"
-  - "einen Zettel"
-  - "eine Tarnkappe"
-  - "eine Riesenfrucht"
-  - "::ein Feuerschwert::"
-  - "einen grossen Bären"
-  - "::ein Schild aus bronze::"
-  - "einen Zwerg"
-  - "::goldene Dracheneier::"
-  - "einen Stein"
-  - "eine Höelenmalerei"
-  - "einen hässlichen Strauch"
-  - "viele rote Beeren"
-  - "::goldene blaetter::"
-  - "::ein Diamantmesser::"
-  - "::einen Silberschlüssel::"
-  - "einen dürren Baum"
-  - "ein vergilbtes Pergament"
-  - "eine grosse Steinschleuder"
-  - "einen leeren Wasserkrug"
-  - "ein Paar Zauberschuhe"
-  - "eine Schrifttafel"
-  - "::einen Zwergendolch::"
-  - "eine grosse Kugel"
-  - "ein rotes Kästchen"
-  - "einen bösen Gnom"
-  - "einen eisernen Ring"
-  - "einen Brief"
-  - "::einen roten Rubin::"
-  - ""
-  - "::goldenes Feenhaar::"
-  - "einen feuerspeienden Drachen"
-  - "eine verwitterte Holztafel"
-  - "::einen silbernen Pokal::"
+  - ID: 9
+    description:
+      long: einen Zauberkuchen
+      short: Zauberkuchen
+    area: 28
+    value: 0
+  - ID: 10
+    description:
+      long: eine haarige Raupe
+      short: Raupe
+    area: 29
+    value: 0
+  - ID: 11
+    description:
+      long: ein grünes Buch
+      short: Buch
+    area: 8
+    value: 0
+  - ID: 12
+    description:
+      long: einen Zettel
+      short: Zettel
+    area: 24
+    value: 0
+  - ID: 13
+    description:
+      long: eine Tarnkappe
+      short: Tarnkappe
+    area: 2
+    value: 0
+  - ID: 14
+    description:
+      long: eine Riesenfrucht 
+      short: Riesenfrucht
+    area: 26
+    value: 0
+  - ID: 15
+    description:
+      long: "::ein Feuerschwert::"
+      short: Feuerschwert
+    area: 20
+    value: 10
+  - ID: 16
+    description:
+      long:  einen grossen Bären
+      short: Bär
+    area: 19
+    value: 0
+  - ID: 17
+    description:
+      long: "::einen Schild aus bronze::"
+      short: Schild
+    area: 19
+    value: 22
+  - ID: 18
+    description:
+      long: einen Zwerg
+      short: Zwerg
+    area: 18
+    value: 0
+  - ID: 19
+    description:
+      long: "::goldene Dracheneier::"
+      short: Dracheneier
+    area: 18
+    value: 20
+  - ID: 20
+    description:
+      long: einen Stein 
+      short: Stein
+    area: 16
+    value: 0
+  - ID: 21
+    description:
+      long: eine Hölenmalerei 
+      short: Hölenmalerei
+    area: 13
+    value: 0
+  - ID: 22
+    description:
+      long: einen hässlichen Strauch 
+      short: Strauch
+    area: 14
+    value: 0
+  - ID: 23
+    description:
+      long: viele rote Beeren 
+      short: Beeren
+    area: 0
+    value: 0
+  - ID: 24
+    description:
+      long: "::goldene Blätter::"
+      short: Blätter
+    area: 0
+    value: 26
+  - ID: 25
+    description:
+      long: "::ein Diamantmesser::"
+      short: Diamantmesser
+    area: 15
+    value: 5
+  - ID: 26
+    description:
+      long: "::einen Silberschlüssel::"
+      short: Silberschlüssel
+    area: 8
+    value: 5
+  - ID: 27
+    description:
+      long: einen dürren Baum 
+      short: Baum
+    area: 9
+    value: 0
+  - ID: 28
+    description:
+      long: ein vergilbtes Pergament 
+      short: Pergament
+    area: 11
+    value: 0
+  - ID: 29
+    description:
+      long: eine grosse Steinschleuder 
+      short: Steinschleuder
+    area: 12
+    value: 0
+  - ID: 30
+    description:
+      long: einen leeren Wasserkrug 
+      short: Wasserkrug
+    area: 1
+    value: 0
+  - ID: 31
+    description:
+      long: ein Paar Zauberschuhe 
+      short: Zauberschuhe
+    area: 1
+    value: 0
+  - ID: 32
+    description:
+      long: eine Schrifttafel 
+      short: Schrifttafel
+    area: 1
+    value: 0
+  - ID: 33
+    description:
+      long: "::einen Zwergendolch::"
+      short: Zwergendolch
+    area: 3
+    value: 7
+  - ID: 34
+    description:
+      long: eine grosse Kugel 
+      short: Kugel
+    area: 4
+    value: 0
+  - ID: 35
+    description:
+      long: ein rotes Kästchen 
+      short: Kästchen
+    area: 4
+    value: 0
+  - ID: 36
+    description:
+      long: einen bösen Gnom 
+      short: Gnom
+    area: 4
+    value: 0
+  - ID: 37
+    description:
+      long: einen eisernen Ring 
+      short: Ring
+    area: 0
+    value: 0
+  - ID: 38
+    description:
+      long: einen Brief 
+      short: Brief
+    area: 0
+    value: 0
+  - ID: 39
+    description:
+      long: "::einen roten Rubin::"
+      short: Rubin
+    area: 0
+    value: 18
+  - ID: 40
+    description:
+      long: eine Tür im Norden 
+      short: Tür
+    area: 25
+    value: 0
+  - ID: 45
+    description:
+      long: eine Tür im Süden 
+      short: Tür
+    area: 30
+    value: 0
+  - ID: 41
+    description:
+      long: "::goldenes Feenhaar::"
+      short: Feenhaar
+    area: 33
+    value: 10
+  - ID: 42
+    description:
+      long: einen feuerspeienden Drachen 
+      short: Drachen
+    area: 51
+    value: 0
+  - ID: 43
+    description:
+      long: eine verwitterte Holztafel 
+      short: Holztafel
+    area: 40
+    value: 0
+  - ID: 44
+    description:
+      long: "::einen silbernen Pokal::"
+      short: Pokal
+    area: 51
+    value: 47

@@ -1,6 +1,14 @@
 locations:
   - long: vor einem riesigem Torbogen.
     short: Torbogen
+#    directions: 
+#      - 0
+#      - 0
+#      - 2
+#      - 0
+#    coordinates:
+#      y: 11
+#      x: 0
   - long: auf einer Blumenwiese.
     short: Blumenwiese
   - long: an einem Seerosenteich.
