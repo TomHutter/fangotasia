@@ -127,7 +127,10 @@ func main() {
 	//view.Input()
 	view.PrintScreen(text)
 	//actions.Parse()
-	actions.Parse("verben")
+	actions.Parse("verben", area)
+	actions.Parse("inventar", area)
+	actions.Parse("nimm Gnom", area)
+	actions.Parse("öffne	Tür", area)
 	/*
 		for {
 			//actions.Parse(view.Scanner("prompt: und nun? > "))

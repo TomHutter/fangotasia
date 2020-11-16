@@ -116,6 +116,7 @@ func Scanner(params ...string) (line string) {
 		// the enter key was pressed
 		if b[0] == 10 {
 			//fmt.Println(line)
+			line = strings.TrimSpace(line)
 			return
 		}
 

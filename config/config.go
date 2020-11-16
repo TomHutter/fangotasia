@@ -34,8 +34,9 @@ type conf struct {
 
 // Places : Contains long and short description of locations.
 type description struct {
-	Long  string
-	Short string
+	Long    string
+	Short   string
+	Article string
 }
 
 // ObjectProperties : Contains long and short description of locations.

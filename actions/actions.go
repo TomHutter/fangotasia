@@ -14,48 +14,70 @@ var object string
 
 type verb config.Verb
 
+//type verb []string
+
 //type command struct{}
 
-func Parse(input string) {
+func Parse(input string, area int) {
 
 	var command string
 	var order verb
-	//var com command
-	//command = {}
-	//var verb, object, subject string
-	//var singleVerbs = []config.Verb{"ende", "schau", "hilfe", "simsalabim", "spring", "o", "w", "n", "s", "verben"}
+	var knownVerb config.Verb
 
-	re := regexp.MustCompile("\\s+")
+	re := regexp.MustCompile("[\\s,\\t]+")
 
 	parts := re.Split(input, -1)
 	command = strings.ToLower(parts[0])
+	// pop parts
+	parts = parts[1:]
 
 	fmt.Println(parts) // ["Have", "a", "great", "day!"]
 	//parts := strings.r  Split(input, )
 	for _, v := range config.Verbs {
 		if v.Name == command {
-			fmt.Printf("Valid verb '%s' found.\n", v.Name)
-			val := reflect.ValueOf(&order).MethodByName(v.Func).Call([]reflect.Value{})
-			fmt.Println(val[0])
+			knownVerb = v
+			break
 		}
 	}
 
-	/*
-		for _, v := range singleVerbs {
-			if v == verb {
-				command = "verben"
-				val := reflect.ValueOf(&verb).MethodByName("verben").Call([]reflect.Value{})
-				fmt.Println(val)
-				return
-				val := reflect.ValueOf(&com).MethodByName("Verben").Call(nil)
-				fmt.Println(val[0])
+	if knownVerb == (config.Verb{}) {
+		fmt.Printf("'%s' kenne ich nicht.\nDas Kommando 'Verben' gibt eine Liste aller verfügbaren Verben aus.\n", command)
+		return
+	}
+
+	fmt.Printf("Valid verb '%s' found.\n", knownVerb.Name)
+	if knownVerb.Single {
+		// call reflec.Call for verb without arguments
+		val := reflect.ValueOf(&order).MethodByName(knownVerb.Func).Call([]reflect.Value{})
+		for i := 0; i < val[0].Len(); i++ {
+			fmt.Println(val[0].Index(i).String())
+		}
+		return
+	}
+	// call reflec.Call for verb with arguments
+	// - first valid noun
+	// - area
+	argv := make([]reflect.Value, 2)
+	//argv := make([]reflect.Value, 1)
+	for _, p := range parts {
+		noun := strings.ToLower(p)
+		for _, n := range config.GameObjects {
+			if strings.ToLower(n.Description.Short) == noun {
+				fmt.Printf("Valid noun '%s' found.\n", n.Description.Short)
+				argv[0] = reflect.ValueOf(n)
+				argv[1] = reflect.ValueOf(area)
+
+				//val := reflect.ValueOf(&order).MethodByName(v.Func).Call(argv)
+				//val := reflect.ValueOf(&order).MethodByName(v.Func).Call([]reflect.Value{reflect.ValueOf(order)})
+				val := reflect.ValueOf(&order).MethodByName(knownVerb.Func).Call(argv)
+				for i := 0; i < val[0].Len(); i++ {
+					fmt.Println(val[0].Index(i).String())
+				}
+				fmt.Println(val[1])
 				return
 			}
 		}
-	*/
-	//switch verb {
-	//	case
-	//fmt.Printf("'%s' kenne ich nicht.\nDas Kommando 'Verben' gibt eine Liste aller verfügbaren Verben aus.\n", verb)
+	}
 
 	/*
 			279 rem ** kommandoabfrage ************
@@ -123,50 +145,88 @@ func objectAvailable(object config.Object, area int) bool {
 	return objectInArea(object, area) || objectInInventory(object) || objectInUse(object)
 }
 
-func take(object config.Object, area int) (string, bool) {
+func (v *verb) Open(object config.Object, area int) (answer []string, ok bool) {
+	answer = append(answer, "lässt sich öffnen")
+	return answer, true
+}
+
+func (v *verb) Take(object config.Object, area int) (answer []string, ok bool) {
 	if !objectAvailable(object, area) {
-		return "sehe ich hier nicht.", false
+		answer = append(answer, "sehe ich hier nicht.")
+		return answer, false
 	}
 	if objectInInventory(object) || objectInUse(object) {
-		return "habe ich schon.", false
+		answer = append(answer, "habe ich schon.")
+		return answer, false
 	}
 
 	switch object.ID {
 	case 10, 16, 18, 21, 22, 27, 36, 40, 42:
-		return config.Answers[0], false
+		answer = append(answer, config.Answers[0])
+		return answer, false
 	case 29, 14:
-		return config.Answers[4], false
+		answer = append(answer, config.Answers[4])
+		return answer, false
 	case 34:
 		if !objectInUse(config.GetObjectByID(9)) {
-			return config.Answers[4], false
+			answer = append(answer, config.Answers[4])
+			return answer, false
 		}
 	case 17:
-		if config.GetObjectByID(16).Area == area && !objectInUse(config.GetObjectByID(13)) {
-			return fmt.Sprintf("%s %s", "Der Bär", config.Answers[3]), false
+		opponent := config.GetObjectByID(16)
+		if opponent.Area == area && !objectInUse(config.GetObjectByID(13)) {
+			answer = append(answer, fmt.Sprintf("%s %si %s",
+				strings.Title(opponent.Description.Article),
+				opponent.Description.Short,
+				config.Answers[3]))
+			return answer, false
 		}
 	case 19:
-		if config.GetObjectByID(18).Area == area && !objectInUse(config.GetObjectByID(13)) {
-			return fmt.Sprintf("%s %s", "Der Zwerg", config.Answers[3]), false
+		opponent := config.GetObjectByID(18)
+		if opponent.Area == area && !objectInUse(config.GetObjectByID(13)) {
+			answer = append(answer, fmt.Sprintf("%s %si %s",
+				strings.Title(opponent.Description.Article),
+				opponent.Description.Short,
+				config.Answers[3]))
+			return answer, false
 		}
 	case 35:
-		if config.GetObjectByID(36).Area == area && !objectInUse(config.GetObjectByID(13)) {
-			return fmt.Sprintf("%s %s", "Der Gnom", config.Answers[3]), false
+		opponent := config.GetObjectByID(36)
+		if opponent.Area == area && !objectInUse(config.GetObjectByID(13)) {
+			answer = append(answer, fmt.Sprintf("%s %si %s",
+				strings.Title(opponent.Description.Article),
+				opponent.Description.Short,
+				config.Answers[3]))
+			return answer, false
 		}
 	case 44:
-		if config.GetObjectByID(42).Area == area && !objectInUse(config.GetObjectByID(13)) {
-			return fmt.Sprintf("%s %s", "Der Drache", config.Answers[3]), false
+		opponent := config.GetObjectByID(42)
+		if opponent.Area == area && !objectInUse(config.GetObjectByID(13)) {
+			answer = append(answer, fmt.Sprintf("%s %si %s",
+				strings.Title(opponent.Description.Article),
+				opponent.Description.Short,
+				config.Answers[3]))
+			return answer, false
 		}
 	case 32, 43:
-		return config.Answers[5], false
+		answer = append(answer, config.Answers[5])
+		return answer, false
 	}
-	if config.GetObjectByID(10).Area == area && !objectInUse(config.GetObjectByID(13)) {
-		return fmt.Sprintf("%s %s", "Die Raupe", config.Answers[3]), false
+	opponent := config.GetObjectByID(10)
+	if opponent.Area == area && !objectInUse(config.GetObjectByID(13)) {
+		answer = append(answer, fmt.Sprintf("%s %si %s",
+			strings.Title(opponent.Description.Article),
+			opponent.Description.Short,
+			config.Answers[3]))
+		return answer, false
 	}
 	if len(inventory) > 6 {
-		return config.Answers[6], false
+		answer = append(answer, config.Answers[6])
+		return answer, false
 	}
 	inventory = append(inventory, object)
-	return config.Answers[7], true
+	answer = append(answer, config.Answers[7])
+	return answer, true
 
 	/*
 			359 rem ** nimm ***********************
@@ -214,7 +274,6 @@ func use(object int, area int) {
 
 func (v *verb) Verbs() (verbs []string) {
 	//func (c *command) Verben() {
-	fmt.Println("Verben, die ich kenne: ")
 	verbs = append(verbs, "Verben, die ich kenne: ")
 	var line []string
 	for i, val := range config.Verbs {
@@ -230,7 +289,7 @@ func (v *verb) Verbs() (verbs []string) {
 
 func (c *verb) Inventory() (inv []string) {
 	if len(inventory) == 0 {
-		fmt.Println("Ich habe nichts dabei.")
+		//fmt.Println("Ich habe nichts dabei.")
 		inv = append(inv, "Ich habe nichts dabei.")
 		return
 	}
