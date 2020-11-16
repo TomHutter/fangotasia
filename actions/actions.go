@@ -175,7 +175,7 @@ func (v *verb) Take(object config.Object, area int) (answer []string, ok bool) {
 	case 17:
 		opponent := config.GetObjectByID(16)
 		if opponent.Area == area && !objectInUse(config.GetObjectByID(13)) {
-			answer = append(answer, fmt.Sprintf("%s %si %s",
+			answer = append(answer, fmt.Sprintf("%s %s %s",
 				strings.Title(opponent.Description.Article),
 				opponent.Description.Short,
 				config.Answers[3]))
@@ -184,7 +184,7 @@ func (v *verb) Take(object config.Object, area int) (answer []string, ok bool) {
 	case 19:
 		opponent := config.GetObjectByID(18)
 		if opponent.Area == area && !objectInUse(config.GetObjectByID(13)) {
-			answer = append(answer, fmt.Sprintf("%s %si %s",
+			answer = append(answer, fmt.Sprintf("%s %s %s",
 				strings.Title(opponent.Description.Article),
 				opponent.Description.Short,
 				config.Answers[3]))
@@ -193,7 +193,7 @@ func (v *verb) Take(object config.Object, area int) (answer []string, ok bool) {
 	case 35:
 		opponent := config.GetObjectByID(36)
 		if opponent.Area == area && !objectInUse(config.GetObjectByID(13)) {
-			answer = append(answer, fmt.Sprintf("%s %si %s",
+			answer = append(answer, fmt.Sprintf("%s %s %s",
 				strings.Title(opponent.Description.Article),
 				opponent.Description.Short,
 				config.Answers[3]))
@@ -202,7 +202,7 @@ func (v *verb) Take(object config.Object, area int) (answer []string, ok bool) {
 	case 44:
 		opponent := config.GetObjectByID(42)
 		if opponent.Area == area && !objectInUse(config.GetObjectByID(13)) {
-			answer = append(answer, fmt.Sprintf("%s %si %s",
+			answer = append(answer, fmt.Sprintf("%s %s %s",
 				strings.Title(opponent.Description.Article),
 				opponent.Description.Short,
 				config.Answers[3]))
@@ -214,7 +214,7 @@ func (v *verb) Take(object config.Object, area int) (answer []string, ok bool) {
 	}
 	opponent := config.GetObjectByID(10)
 	if opponent.Area == area && !objectInUse(config.GetObjectByID(13)) {
-		answer = append(answer, fmt.Sprintf("%s %si %s",
+		answer = append(answer, fmt.Sprintf("%s %s %s",
 			strings.Title(opponent.Description.Article),
 			opponent.Description.Short,
 			config.Answers[3]))

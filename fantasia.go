@@ -108,13 +108,13 @@ func main() {
 	// do not display entered characters on the screen
 	exec.Command("stty", "-F", "/dev/tty", "-echo").Run()
 	// reenable display entered characters on the screen
-	//defer exec.Command("stty", "-F", "/dev/tty", "echo").Run()
+	defer exec.Command("stty", "-F", "/dev/tty", "echo").Run()
 
 	// Setup our Ctrl+C handler
 	setupCloseHandler()
 	prelude()
 	view.Scanner("once: true")
-	area := 1
+	area := 4
 	//oldArea := area
 	movement.RevealArea(area)
 	//var dir rune
@@ -129,7 +129,7 @@ func main() {
 	//actions.Parse()
 	actions.Parse("verben", area)
 	actions.Parse("inventar", area)
-	actions.Parse("nimm Gnom", area)
+	actions.Parse("nimm Kästchen", area)
 	actions.Parse("öffne	Tür", area)
 	/*
 		for {
