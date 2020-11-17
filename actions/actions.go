@@ -2,23 +2,26 @@ package actions
 
 import (
 	"fantasia/config"
+	"fantasia/movement"
+	"fantasia/view"
 	"fmt"
 	"reflect"
 	"regexp"
 	"strings"
 )
 
-var inventory []config.Object
-var inUse []config.Object
-var object string
-
 type verb config.Verb
+type storage []config.Object
+
+var inventory storage
+var inUse storage
+var object string
 
 //type verb []string
 
 //type command struct{}
 
-func Parse(input string, area int) {
+func Parse(input string, area int, text []string) int {
 
 	var command string
 	var order verb
@@ -41,43 +44,99 @@ func Parse(input string, area int) {
 	}
 
 	if knownVerb == (config.Verb{}) {
-		fmt.Printf("'%s' kenne ich nicht.\nDas Kommando 'Verben' gibt eine Liste aller verfügbaren Verben aus.\n", command)
-		return
+		notice := fmt.Sprintf("'%s' kenne ich nicht.\nDas Kommando 'Verben' gibt eine Liste aller verfügbaren Verben aus.\n", command)
+		view.Flash(text, notice, 2, config.RED)
+		return area
 	}
 
 	fmt.Printf("Valid verb '%s' found.\n", knownVerb.Name)
 	if knownVerb.Single {
 		// call reflec.Call for verb without arguments
 		val := reflect.ValueOf(&order).MethodByName(knownVerb.Func).Call([]reflect.Value{})
+		var notice []string
 		for i := 0; i < val[0].Len(); i++ {
-			fmt.Println(val[0].Index(i).String())
+			notice = append(notice, val[0].Index(i).String())
 		}
-		return
+		view.Flash(text, strings.Join(notice, "\n"), 5, config.GREEN)
+		//for i := 0; i < val[0].Len(); i++ {
+		//	fmt.Println(val[0].Index(i).String())
+		//}
+		return area
 	}
-	// call reflec.Call for verb with arguments
-	// - first valid noun
-	// - area
-	argv := make([]reflect.Value, 2)
-	//argv := make([]reflect.Value, 1)
-	for _, p := range parts {
-		noun := strings.ToLower(p)
-		for _, n := range config.GameObjects {
-			if strings.ToLower(n.Description.Short) == noun {
-				fmt.Printf("Valid noun '%s' found.\n", n.Description.Short)
-				argv[0] = reflect.ValueOf(n)
-				argv[1] = reflect.ValueOf(area)
 
-				//val := reflect.ValueOf(&order).MethodByName(v.Func).Call(argv)
-				//val := reflect.ValueOf(&order).MethodByName(v.Func).Call([]reflect.Value{reflect.ValueOf(order)})
-				val := reflect.ValueOf(&order).MethodByName(knownVerb.Func).Call(argv)
-				for i := 0; i < val[0].Len(); i++ {
-					fmt.Println(val[0].Index(i).String())
+	argv := make([]reflect.Value, 0)
+
+	switch knownVerb.Name {
+	case "n", "s", "o", "w":
+		argv = append(argv, reflect.ValueOf(area))
+		argv = append(argv, reflect.ValueOf(knownVerb.Name))
+	default:
+		// call reflec.Call for verb with arguments
+		// - first valid noun
+		// - area
+		//argv := make([]reflect.Value, 1)
+		// loop over all input parts and see if we find a valid object
+		for _, p := range parts {
+			word := strings.ToLower(p)
+			for _, o := range config.GameObjects {
+				if strings.ToLower(o.Description.Short) == word {
+					fmt.Printf("Valid object '%s' found.\n", o.Description.Short)
+					argv = append(argv, reflect.ValueOf(o))
+					argv = append(argv, reflect.ValueOf(area))
+					break
+
+					/*
+						//val := reflect.ValueOf(&order).MethodByName(v.Func).Call(argv)
+						//val := reflect.ValueOf(&order).MethodByName(v.Func).Call([]reflect.Value{reflect.ValueOf(order)})
+						val := reflect.ValueOf(&order).MethodByName(knownVerb.Func).Call(argv)
+						for i := 0; i < val[0].Len(); i++ {
+							fmt.Println(val[0].Index(i).String())
+						}
+						fmt.Println(val[1])
+						return
+					*/
 				}
-				fmt.Println(val[1])
-				return
 			}
 		}
 	}
+
+	if len(argv) < 2 {
+		notice := fmt.Sprintf("'%s' kenne ich nicht.\n", strings.Join(parts, " "))
+		view.Flash(text, notice, 2, config.RED)
+		return area
+	}
+
+	// now method and all args should be known
+	val := reflect.ValueOf(&order).MethodByName(knownVerb.Func).Call(argv)
+
+	if knownVerb.Func == "Move" {
+		if val[0].Bool() == false {
+			var notice []string
+			for i := 0; i < val[2].Len(); i++ {
+				notice = append(notice, val[2].Index(i).String())
+			}
+			view.Flash(text, strings.Join(notice, "\n"), 2, config.RED)
+			return area
+		} else {
+			fmt.Printf("New area: %d\n", val[1].Int())
+			return int(val[1].Int())
+		}
+	}
+
+	var notice []string
+	var color string
+	fmt.Println(val[0])
+	if val[0].Bool() == false {
+		color = config.RED
+	} else {
+		color = config.GREEN
+	}
+	for i := 0; i < val[1].Len(); i++ {
+		//fmt.Println(val[1].Index(i).String())
+		notice = append(notice, val[1].Index(i).String())
+		view.Flash(text, strings.Join(notice, "\n"), 2, color)
+	}
+	return area
 
 	/*
 			279 rem ** kommandoabfrage ************
@@ -145,88 +204,107 @@ func objectAvailable(object config.Object, area int) bool {
 	return objectInArea(object, area) || objectInInventory(object) || objectInUse(object)
 }
 
-func (v *verb) Open(object config.Object, area int) (answer []string, ok bool) {
-	answer = append(answer, "lässt sich öffnen")
-	return answer, true
+func (inv *storage) add(object config.Object) {
+	*inv = append(*inv, object)
+	o := config.GetObjectByID(object.ID)
+	o.Area = -1
 }
 
-func (v *verb) Take(object config.Object, area int) (answer []string, ok bool) {
+func (inv storage) drop(object config.Object, area int) {
+	var newInv storage
+	for _, o := range inv {
+		if o.ID == object.ID {
+			obj := config.GetObjectByID(object.ID)
+			obj.Area = area
+			continue
+		}
+		newInv = append(newInv, o)
+	}
+	copy(inv, newInv)
+}
+
+func (v *verb) Open(object config.Object, area int) (ok bool, answer []string) {
+	answer = append(answer, "lässt sich öffnen")
+	return true, answer
+}
+
+func (v *verb) Take(object config.Object, area int) (ok bool, answer []string) {
 	if !objectAvailable(object, area) {
 		answer = append(answer, "sehe ich hier nicht.")
-		return answer, false
+		return false, answer
 	}
 	if objectInInventory(object) || objectInUse(object) {
 		answer = append(answer, "habe ich schon.")
-		return answer, false
+		return false, answer
 	}
 
 	switch object.ID {
 	case 10, 16, 18, 21, 22, 27, 36, 40, 42:
 		answer = append(answer, config.Answers[0])
-		return answer, false
+		return false, answer
 	case 29, 14:
 		answer = append(answer, config.Answers[4])
-		return answer, false
+		return false, answer
 	case 34:
-		if !objectInUse(config.GetObjectByID(9)) {
+		if !objectInUse(*config.GetObjectByID(9)) {
 			answer = append(answer, config.Answers[4])
-			return answer, false
+			return false, answer
 		}
 	case 17:
 		opponent := config.GetObjectByID(16)
-		if opponent.Area == area && !objectInUse(config.GetObjectByID(13)) {
+		if opponent.Area == area && !objectInUse(*config.GetObjectByID(13)) {
 			answer = append(answer, fmt.Sprintf("%s %s %s",
 				strings.Title(opponent.Description.Article),
 				opponent.Description.Short,
 				config.Answers[3]))
-			return answer, false
+			return false, answer
 		}
 	case 19:
 		opponent := config.GetObjectByID(18)
-		if opponent.Area == area && !objectInUse(config.GetObjectByID(13)) {
+		if opponent.Area == area && !objectInUse(*config.GetObjectByID(13)) {
 			answer = append(answer, fmt.Sprintf("%s %s %s",
 				strings.Title(opponent.Description.Article),
 				opponent.Description.Short,
 				config.Answers[3]))
-			return answer, false
+			return false, answer
 		}
 	case 35:
 		opponent := config.GetObjectByID(36)
-		if opponent.Area == area && !objectInUse(config.GetObjectByID(13)) {
+		if opponent.Area == area && !objectInUse(*config.GetObjectByID(13)) {
 			answer = append(answer, fmt.Sprintf("%s %s %s",
 				strings.Title(opponent.Description.Article),
 				opponent.Description.Short,
 				config.Answers[3]))
-			return answer, false
+			return false, answer
 		}
 	case 44:
 		opponent := config.GetObjectByID(42)
-		if opponent.Area == area && !objectInUse(config.GetObjectByID(13)) {
+		if opponent.Area == area && !objectInUse(*config.GetObjectByID(13)) {
 			answer = append(answer, fmt.Sprintf("%s %s %s",
 				strings.Title(opponent.Description.Article),
 				opponent.Description.Short,
 				config.Answers[3]))
-			return answer, false
+			return false, answer
 		}
 	case 32, 43:
 		answer = append(answer, config.Answers[5])
-		return answer, false
+		return false, answer
 	}
 	opponent := config.GetObjectByID(10)
-	if opponent.Area == area && !objectInUse(config.GetObjectByID(13)) {
+	if opponent.Area == area && !objectInUse(*config.GetObjectByID(13)) {
 		answer = append(answer, fmt.Sprintf("%s %s %s",
 			strings.Title(opponent.Description.Article),
 			opponent.Description.Short,
 			config.Answers[3]))
-		return answer, false
+		return false, answer
 	}
 	if len(inventory) > 6 {
 		answer = append(answer, config.Answers[6])
-		return answer, false
+		return false, answer
 	}
-	inventory = append(inventory, object)
+	inventory.add(object)
 	answer = append(answer, config.Answers[7])
-	return answer, true
+	return true, answer
 
 	/*
 			359 rem ** nimm ***********************
@@ -246,6 +324,32 @@ func (v *verb) Take(object config.Object, area int) (answer []string, ok bool) {
 		373 in=in+1:ge(no)=-1:print"gut.":goto281
 		374 :
 	*/
+}
+
+func (v *verb) Move(area int, dir string) (ok bool, newArea int, answer []string) {
+	//func Move(area int, direction int, text []string) int {
+	//if direction == 0 {
+	//	return 0, "Ich brauche eine Richtung."
+	//}
+	var direction = map[string]int{"n": 0, "s": 1, "o": 2, "w": 3}
+
+	newArea = config.Areas[area][direction[dir]]
+	if newArea == 0 {
+		answer = append(answer, config.Answers[8])
+		return false, area, answer
+		//view.Flash(text, "In diese Richtung führt kein Weg.")
+		//return area
+	}
+	// Area 30 and 25 are connected by a door. Is it open?
+	if (area == 30 || area == 25 && direction[dir] == 0) && !config.DoorOpen {
+		answer = append(answer, config.Answers[9])
+		return false, area, answer
+		//view.Flash(text, "Die Tür ist versperrt.")
+		//return area
+	}
+	movement.RevealArea(newArea)
+	answer = append(answer, config.Answers[7])
+	return true, newArea, answer
 }
 
 func useDoor() {
@@ -294,6 +398,7 @@ func (c *verb) Inventory() (inv []string) {
 		return
 	}
 
+	inv = append(inv, "Ich habe:")
 	for _, i := range inventory {
 		inv = append(inv, i.Description.Short)
 	}

@@ -27,13 +27,13 @@ func AppendText(block *[]string, newText string, color ...string) {
 	*block = append(text, fmt.Sprintf("%s%s%s", color[0], newText, config.WHITE))
 }
 
-func Flash(text []string, err string) {
+func Flash(text []string, notice string, sleep int, color string) {
 	flashText := make([]string, len(text))
 	copy(flashText, text)
 	flashText = append(text, "")
-	flashText = append(text, fmt.Sprintf("%s%s%s", config.RED, err, config.NEUTRAL))
+	flashText = append(text, fmt.Sprintf("%s%s%s", color, notice, config.NEUTRAL))
 	PrintScreen(flashText)
-	time.Sleep(2 * time.Second)
+	time.Sleep(time.Duration(sleep) * time.Second)
 	PrintScreen(text)
 }
 

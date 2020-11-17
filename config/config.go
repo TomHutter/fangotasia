@@ -100,6 +100,8 @@ var Areas = [52][4]int{
 	{0, 45, 50, 0}, {0, 46, 0, 49}, {46, 0, 0, 0},
 }
 
+var DoorOpen = false
+
 /*
 var AreaMap = [12][10]int{
 	{0, 0, 0, 0, 0, 0, 47, 48, 49, 50},
@@ -260,10 +262,10 @@ func GetObjectByName(name string) (object Object) {
 	return
 }
 
-func GetObjectByID(id int) (object Object) {
-	for _, o := range GameObjects {
+func GetObjectByID(id int) (object *Object) {
+	for i, o := range GameObjects {
 		if o.ID == id {
-			return o
+			return &GameObjects[i]
 		}
 	}
 	return

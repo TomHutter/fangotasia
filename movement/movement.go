@@ -2,12 +2,9 @@ package movement
 
 import (
 	"fantasia/config"
-	"fantasia/view"
 	"fmt"
 	"strings"
 )
-
-var doorOpen = false
 
 func Surroundings(area int) (text []string) {
 	/*
@@ -119,6 +116,7 @@ func Surroundings(area int) (text []string) {
 	*/
 }
 
+/*
 func Move(area int, direction int, text []string) int {
 	//if direction == 0 {
 	//	return 0, "Ich brauche eine Richtung."
@@ -136,3 +134,22 @@ func Move(area int, direction int, text []string) int {
 	RevealArea(newArea)
 	return newArea
 }
+*/
+/*
+	area = movement.Move(area, direction, text)
+	// are we lost? (show old area)
+	if !movement.AreaVisible(area) {
+		text = movement.DrawMap(oldArea)
+		//text = append(text, "\n", "\n", "\n")
+		text = append(text, movement.Surroundings(oldArea)...)
+		view.PrintScreen(text)
+	} else {
+		//text = drawMap(area)
+		//text = surroundings(area, locations, objects)
+		text = movement.DrawMap(area)
+		//text = append(text, "\n", "\n", "\n")
+		text = append(text, movement.Surroundings(area)...)
+		oldArea = area
+		view.PrintScreen(text)
+	}
+*/

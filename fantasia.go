@@ -114,29 +114,38 @@ func main() {
 	setupCloseHandler()
 	prelude()
 	view.Scanner("once: true")
-	area := 4
+	area := 1
 	//oldArea := area
 	movement.RevealArea(area)
 	//var dir rune
 	//var direction int
-	var text []string
+	//var text []string
 	//text = surroundings(area, locations, objects)
-	text = movement.DrawMap(area)
+	text := movement.DrawMap(area)
 	//text = append(text, "\n", "\n", "\n")
-	text = append(text, movement.Surroundings(area)...)
+	surroundings := movement.Surroundings(area)
+	text = append(text, surroundings...)
 	//view.Input()
 	view.PrintScreen(text)
 	//actions.Parse()
-	actions.Parse("verben", area)
-	actions.Parse("inventar", area)
-	actions.Parse("nimm Kästchen", area)
-	actions.Parse("öffne	Tür", area)
-	/*
-		for {
-			//actions.Parse(view.Scanner("prompt: und nun? > "))
-			actions.Parse("verben")
-			//fmt.Printf("\ninput: %s\n", string(input))
-			/*
+	//actions.Parse("verben", area, text)
+	//actions.Parse("inventar", area)
+	actions.Parse("nimm Wasserkrug", area, text)
+	actions.Parse("Inventar", area, text)
+	//surroundings = movement.Surroundings(area)
+	//actions.Parse("nimm Gnom", area, text)
+	//actions.Parse("n", area, text)
+	//actions.Parse("öffne	Tür", area)
+	//actions.Parse(view.Scanner("prompt: und nun? > "), area)
+	for {
+		area = actions.Parse(view.Scanner("prompt: und nun? > "), area, text)
+		text := movement.DrawMap(area)
+		surroundings := movement.Surroundings(area)
+		text = append(text, surroundings...)
+		view.PrintScreen(text)
+		//actions.Parse("verben")
+		//fmt.Printf("\ninput: %s\n", string(input))
+		/*
 				switch int(dir) {
 				case 110: // N
 					direction = 0
@@ -164,8 +173,8 @@ func main() {
 					view.PrintScreen(text)
 				}
 			//text = surroundings(area, locations, objects)
-		}
-	*/
+		*/
+	}
 	//scanner()
 
 	//surroundings(8, locations, objects)
