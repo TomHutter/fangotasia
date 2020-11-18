@@ -32,7 +32,15 @@ func Flash(text []string, notice string, sleep int, color string) {
 	copy(flashText, text)
 	flashText = append(text, "")
 	flashText = append(text, fmt.Sprintf("%s%s%s", color, notice, config.NEUTRAL))
-	PrintScreen(flashText)
+	if sleep < 0 {
+		flashText = append(flashText, "")
+		flashText = append(flashText, "Weiter \u23CE")
+		PrintScreen(flashText)
+		Scanner("once: true")
+	} else {
+		PrintScreen(flashText)
+		time.Sleep(time.Duration(sleep) * time.Second)
+	}
 	time.Sleep(time.Duration(sleep) * time.Second)
 	PrintScreen(text)
 }

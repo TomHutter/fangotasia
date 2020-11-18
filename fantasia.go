@@ -114,7 +114,7 @@ func main() {
 	setupCloseHandler()
 	prelude()
 	view.Scanner("once: true")
-	area := 1
+	area := 3
 	//oldArea := area
 	movement.RevealArea(area)
 	//var dir rune
@@ -130,8 +130,13 @@ func main() {
 	//actions.Parse()
 	//actions.Parse("verben", area, text)
 	//actions.Parse("inventar", area)
-	actions.Parse("nimm Wasserkrug", area, text)
-	actions.Parse("Inventar", area, text)
+	//actions.Parse("nimm Zwergendolch", area, text)
+	//actions.Parse("Inventar", area, text)
+	//actions.Parse("n", area, text)
+	//actions.Parse("o", area, text)
+	//actions.Parse("s", area, text)
+	//actions.Parse("stich Gnom", area, text)
+	//actions.Parse("Inventar", area, text)
 	//surroundings = movement.Surroundings(area)
 	//actions.Parse("nimm Gnom", area, text)
 	//actions.Parse("n", area, text)
@@ -139,7 +144,7 @@ func main() {
 	//actions.Parse(view.Scanner("prompt: und nun? > "), area)
 	for {
 		area = actions.Parse(view.Scanner("prompt: und nun? > "), area, text)
-		text := movement.DrawMap(area)
+		text = movement.DrawMap(area)
 		surroundings := movement.Surroundings(area)
 		text = append(text, surroundings...)
 		view.PrintScreen(text)

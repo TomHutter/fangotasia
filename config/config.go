@@ -17,6 +17,7 @@ type Verb struct {
 	Name   string
 	Func   string
 	Single bool
+	Sleep  int
 }
 
 var Verbs []Verb

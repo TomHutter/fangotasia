@@ -5,6 +5,8 @@ import (
 	"fantasia/movement"
 	"fantasia/view"
 	"fmt"
+	"os"
+	"os/exec"
 	"reflect"
 	"regexp"
 	"strings"
@@ -16,6 +18,8 @@ type storage []config.Object
 var inventory storage
 var inUse storage
 var object string
+var moves int
+var visited [51]bool
 
 //type verb []string
 
@@ -45,19 +49,33 @@ func Parse(input string, area int, text []string) int {
 
 	if knownVerb == (config.Verb{}) {
 		notice := fmt.Sprintf("'%s' kenne ich nicht.\nDas Kommando 'Verben' gibt eine Liste aller verfügbaren Verben aus.\n", command)
-		view.Flash(text, notice, 2, config.RED)
+		view.Flash(text, notice, knownVerb.Sleep, config.RED)
 		return area
 	}
 
 	fmt.Printf("Valid verb '%s' found.\n", knownVerb.Name)
 	if knownVerb.Single {
-		// call reflec.Call for verb without arguments
-		val := reflect.ValueOf(&order).MethodByName(knownVerb.Func).Call([]reflect.Value{})
+		call := reflect.ValueOf(&order).MethodByName(knownVerb.Func)
+		//view.Flash(text, fmt.Sprintf("%s", call.IsNil()), 2, config.RED)
+		//fmt.Println(call.String())
+		//fmt.Println(call.IsValid())
+		if !call.IsValid() {
+			view.Flash(text, fmt.Sprintf("Func '%s' not yet implemented\n", knownVerb.Func), 2, config.RED)
+			return area
+		}
+		//val := reflect.ValueOf(&order).MethodByName(knownVerb.Func).Call(argv)
+		val := call.Call([]reflect.Value{})
+		/*
+			// call reflec.Call for verb without arguments
+			call := reflect.ValueOf(&order).MethodByName(knownVerb.Func)
+			fmt.Println(call)
+			val := reflect.ValueOf(&order).MethodByName(knownVerb.Func).Call([]reflect.Value{})
+		*/
 		var notice []string
 		for i := 0; i < val[0].Len(); i++ {
 			notice = append(notice, val[0].Index(i).String())
 		}
-		view.Flash(text, strings.Join(notice, "\n"), 5, config.GREEN)
+		view.Flash(text, strings.Join(notice, "\n"), knownVerb.Sleep, config.GREEN)
 		//for i := 0; i < val[0].Len(); i++ {
 		//	fmt.Println(val[0].Index(i).String())
 		//}
@@ -102,39 +120,56 @@ func Parse(input string, area int, text []string) int {
 
 	if len(argv) < 2 {
 		notice := fmt.Sprintf("'%s' kenne ich nicht.\n", strings.Join(parts, " "))
-		view.Flash(text, notice, 2, config.RED)
+		view.Flash(text, notice, knownVerb.Sleep, config.RED)
 		return area
 	}
 
 	// now method and all args should be known
-	val := reflect.ValueOf(&order).MethodByName(knownVerb.Func).Call(argv)
-
-	if knownVerb.Func == "Move" {
-		if val[0].Bool() == false {
-			var notice []string
-			for i := 0; i < val[2].Len(); i++ {
-				notice = append(notice, val[2].Index(i).String())
-			}
-			view.Flash(text, strings.Join(notice, "\n"), 2, config.RED)
-			return area
-		} else {
-			fmt.Printf("New area: %d\n", val[1].Int())
-			return int(val[1].Int())
-		}
+	call := reflect.ValueOf(&order).MethodByName(knownVerb.Func)
+	//view.Flash(text, fmt.Sprintf("%s", call.IsNil()), 2, config.RED)
+	//fmt.Println(call.String())
+	//fmt.Println(call.IsValid())
+	if !call.IsValid() {
+		view.Flash(text, fmt.Sprintf("Func '%s' not yet implemented\n", knownVerb.Func), 2, config.RED)
+		return area
 	}
+	//val := reflect.ValueOf(&order).MethodByName(knownVerb.Func).Call(argv)
+	val := call.Call(argv)
 
 	var notice []string
 	var color string
-	fmt.Println(val[0])
-	if val[0].Bool() == false {
-		color = config.RED
-	} else {
-		color = config.GREEN
-	}
-	for i := 0; i < val[1].Len(); i++ {
-		//fmt.Println(val[1].Index(i).String())
-		notice = append(notice, val[1].Index(i).String())
-		view.Flash(text, strings.Join(notice, "\n"), 2, color)
+	switch knownVerb.Func {
+	case "Move":
+		if val[0].Bool() == true {
+			fmt.Printf("New area: %d\n", val[1].Int())
+			return int(val[1].Int())
+		}
+		for i := 0; i < val[2].Len(); i++ {
+			notice = append(notice, val[2].Index(i).String())
+		}
+		view.Flash(text, strings.Join(notice, "\n"), knownVerb.Sleep, config.RED)
+	case "Stab":
+		for i := 0; i < val[1].Len(); i++ {
+			notice = append(notice, val[1].Index(i).String())
+		}
+		if val[0].Bool() == false {
+			view.Flash(text, strings.Join(notice, "\n"), knownVerb.Sleep, config.RED)
+			order.GameOver()
+		} else {
+			view.Flash(text, strings.Join(notice, "\n"), knownVerb.Sleep, config.GREEN)
+		}
+	default:
+		fmt.Println(val[0])
+		if val[0].Bool() == false {
+			color = config.RED
+		} else {
+			color = config.GREEN
+		}
+		for i := 0; i < val[1].Len(); i++ {
+			//fmt.Println(val[1].Index(i).String())
+			notice = append(notice, val[1].Index(i).String())
+			view.Flash(text, strings.Join(notice, "\n"), knownVerb.Sleep, color)
+		}
 	}
 	return area
 
@@ -204,13 +239,19 @@ func objectAvailable(object config.Object, area int) bool {
 	return objectInArea(object, area) || objectInInventory(object) || objectInUse(object)
 }
 
-func (inv *storage) add(object config.Object) {
+func (inv *storage) add(object config.Object) (ok bool, answer []string) {
+	if len(*inv) > 6 {
+		answer = append(answer, config.Answers[6])
+		return false, answer
+	}
 	*inv = append(*inv, object)
 	o := config.GetObjectByID(object.ID)
 	o.Area = -1
+	answer = append(answer, config.Answers[7])
+	return true, answer
 }
 
-func (inv storage) drop(object config.Object, area int) {
+func (inv storage) drop(object config.Object, area int) (ok bool, answer []string) {
 	var newInv storage
 	for _, o := range inv {
 		if o.ID == object.ID {
@@ -221,6 +262,19 @@ func (inv storage) drop(object config.Object, area int) {
 		newInv = append(newInv, o)
 	}
 	copy(inv, newInv)
+	answer = append(answer, config.Answers[7])
+	return true, answer
+}
+
+func invisible(area int, opponent config.Object, object config.Object) (ok bool, answer []string) {
+	if opponent.Area == area && !objectInUse(*config.GetObjectByID(13)) {
+		answer = append(answer, fmt.Sprintf("%s %s %s",
+			strings.Title(opponent.Description.Article),
+			opponent.Description.Short,
+			config.Answers[3]))
+		return false, answer
+	}
+	return inventory.add(object)
 }
 
 func (v *verb) Open(object config.Object, area int) (ok bool, answer []string) {
@@ -251,61 +305,29 @@ func (v *verb) Take(object config.Object, area int) (ok bool, answer []string) {
 			return false, answer
 		}
 	case 17:
-		opponent := config.GetObjectByID(16)
-		if opponent.Area == area && !objectInUse(*config.GetObjectByID(13)) {
-			answer = append(answer, fmt.Sprintf("%s %s %s",
-				strings.Title(opponent.Description.Article),
-				opponent.Description.Short,
-				config.Answers[3]))
-			return false, answer
-		}
+		return invisible(area, *config.GetObjectByID(16), object)
 	case 19:
-		opponent := config.GetObjectByID(18)
-		if opponent.Area == area && !objectInUse(*config.GetObjectByID(13)) {
-			answer = append(answer, fmt.Sprintf("%s %s %s",
-				strings.Title(opponent.Description.Article),
-				opponent.Description.Short,
-				config.Answers[3]))
-			return false, answer
-		}
+		return invisible(area, *config.GetObjectByID(18), object)
 	case 35:
-		opponent := config.GetObjectByID(36)
-		if opponent.Area == area && !objectInUse(*config.GetObjectByID(13)) {
-			answer = append(answer, fmt.Sprintf("%s %s %s",
-				strings.Title(opponent.Description.Article),
-				opponent.Description.Short,
-				config.Answers[3]))
-			return false, answer
-		}
+		return invisible(area, *config.GetObjectByID(36), object)
 	case 44:
-		opponent := config.GetObjectByID(42)
-		if opponent.Area == area && !objectInUse(*config.GetObjectByID(13)) {
-			answer = append(answer, fmt.Sprintf("%s %s %s",
-				strings.Title(opponent.Description.Article),
-				opponent.Description.Short,
-				config.Answers[3]))
-			return false, answer
-		}
+		return invisible(area, *config.GetObjectByID(42), object)
 	case 32, 43:
 		answer = append(answer, config.Answers[5])
 		return false, answer
 	}
-	opponent := config.GetObjectByID(10)
-	if opponent.Area == area && !objectInUse(*config.GetObjectByID(13)) {
-		answer = append(answer, fmt.Sprintf("%s %s %s",
-			strings.Title(opponent.Description.Article),
-			opponent.Description.Short,
-			config.Answers[3]))
-		return false, answer
-	}
-	if len(inventory) > 6 {
-		answer = append(answer, config.Answers[6])
-		return false, answer
-	}
-	inventory.add(object)
-	answer = append(answer, config.Answers[7])
-	return true, answer
-
+	return invisible(area, *config.GetObjectByID(10), object)
+	/*
+		opponent := config.GetObjectByID(10)
+		if opponent.Area == area && !objectInUse(*config.GetObjectByID(13)) {
+			answer = append(answer, fmt.Sprintf("%s %s %s",
+				strings.Title(opponent.Description.Article),
+				opponent.Description.Short,
+				config.Answers[3]))
+			return false, answer
+		}
+		return inventory.add(object)
+	*/
 	/*
 			359 rem ** nimm ***********************
 		360 f=0:gosub605:iffl=1thenfl=0:goto280
@@ -323,6 +345,52 @@ func (v *verb) Take(object config.Object, area int) (ok bool, answer []string) {
 		372 ifin+1>7thenprint"ich muesste etwas weglegen.":goto280
 		373 in=in+1:ge(no)=-1:print"gut.":goto281
 		374 :
+	*/
+}
+
+func (v *verb) Stab(object config.Object, area int) (ok bool, answer []string) {
+	if !objectInInventory(*config.GetObjectByID(15)) &&
+		!objectInInventory(*config.GetObjectByID(25)) &&
+		!objectInInventory(*config.GetObjectByID(33)) {
+		answer = append(answer, config.Answers[0])
+		return false, answer
+	}
+	switch object.ID {
+	case 14:
+		answer = append(answer, config.Answers[10])
+		return true, answer
+	case 10:
+		answer = append(answer, config.Answers[11])
+		return true, answer
+	case 16:
+		answer = append(answer, config.Answers[12])
+		return true, answer
+	case 18:
+		answer = append(answer, config.Answers[13])
+		return false, answer
+	case 36:
+		answer = append(answer, config.Answers[14])
+		return false, answer
+	case 42:
+		answer = append(answer, config.Answers[15])
+		return false, answer
+	}
+	answer = append(answer, config.Answers[1])
+	return true, answer
+	/*
+		345 rem ** stich **********************
+		346 f=0:gosub605:iffl=1thenfl=0:goto280
+		347 ifno<>10andno<>14andno<>16andno<>18andno<>36andno<>42thenfl=1
+		348 iffl=1thenfl=0:printa$(2):goto280
+		349 ifno=14thenprint"versuche 'schneide'.":goto280
+		350 ifge(15)<>-1andge(25)<>-1andge(33)<>-1thenfl=1
+		351 iffl=1thenfl=0:printa$(1):goto280
+		352 ifno=10thenprint"die raupe ist kitzelig und lacht laut !":goto281
+		353 ifno=16thenprint"der baer brummt unwillig.":goto281
+		354 ifno=18thenprint"der zwerg wird boes und toetet mich !":goto357
+		355 ifno=36thenprint"der gnom verzaubert mich !":goto357
+		356 ifno=42thenprint"der drache verbrennt mich !"
+		357 fori=1to2000:next:goto611
 	*/
 }
 
@@ -349,6 +417,8 @@ func (v *verb) Move(area int, dir string) (ok bool, newArea int, answer []string
 	}
 	movement.RevealArea(newArea)
 	answer = append(answer, config.Answers[7])
+	moves += 1
+	visited[area] = true
 	return true, newArea, answer
 }
 
@@ -400,9 +470,57 @@ func (c *verb) Inventory() (inv []string) {
 
 	inv = append(inv, "Ich habe:")
 	for _, i := range inventory {
-		inv = append(inv, i.Description.Short)
+		inv = append(inv, fmt.Sprintf("- %s", i.Description.Long))
 	}
 	return
+}
+
+func (v *verb) GameOver() {
+	var board []string
+	sum := 0
+	for _, o := range inventory {
+		sum += o.Value
+	}
+	// all valuable objects found
+	if sum == 170 {
+		switch {
+		case moves < 500:
+			sum += 7
+			fallthrough
+		case moves < 400:
+			sum += 7
+			fallthrough
+		case moves < 300:
+			sum += 7
+		}
+	}
+	switch {
+	case visited[5]:
+		sum += 2
+	case visited[29]:
+		sum += 3
+	case visited[31]:
+		sum += 4
+	}
+	board = append(board, fmt.Sprintf("Du hast %d von 200 Punkten!\n", sum))
+	board = append(board, "Noch ein Spiel (j/n)?\n")
+	view.Flash(board, "", -1, "")
+	/*
+		621 poke214,9:poke211,13:sysvd:printb$"-rang ";
+		622 ifpu=0thenprint"10 -":goto632
+		623 ifpu<25thenprint"9 -":goto632
+		624 ifpu<50thenprint"8 -":goto632
+		625 ifpu<75thenprint"7 -":goto632
+		626 ifpu<100thenprint"6 -":goto632
+		627 ifpu<125thenprint"5 -":goto632
+		628 ifpu<150thenprint"4 -":goto632
+		629 ifpu<175thenprint"3 -":goto632
+		630 ifpu<200thenprint"2 -"goto632
+		631 ifpu=200thenprint"1 -"
+	*/
+	//return true
+	exec.Command("stty", "-F", "/dev/tty", "echo").Run()
+	os.Exit(0)
 }
 
 //func (obj object) hit(inv []string) {
