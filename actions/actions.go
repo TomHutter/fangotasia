@@ -209,30 +209,15 @@ func Parse(input string, area int, text []string) int {
 }
 
 func objectInArea(object config.Object, area int) bool {
-	for _, o := range config.ObjectsInArea(area) {
-		if o.Description.Short == object.Description.Short {
-			return true
-		}
-	}
-	return false
+	return object.Area == area
 }
 
 func objectInInventory(object config.Object) bool {
-	for _, o := range inventory {
-		if o.Description.Short == object.Description.Short {
-			return true
-		}
-	}
-	return false
+	return object.Area == -1
 }
 
 func objectInUse(object config.Object) bool {
-	for _, o := range inUse {
-		if o.Description.Short == object.Description.Short {
-			return true
-		}
-	}
-	return false
+	return object.Area == -2
 }
 
 func objectAvailable(object config.Object, area int) bool {
@@ -401,7 +386,7 @@ func (v *verb) Move(area int, dir string) (ok bool, newArea int, answer []string
 	//}
 	var direction = map[string]int{"n": 0, "s": 1, "o": 2, "w": 3}
 
-	newArea = config.Areas[area][direction[dir]]
+	newArea = config.GetAreaByID(area).Directions[direction[dir]]
 	if newArea == 0 {
 		answer = append(answer, config.Answers[8])
 		return false, area, answer

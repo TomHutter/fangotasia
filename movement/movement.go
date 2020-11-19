@@ -22,7 +22,7 @@ func Surroundings(area int) (text []string) {
 	//	ifoa=30thenge(40)=30:ge$(40)="eine tuer im sueden"
 	//fmt.Printf("Ich bin %s\n", locations[area-1])
 	//var text []string
-	desc := strings.Split(config.Locations[area-1].Long, "\\n")
+	desc := strings.Split(config.GetAreaByID(area).Description.Long, "\\n")
 	desc0, desc := desc[0], desc[1:]
 	text = append(text, fmt.Sprintf("%sIch bin %s", config.YELLOW, desc0))
 	for _, v := range desc {
@@ -58,7 +58,7 @@ func Surroundings(area int) (text []string) {
 	}
 	var directions []string
 	for d := 0; d < 4; d++ {
-		if config.Areas[area][d] != 0 {
+		if config.GetAreaByID(area).Directions[d] == 0 {
 			switch d {
 			case 0: // N
 				directions = append(directions, "Norden")

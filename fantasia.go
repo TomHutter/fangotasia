@@ -114,7 +114,7 @@ func main() {
 	setupCloseHandler()
 	prelude()
 	view.Scanner("once: true")
-	area := 3
+	area := 1
 	//oldArea := area
 	movement.RevealArea(area)
 	//var dir rune

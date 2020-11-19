@@ -1,111 +1,616 @@
 locations:
-  - long: vor einem riesigem Torbogen.
-    short: Torbogen
-#    directions: 
-#      - 0
-#      - 0
-#      - 2
-#      - 0
-#    coordinates:
-#      y: 11
-#      x: 0
-  - long: auf einer Blumenwiese.
-    short: Blumenwiese
-  - long: an einem Seerosenteich.
-    short: Seerosenteich
-  - long: in einer trostlosen Einöde.
-    short: Einöde
-  - long: in einem nebligem Moor.
-    short: Moor
-  - long: in einer feenhaften Grotte.
-    short: Grotte
-  - long: an einer zerklüfteten Felswand.
-    short: Felswand
-  - long: in einem lichten Auwald.
-    short: Auwald
-  - long: auf einer blühenden Heide.
-    short: Heide
-  - long: in einer verdorrten Steppe.
-    short: Steppe
-  - long: auf dem Versammlungsplatz der Gnome.
-    short: Versammlungsplatz
-  - long: in der Waffenkammer der Gnome.
-    short: Waffenkammer
-  - long: in einer Tropfsteinhöhle.
-    short: Tropfsteinhöhle
-  - long: am Fuß eines Berges.
-    short: Berg
-  - long: in der Schatzkammer der Elfen.
-    short: Schatzkammer
-  - long: auf einer Bergwiese.
-    short: Bergwiese
-  - long: an einer silbernen Quelle.
-    short: Quelle
-  - long: in einer Schlucht mit vielen Farnen.
-    short: Schlucht
-  - long: in einer Bärenhöhle.
-    short: Bärenhöhle
-  - long: auf einer schwankenden Hängebrücke.
-    short: Hängebrücke
-  - long: an einem Wiesenhang.
-    short: Wiesenhang
-  - long: in einer Rosenlaube.
-    short: Rosenlaube
-  - long: in einem Kräutergarten.
-    short: Kräutergarten
-  - long: auf einem verschlungenen Weg.
-    short: Weg
-  - long: an einer verfallenen Burgruine.
-    short: Burgruine
-  - long: in einem sonnigen Obsthain.
-    short: Obsthain
-  - long: in einem verwilderten Park.
-    short: Park
-  - long: in einer finsteren Hexenküche.
-    short: Hexenküche
-  - long: im Hof einer verlassenen Burg.
-    short: Burg
-  - long: in einem finsteren Burgverlies.
-    short: Burgverlies
-  - long: in der Krone eines Baumes.\n++Ich kann nicht weit sehen.++
-    short: Baumkrone
-  - long: in einem feuchten Laubwald.
-    short: Laubwald
-  - long: im Reich der Feen.
-    short: Feenreich
-  - long: in einer grauen Steinwüste.
-    short: Steinwüste
-  - long: an einem breiten Fluss.\n++Am anderen Ufer bewegt sich etwas.++
-    short: Fluss
-  - long: auf einem dreckigem Pfad.
-    short: Pfad
-  - long: in einem Dornengestrüpp.\n++Ich finde mich nicht mehr zurecht.++
-    short: Dornengestrüpp
-  - long: in einem Dornengestrüpp.\n++Ich finde mich nicht mehr zurecht.++
-    short: Dornengestrüpp
-  - long: in einem Dornengestrüpp.\n++Ich finde mich nicht mehr zurecht.++
-    short: Dornengestrüpp
-  - long: auf einem Hohlweg.
-    short: Hohlweg
-  - long: in einem unheimlichen Wald.\n++Man sieht kaum einen Weg. Ob hier ein\nDrache haust?!++
-    short: Wald
-  - long: in einem unheimlichen Wald.\n++Man sieht kaum einen Weg. Ob hier ein\nDrache haust?!++
-    short: Wald
-  - long: in einem unheimlichen Wald.\n++Man sieht kaum einen Weg. Ob hier ein\nDrache haust?!++
-    short: Wald
-  - long: in einem unheimlichen Wald.\n++Man sieht kaum einen Weg. Ob hier ein\nDrache haust?!++
-    short: Wald
-  - long: in einem unheimlichen Wald.\n++Man sieht kaum einen Weg. Ob hier ein\nDrache haust?!++
-    short: Wald
-  - long: in einem unheimlichen Wald.\n++Man sieht kaum einen Weg. Ob hier ein\nDrache haust?!++
-    short: Wald
-  - long: in einem unheimlichen Wald.\n++Man sieht kaum einen Weg. Ob hier ein\nDrache haust?!++
-    short: Wald
-  - long: in einem unheimlichen Wald.\n++Man sieht kaum einen Weg. Ob hier ein\nDrache haust?!++
-    short: Wald
-  - long: in einem unheimlichen Wald.\n++Man sieht kaum einen Weg. Ob hier ein\nDrache haust?!++
-    short: Wald
-  - long: in einem unheimlichen Wald.\n++Man sieht kaum einen Weg. Ob hier ein\nDrache haust?!++
-    short: Wald
-  - long: auf einer unzugänglichen Waldlichtung.
-    short: Waldlichtung
+  - id: 1
+    description:
+      long: vor einem riesigem Torbogen.
+      short: Torbogen
+    directions: 
+      - 0
+      - 0
+      - 2
+      - 0
+    coordinates:
+      y: 11
+      x: 0
+  - id: 2
+    description:
+      long: auf einer Blumenwiese.
+      short: Blumenwiese
+    directions: 
+      - 8
+      - 0
+      - 3
+      - 1
+    coordinates:
+      y: 11
+      x: 1
+  - id: 3
+    description:
+      long: an einem Seerosenteich.
+      short: Seerosenteich
+    directions: 
+      - 9
+      - 0
+      - 0
+      - 2
+    coordinates:
+      y: 11
+      x: 2
+  - id: 4
+    description:
+      long: in einer trostlosen Einöde.
+      short: Einöde
+    directions: 
+      - 10
+      - 0
+      - 5
+      - 0
+    coordinates:
+      y: 11
+      x: 3
+  - id: 5
+    description:
+      long: in einem nebligem Moor.
+      short: Moor
+    directions: 
+      - 11
+      - 0
+      - 0
+      - 4
+    coordinates:
+      y: 11
+      x: 4
+  - id: 6
+    description:
+      long: in einer feenhaften Grotte.
+      short: Grotte
+    directions: 
+      - 13
+      - 0
+      - 7
+      - 0
+    coordinates:
+      y: 9
+      x: 0
+  - id: 7
+    description:
+      long: an einer zerklüfteten Felswand.
+      short: Felswand
+    directions: 
+      - 0
+      - 8
+      - 0
+      - 0
+    coordinates:
+      y: 9
+      x: 1
+  - id: 8
+    description:
+      long: in einem lichten Auwald.
+      short: Auwald
+    directions: 
+      - 7
+      - 2
+      - 9
+      - 0
+    coordinates:
+      y: 10
+      x: 1
+  - id: 9
+    description:
+      long: auf einer blühenden Heide.
+      short: Heide
+    directions: 
+      - 15
+      - 3
+      - 10
+      - 8
+    coordinates:
+      y: 10
+      x: 2
+  - id: 10
+    description:
+      long: in einer verdorrten Steppe.
+      short: Steppe
+    directions: 
+      - 0
+      - 4
+      - 11
+      - 9
+    coordinates:
+      y: 10
+      x: 3
+  - id: 11
+    description:
+      long: auf dem Versammlungsplatz der Gnome.
+      short: Versammlungsplatz
+    directions: 
+      - 0
+      - 5
+      - 12
+      - 10
+    coordinates:
+      y: 10
+      x: 4
+  - id: 12
+    description:
+      long: in der Waffenkammer der Gnome.
+      short: Waffenkammer
+    directions: 
+      - 0
+      - 0
+      - 0
+      - 11
+    coordinates:
+      y: 10
+      x: 5
+  - id: 13
+    description:
+      long: in einer Tropfsteinhöhle.
+      short: Tropfsteinhöhle
+    directions: 
+      - 16
+      - 6
+      - 0
+      - 0
+    coordinates:
+      y: 8
+      x: 0
+  - id: 14
+    description:
+      long: am Fuß eines Berges.
+      short: Berg
+    directions: 
+      - 17
+      - 0
+      - 15
+      - 0
+    coordinates:
+      y: 8
+      x: 1
+  - id: 15
+    description:
+      long: in der Schatzkammer der Elfen.
+      short: Schatzkammer
+    directions: 
+      - 0
+      - 9
+      - 0
+      - 14
+    coordinates:
+      y: 8
+      x: 2
+
+
+
+  - id: 16
+    description:
+      long: auf einer Bergwiese.
+      short: Bergwiese
+    directions: 
+      - 0
+      - 13
+      - 17
+      - 0
+    coordinates:
+      y: 7
+      x: 0
+  - id: 17
+    description:
+      long: an einer silbernen Quelle.
+      short: Quelle
+    directions: 
+      - 0
+      - 14
+      - 18
+      - 16
+    coordinates:
+      y: 7
+      x: 1
+  - id: 18
+    description:
+      long: in einer Schlucht mit vielen Farnen.
+      short: Schlucht
+    directions: 
+      - 24
+      - 0
+      - 19
+      - 17
+    coordinates:
+      y: 7
+      x: 2
+  - id: 19
+    description:
+      long: in einer Bärenhöhle.
+      short: Bärenhöhle
+    directions: 
+      - 25
+      - 0
+      - 20
+      - 18
+    coordinates:
+      y: 7
+      x: 3
+  - id: 20
+    description:
+      long: auf einer schwankenden Hängebrücke.
+      short: Hängebrücke
+    directions: 
+      - 0
+      - 0
+      - 21
+      - 19
+    coordinates:
+      y: 7
+      x: 4
+  - id: 21
+    description:
+      long: an einem Wiesenhang.
+      short: Wiesenhang
+    directions: 
+      - 26
+      - 0
+      - 0
+      - 20
+    coordinates:
+      y: 7
+      x: 5
+  - id: 22
+    description:
+      long: in einer Rosenlaube.
+      short: Rosenlaube
+    directions: 
+      - 27
+      - 0
+      - 23
+      - 0
+    coordinates:
+      y: 6
+      x: 0
+  - id: 23
+    description:
+      long: in einem Kräutergarten.
+      short: Kräutergarten
+    directions: 
+      - 0
+      - 0
+      - 24
+      - 22
+    coordinates:
+      y: 6
+      x: 1
+  - id: 24
+    description:
+      long: auf einem verschlungenen Weg.
+      short: Weg
+    directions: 
+      - 29
+      - 18
+      - 0
+      - 23
+    coordinates:
+      y: 6
+      x: 2
+  - id: 25
+    description:
+      long: an einer verfallenen Burgruine.
+      short: Burgruine
+    directions: 
+      - 30
+      - 19
+      - 0
+      - 0
+    coordinates:
+      y: 6
+      x: 3
+  - id: 26
+    description:
+      long: in einem sonnigen Obsthain.
+      short: Obsthain
+    directions: 
+      - 32
+      - 21
+      - 0
+      - 0
+    coordinates:
+      y: 6
+      x: 5
+  - id: 27
+    description:
+      long: in einem verwilderten Park.
+      short: Park
+    directions: 
+      - 0
+      - 22
+      - 28
+      - 0
+    coordinates:
+      y: 5
+      x: 0
+  - id: 28
+    description:
+      long: in einer finsteren Hexenküche.
+      short: Hexenküche
+    directions: 
+      - 0
+      - 0
+      - 0
+      - 27
+    coordinates:
+      y: 5
+      x: 1
+  - id: 29
+    description:
+      long: im Hof einer verlassenen Burg.
+      short: Burg
+    directions: 
+      - 0
+      - 0
+      - 30
+      - 0
+    coordinates:
+      y: 5
+      x: 2
+  - id: 30
+    description:
+      long: in einem finsteren Burgverlies.
+      short: Burgverlies
+    directions: 
+      - 0
+      - 0
+      - 25
+      - 0
+    coordinates:
+      y: 5
+      x: 3
+  - id: 31
+    description:
+      long: in der Krone eines Baumes.\n++Ich kann nicht weit sehen.++
+      short: Baumkrone
+    directions: 
+      - 0
+      - 0
+      - 0
+      - 0
+    coordinates:
+      y: 9
+      x: 3
+  - id: 32
+    description:
+      long: in einem feuchten Laubwald.
+      short: Laubwald
+    directions: 
+      - 0
+      - 26
+      - 0
+      - 33
+    coordinates:
+      y: 3
+      x: 5
+  - id: 33
+    description:
+      long: im Reich der Feen.
+      short: Feenreich
+    directions: 
+      - 0
+      - 34
+      - 32
+      - 0
+    coordinates:
+      y: 3
+      x: 4
+  - id: 34
+    description:
+      long: in einer grauen Steinwüste.
+      short: Steinwüste
+    directions: 
+      - 33
+      - 36
+      - 37
+      - 35
+    coordinates:
+      y: 4
+      x: 4
+  - id: 35
+    description:
+      long: an einem breiten Fluss.\n++Am anderen Ufer bewegt sich etwas.++
+      short: Fluss
+    directions: 
+      - 0
+      - 0
+      - 34
+      - 0
+    coordinates:
+      y: 4
+      x: 3
+  - id: 36
+    description:
+      long: auf einem dreckigem Pfad.
+      short: Pfad
+    directions: 
+      - 34
+      - 0
+      - 5
+      - 0
+    coordinates:
+      y: 5
+      x: 4
+  - id: 37
+    description:
+      long: in einem Dornengestrüpp.\n++Ich finde mich nicht mehr zurecht.++
+      short: Dornengestrüpp
+    directions: 
+      - 37
+      - 38
+      - 39
+      - 34
+    coordinates:
+      y: 4
+      x: 6
+  - id: 38
+    description:
+      long: in einem Dornengestrüpp.\n++Ich finde mich nicht mehr zurecht.++
+      short: Dornengestrüpp
+    directions: 
+      - 37
+      - 38
+      - 38
+      - 38
+    coordinates:
+      y: 5
+      x: 6
+  - id: 39
+    description:
+      long: in einem Dornengestrüpp.\n++Ich finde mich nicht mehr zurecht.++
+      short: Dornengestrüpp
+    directions: 
+      - 40
+      - 39
+      - 39
+      - 37
+    coordinates:
+      y: 4
+      x: 7
+  - id: 40
+    description:
+      long: auf einem Hohlweg.
+      short: Hohlweg
+    directions: 
+      - 42
+      - 39
+      - 0
+      - 0
+    coordinates:
+      y: 3
+      x: 7
+  - id: 41
+    description:
+      long: in einem unheimlichen Wald.\n++Man sieht kaum einen Weg. Ob hier ein\nDrache haust?!++
+      short: Wald
+    directions: 
+      - 43
+      - 41
+      - 42
+      - 41
+    coordinates:
+      y: 2
+      x: 6
+  - id: 42
+    description:
+      long: in einem unheimlichen Wald.\n++Man sieht kaum einen Weg. Ob hier ein\nDrache haust?!++
+      short: Wald
+    directions: 
+      - 44
+      - 40
+      - 42
+      - 41
+    coordinates:
+      y: 2
+      x: 7
+  - id: 43
+    description:
+      long: in einem unheimlichen Wald.\n++Man sieht kaum einen Weg. Ob hier ein\nDrache haust?!++
+      short: Wald
+    directions: 
+      - 47
+      - 41
+      - 43
+      - 43
+    coordinates:
+      y: 1
+      x: 6
+  - id: 44
+    description:
+      long: in einem unheimlichen Wald.\n++Man sieht kaum einen Weg. Ob hier ein\nDrache haust?!++
+      short: Wald
+    directions: 
+      - 48
+      - 42
+      - 45
+      - 44
+    coordinates:
+      y: 1
+      x: 7
+  - id: 45
+    description:
+      long: in einem unheimlichen Wald.\n++Man sieht kaum einen Weg. Ob hier ein\nDrache haust?!++
+      short: Wald
+    directions: 
+      - 49
+      - 45
+      - 45
+      - 44
+    coordinates:
+      y: 1
+      x: 8
+  - id: 46
+    description:
+      long: in einem unheimlichen Wald.\n++Man sieht kaum einen Weg. Ob hier ein\nDrache haust?!++
+      short: Wald
+    directions: 
+      - 50
+      - 51
+      - 0
+      - 0
+    coordinates:
+      y: 1
+      x: 9
+  - id: 47
+    description:
+      long: in einem unheimlichen Wald.\n++Man sieht kaum einen Weg. Ob hier ein\nDrache haust?!++
+      short: Wald
+    directions: 
+      - 47
+      - 43
+      - 48
+      - 47
+    coordinates:
+      y: 0
+      x: 6
+  - id: 48
+    description:
+      long: in einem unheimlichen Wald.\n++Man sieht kaum einen Weg. Ob hier ein\nDrache haust?!++
+      short: Wald
+    directions: 
+      - 48
+      - 44
+      - 48
+      - 47
+    coordinates:
+      y: 0
+      x: 7
+  - id: 49
+    description:
+      long: in einem unheimlichen Wald.\n++Man sieht kaum einen Weg. Ob hier ein\nDrache haust?!++
+      short: Wald
+    directions: 
+      - 0
+      - 45
+      - 50
+      - 0
+    coordinates:
+      y: 0
+      x: 8
+  - id: 50
+    description:
+      long: in einem unheimlichen Wald.\n++Man sieht kaum einen Weg. Ob hier ein\nDrache haust?!++
+      short: Wald
+    directions: 
+      - 0
+      - 46
+      - 0
+      - 49
+    coordinates:
+      y: 0
+      x: 9
+  - id: 51
+    description:
+      long: auf einer unzugänglichen Waldlichtung.
+      short: Waldlichtung
+    directions: 
+      - 46
+      - 0
+      - 0
+      - 0
+    coordinates:
+      y: 2
+      x: 9

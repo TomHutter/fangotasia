@@ -9,7 +9,7 @@ import (
 )
 
 var GameObjects []Object
-var Locations []description
+var GameAreas []Area
 var Overwrites [][3]string
 var Answers []string
 
@@ -29,11 +29,11 @@ type conf struct {
 	Nouns      []string        `yaml:"nouns"`
 	Objects    []Object        `yaml:"objects"`
 	Answers    []string        `yaml:"answers"`
-	Locations  []description   `yaml:"locations"`
+	Locations  []Area          `yaml:"locations"`
 	Overwrites []mapOverwrites `yaml:"overwrites"`
 }
 
-// Places : Contains long and short description of locations.
+// Long and short description and the article for the noun
 type description struct {
 	Long    string
 	Short   string
@@ -46,6 +46,22 @@ type Object struct {
 	Description description
 	Area        int
 	Value       int
+}
+
+// Area : long and short description of locations.
+//        directions: which area will be nearby in n,s,e,w
+//        coordinates: y and x coordinates for area on map
+type Area struct {
+	ID          int
+	Description description
+	Directions  [4]int
+	Coordinates Coordinates
+}
+
+type Coordinates struct {
+	Y int
+	X int
+	//Visible bool
 }
 
 type mapOverwrites struct {
@@ -83,6 +99,7 @@ const (
 	AD  = "\u2BC6"
 )
 
+/*
 // Areas start at 1 in the original game.
 // Kept it like this to adapt game more easily.
 var Areas = [52][4]int{
@@ -100,6 +117,7 @@ var Areas = [52][4]int{
 	{49, 45, 45, 44}, {50, 51, 0, 0}, {47, 43, 48, 47}, {48, 44, 48, 47},
 	{0, 45, 50, 0}, {0, 46, 0, 49}, {46, 0, 0, 0},
 }
+*/
 
 var DoorOpen = false
 
@@ -119,7 +137,7 @@ var AreaMap = [12][10]int{
 	{1, 2, 3, 4, 5, 0, 0, 0, 0, 0},
 }
 */
-
+/*
 // AreaCoordinates  Array with the coordinates [x,y] for each area
 // in a field [0..11][0..9]
 // Again: First area starts with 1
@@ -135,13 +153,7 @@ var AreaCoordinates = [52]Coordinates{
 	{2, 6}, {2, 7}, {1, 6}, {1, 7}, {1, 8}, {1, 9},
 	{0, 6}, {0, 7}, {0, 8}, {0, 9}, {2, 9},
 }
-
-type Coordinates struct {
-	Y int
-	X int
-	//Visible bool
-}
-
+*/
 /*
 var MapOverwrite = [52]MapSpecials{
 	{},{},{},{},{},
@@ -218,8 +230,8 @@ func getMapOverwrites() (overwrites [][3]string) {
 // InitBoxLen : Get min length for boxes to fit all short descriptions of locations
 func initBoxLen() {
 	BoxLen = 0
-	for _, v := range Locations {
-		lineLen := len([]rune(strings.Split(v.Short, "\n")[0]))
+	for _, v := range GameAreas {
+		lineLen := len([]rune(strings.Split(v.Description.Short, "\n")[0]))
 		if lineLen > BoxLen {
 			BoxLen = lineLen
 		}
@@ -236,7 +248,7 @@ func Init() {
 	c.getConf("config/objects.yaml")
 	GameObjects = c.Objects
 	c.getConf("config/locations.yaml")
-	Locations = c.Locations
+	GameAreas = c.Locations
 	c.getConf("config/answers.yaml")
 	Answers = c.Answers
 	c.getConf("config/verbs.yaml")
@@ -267,6 +279,15 @@ func GetObjectByID(id int) (object *Object) {
 	for i, o := range GameObjects {
 		if o.ID == id {
 			return &GameObjects[i]
+		}
+	}
+	return
+}
+
+func GetAreaByID(id int) (area Area) {
+	for _, o := range GameAreas {
+		if o.ID == id {
+			return o
 		}
 	}
 	return
