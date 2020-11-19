@@ -257,9 +257,9 @@ func Init() {
 	initBoxLen()
 }
 
-func ObjectsInArea(area int) (objects []Object) {
+func ObjectsInArea(area Area) (objects []Object) {
 	for _, o := range GameObjects {
-		if o.Area == area {
+		if o.Area == area.ID {
 			objects = append(objects, o)
 		}
 	}
@@ -285,9 +285,9 @@ func GetObjectByID(id int) (object *Object) {
 }
 
 func GetAreaByID(id int) (area Area) {
-	for _, o := range GameAreas {
-		if o.ID == id {
-			return o
+	for _, a := range GameAreas {
+		if a.ID == id {
+			return a
 		}
 	}
 	return

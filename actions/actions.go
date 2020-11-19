@@ -14,6 +14,12 @@ import (
 
 type verb config.Verb
 type storage []config.Object
+type reaction struct {
+	OK     bool
+	KO     bool
+	Answer []string
+	Sleep  int
+}
 
 var inventory storage
 var inUse storage
@@ -25,7 +31,7 @@ var visited [51]bool
 
 //type command struct{}
 
-func Parse(input string, area int, text []string) int {
+func Parse(input string, area config.Area, text []string) config.Area {
 
 	var command string
 	var order verb
@@ -49,7 +55,7 @@ func Parse(input string, area int, text []string) int {
 
 	if knownVerb == (config.Verb{}) {
 		notice := fmt.Sprintf("'%s' kenne ich nicht.\nDas Kommando 'Verben' gibt eine Liste aller verfügbaren Verben aus.\n", command)
-		view.Flash(text, notice, knownVerb.Sleep, config.RED)
+		view.Flash(text, notice, 2, config.RED)
 		return area
 	}
 
@@ -142,35 +148,48 @@ func Parse(input string, area int, text []string) int {
 	case "Move":
 		if val[0].Bool() == true {
 			fmt.Printf("New area: %d\n", val[1].Int())
-			return int(val[1].Int())
+			return config.GetAreaByID(int(val[1].Int()))
 		}
 		for i := 0; i < val[2].Len(); i++ {
 			notice = append(notice, val[2].Index(i).String())
 		}
 		view.Flash(text, strings.Join(notice, "\n"), knownVerb.Sleep, config.RED)
-	case "Stab":
-		for i := 0; i < val[1].Len(); i++ {
-			notice = append(notice, val[1].Index(i).String())
-		}
-		if val[0].Bool() == false {
-			view.Flash(text, strings.Join(notice, "\n"), knownVerb.Sleep, config.RED)
-			order.GameOver()
-		} else {
-			view.Flash(text, strings.Join(notice, "\n"), knownVerb.Sleep, config.GREEN)
-		}
+	//case "Stab":
 	default:
-		fmt.Println(val[0])
-		if val[0].Bool() == false {
-			color = config.RED
-		} else {
+		// OK
+		if val[0].Field(0).Bool() == true {
 			color = config.GREEN
+		} else {
+			color = config.RED
 		}
-		for i := 0; i < val[1].Len(); i++ {
-			//fmt.Println(val[1].Index(i).String())
-			notice = append(notice, val[1].Index(i).String())
-			view.Flash(text, strings.Join(notice, "\n"), knownVerb.Sleep, color)
+		// Sleep
+		sleep := val[0].Field(3).Int()
+		// Answer
+		for i := 0; i < val[0].Field(2).Len(); i++ {
+			notice = append(notice, val[0].Field(2).Index(i).String())
+		}
+		view.Flash(text, strings.Join(notice, "\n"), int(sleep), color)
+		// KO
+		if val[0].Field(1).Bool() == true {
+			order.GameOver()
 		}
 	}
+	/*
+		default:
+			fmt.Println(val[0])
+			sleep := 1
+			if val[0].Bool() == false {
+				color = config.RED
+				sleep = knownVerb.Sleep
+			} else {
+				color = config.GREEN
+			}
+			for i := 0; i < val[1].Len(); i++ {
+				//fmt.Println(val[1].Index(i).String())
+				notice = append(notice, val[1].Index(i).String())
+				view.Flash(text, strings.Join(notice, "\n"), sleep, color)
+			}
+		}*/
 	return area
 
 	/*
@@ -208,8 +227,8 @@ func Parse(input string, area int, text []string) int {
 	*/
 }
 
-func objectInArea(object config.Object, area int) bool {
-	return object.Area == area
+func objectInArea(object config.Object, area config.Area) bool {
+	return object.Area == area.ID
 }
 
 func objectInInventory(object config.Object) bool {
@@ -220,28 +239,34 @@ func objectInUse(object config.Object) bool {
 	return object.Area == -2
 }
 
-func objectAvailable(object config.Object, area int) bool {
+func objectAvailable(object config.Object, area config.Area) bool {
 	return objectInArea(object, area) || objectInInventory(object) || objectInUse(object)
 }
 
-func (inv *storage) add(object config.Object) (ok bool, answer []string) {
+func (inv *storage) add(object config.Object) (r reaction) {
 	if len(*inv) > 6 {
-		answer = append(answer, config.Answers[6])
-		return false, answer
+		r.Answer = append(r.Answer, config.Answers[6])
+		r.OK = false
+		r.KO = false
+		r.Sleep = 2000
+		return
 	}
 	*inv = append(*inv, object)
 	o := config.GetObjectByID(object.ID)
 	o.Area = -1
-	answer = append(answer, config.Answers[7])
-	return true, answer
+	r.Answer = append(r.Answer, config.Answers[7])
+	r.OK = true
+	r.KO = false
+	r.Sleep = 1000
+	return
 }
 
-func (inv storage) drop(object config.Object, area int) (ok bool, answer []string) {
+func (inv storage) drop(object config.Object, area config.Area) (ok bool, answer []string) {
 	var newInv storage
 	for _, o := range inv {
 		if o.ID == object.ID {
 			obj := config.GetObjectByID(object.ID)
-			obj.Area = area
+			obj.Area = area.ID
 			continue
 		}
 		newInv = append(newInv, o)
@@ -251,13 +276,16 @@ func (inv storage) drop(object config.Object, area int) (ok bool, answer []strin
 	return true, answer
 }
 
-func invisible(area int, opponent config.Object, object config.Object) (ok bool, answer []string) {
-	if opponent.Area == area && !objectInUse(*config.GetObjectByID(13)) {
-		answer = append(answer, fmt.Sprintf("%s %s %s",
+func snatch(area config.Area, opponent config.Object, object config.Object) (r reaction) {
+	if objectInArea(opponent, area) && !objectInUse(*config.GetObjectByID(13)) {
+		r.Answer = append(r.Answer, fmt.Sprintf("%s %s %s",
 			strings.Title(opponent.Description.Article),
 			opponent.Description.Short,
 			config.Answers[3]))
-		return false, answer
+		r.OK = false
+		r.KO = false
+		r.Sleep = 2000
+		return
 	}
 	return inventory.add(object)
 }
@@ -267,41 +295,59 @@ func (v *verb) Open(object config.Object, area int) (ok bool, answer []string) {
 	return true, answer
 }
 
-func (v *verb) Take(object config.Object, area int) (ok bool, answer []string) {
+func (v *verb) Take(object config.Object, area config.Area) (r reaction) {
 	if !objectAvailable(object, area) {
-		answer = append(answer, "sehe ich hier nicht.")
-		return false, answer
+		r.Answer = append(r.Answer, config.Answers[16])
+		r.OK = false
+		r.KO = false
+		r.Sleep = 2000
+		return
 	}
 	if objectInInventory(object) || objectInUse(object) {
-		answer = append(answer, "habe ich schon.")
-		return false, answer
+		r.Answer = append(r.Answer, config.Answers[17])
+		r.OK = false
+		r.KO = false
+		r.Sleep = 2000
+		return
 	}
 
 	switch object.ID {
 	case 10, 16, 18, 21, 22, 27, 36, 40, 42:
-		answer = append(answer, config.Answers[0])
-		return false, answer
+		r.Answer = append(r.Answer, config.Answers[0])
+		r.OK = false
+		r.KO = false
+		r.Sleep = 2000
+		return
 	case 29, 14:
-		answer = append(answer, config.Answers[4])
-		return false, answer
+		r.Answer = append(r.Answer, config.Answers[4])
+		r.OK = false
+		r.KO = false
+		r.Sleep = 2000
+		return
 	case 34:
 		if !objectInUse(*config.GetObjectByID(9)) {
-			answer = append(answer, config.Answers[4])
-			return false, answer
+			r.Answer = append(r.Answer, config.Answers[4])
+			r.OK = false
+			r.KO = false
+			r.Sleep = 2000
+			return
 		}
 	case 17:
-		return invisible(area, *config.GetObjectByID(16), object)
+		return snatch(area, *config.GetObjectByID(16), object)
 	case 19:
-		return invisible(area, *config.GetObjectByID(18), object)
+		return snatch(area, *config.GetObjectByID(18), object)
 	case 35:
-		return invisible(area, *config.GetObjectByID(36), object)
+		return snatch(area, *config.GetObjectByID(36), object)
 	case 44:
-		return invisible(area, *config.GetObjectByID(42), object)
+		return snatch(area, *config.GetObjectByID(42), object)
 	case 32, 43:
-		answer = append(answer, config.Answers[5])
-		return false, answer
+		r.Answer = append(r.Answer, config.Answers[5])
+		r.OK = false
+		r.KO = false
+		r.Sleep = 2000
+		return
 	}
-	return invisible(area, *config.GetObjectByID(10), object)
+	return snatch(area, *config.GetObjectByID(10), object)
 	/*
 		opponent := config.GetObjectByID(10)
 		if opponent.Area == area && !objectInUse(*config.GetObjectByID(13)) {
@@ -333,35 +379,59 @@ func (v *verb) Take(object config.Object, area int) (ok bool, answer []string) {
 	*/
 }
 
-func (v *verb) Stab(object config.Object, area int) (ok bool, answer []string) {
+func (v *verb) Stab(object config.Object, area config.Area) (r reaction) {
 	if !objectInInventory(*config.GetObjectByID(15)) &&
 		!objectInInventory(*config.GetObjectByID(25)) &&
 		!objectInInventory(*config.GetObjectByID(33)) {
-		answer = append(answer, config.Answers[0])
-		return false, answer
+		r.Answer = append(r.Answer, config.Answers[0])
+		r.OK = false
+		r.KO = false
+		r.Sleep = 2000
+		return
 	}
 	switch object.ID {
 	case 14:
-		answer = append(answer, config.Answers[10])
-		return true, answer
+		r.Answer = append(r.Answer, config.Answers[10])
+		r.OK = true
+		r.KO = false
+		r.Sleep = 2000
+		return
 	case 10:
-		answer = append(answer, config.Answers[11])
-		return true, answer
+		r.Answer = append(r.Answer, config.Answers[11])
+		r.OK = true
+		r.KO = false
+		r.Sleep = 2000
+		return
 	case 16:
-		answer = append(answer, config.Answers[12])
-		return true, answer
+		r.Answer = append(r.Answer, config.Answers[12])
+		r.OK = true
+		r.KO = false
+		r.Sleep = 2000
+		return
 	case 18:
-		answer = append(answer, config.Answers[13])
-		return false, answer
+		r.Answer = append(r.Answer, config.Answers[13])
+		r.OK = false
+		r.KO = true
+		r.Sleep = 2000
+		return
 	case 36:
-		answer = append(answer, config.Answers[14])
-		return false, answer
+		r.Answer = append(r.Answer, config.Answers[14])
+		r.OK = false
+		r.KO = true
+		r.Sleep = 2000
+		return
 	case 42:
-		answer = append(answer, config.Answers[15])
-		return false, answer
+		r.Answer = append(r.Answer, config.Answers[15])
+		r.OK = false
+		r.KO = true
+		r.Sleep = 2000
+		return
 	}
-	answer = append(answer, config.Answers[1])
-	return true, answer
+	r.Answer = append(r.Answer, config.Answers[1])
+	r.OK = true
+	r.KO = false
+	r.Sleep = 2000
+	return
 	/*
 		345 rem ** stich **********************
 		346 f=0:gosub605:iffl=1thenfl=0:goto280
@@ -379,31 +449,31 @@ func (v *verb) Stab(object config.Object, area int) (ok bool, answer []string) {
 	*/
 }
 
-func (v *verb) Move(area int, dir string) (ok bool, newArea int, answer []string) {
+func (v *verb) Move(area config.Area, dir string) (ok bool, newArea int, answer []string) {
 	//func Move(area int, direction int, text []string) int {
 	//if direction == 0 {
 	//	return 0, "Ich brauche eine Richtung."
 	//}
 	var direction = map[string]int{"n": 0, "s": 1, "o": 2, "w": 3}
 
-	newArea = config.GetAreaByID(area).Directions[direction[dir]]
+	newArea = area.Directions[direction[dir]]
 	if newArea == 0 {
 		answer = append(answer, config.Answers[8])
-		return false, area, answer
+		return false, area.ID, answer
 		//view.Flash(text, "In diese Richtung führt kein Weg.")
 		//return area
 	}
 	// Area 30 and 25 are connected by a door. Is it open?
-	if (area == 30 || area == 25 && direction[dir] == 0) && !config.DoorOpen {
+	if (area.ID == 30 || area.ID == 25 && direction[dir] == 0) && !config.DoorOpen {
 		answer = append(answer, config.Answers[9])
-		return false, area, answer
+		return false, area.ID, answer
 		//view.Flash(text, "Die Tür ist versperrt.")
 		//return area
 	}
 	movement.RevealArea(newArea)
 	answer = append(answer, config.Answers[7])
 	moves += 1
-	visited[area] = true
+	visited[area.ID] = true
 	return true, newArea, answer
 }
 

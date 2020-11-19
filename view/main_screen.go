@@ -39,9 +39,9 @@ func Flash(text []string, notice string, sleep int, color string) {
 		Scanner("once: true")
 	} else {
 		PrintScreen(flashText)
-		time.Sleep(time.Duration(sleep) * time.Second)
+		time.Sleep(time.Duration(sleep) * time.Millisecond)
 	}
-	time.Sleep(time.Duration(sleep) * time.Second)
+	//time.Sleep(time.Duration(sleep) * time.Millisecond)
 	PrintScreen(text)
 }
 

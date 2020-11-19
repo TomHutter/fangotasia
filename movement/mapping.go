@@ -19,14 +19,14 @@ func initVisibleAreas() {
 	visibleMap[11][0] = 1
 }
 
-func AreaVisible(area int) bool {
-	coordinates := config.GetAreaByID(area).Coordinates
-	return visibleMap[coordinates.Y][coordinates.X] != 0
+func AreaVisible(a int) bool {
+	area := config.GetAreaByID(a)
+	return visibleMap[area.Coordinates.Y][area.Coordinates.X] != 0
 }
 
-func drawBox(area int, boxLen int) (box [3]string) {
+func drawBox(area config.Area, boxLen int) (box [3]string) {
 	// draw emty field, if area == 0
-	if area == 0 {
+	if area == (config.Area{}) {
 		// boxlen + left an right connection
 		spacer := strings.Repeat(" ", boxLen+2)
 		for l := 0; l < 3; l++ {
@@ -35,9 +35,9 @@ func drawBox(area int, boxLen int) (box [3]string) {
 		return
 	}
 	// we have an overwrite for this box?
-	if len(config.Overwrites) >= area && len(config.Overwrites[area][0]) > 0 {
+	if len(config.Overwrites) >= area.ID && len(config.Overwrites[area.ID][0]) > 0 {
 		var dummy [3]string
-		for i, v := range config.Overwrites[area] {
+		for i, v := range config.Overwrites[area.ID] {
 			dummy[i] = v
 		}
 		box = dummy
@@ -45,14 +45,14 @@ func drawBox(area int, boxLen int) (box [3]string) {
 	}
 	var leftCon, rightCon, topCon, bottomCon string
 	// get first line of area from locations
-	text := strings.Split(config.GetAreaByID(area).Description.Short, "\n")[0]
+	text := area.Description.Short
 	textLen := len([]rune(text)) + 2 // two space left and right
 	leftSpacer := strings.Repeat(" ", (boxLen-textLen)/2)
 	rightSpacer := strings.Repeat(" ", boxLen-len(leftSpacer)-textLen)
 	// horizontal line - left/right corner and middle connection element
 	horLine := strings.Repeat(config.HL, (boxLen-3)/2)
 	// can we walk to the north?
-	if config.GetAreaByID(area).Directions[0] == 0 {
+	if area.Directions[0] == 0 {
 
 		// no => draw a hoizontal line
 		topCon = config.HL
@@ -61,7 +61,7 @@ func drawBox(area int, boxLen int) (box [3]string) {
 		topCon = config.TC
 	}
 	// can we walk to the south?
-	if config.GetAreaByID(area).Directions[1] == 0 {
+	if area.Directions[1] == 0 {
 		// no => draw a hoizontal line
 		bottomCon = config.HL
 	} else {
@@ -69,7 +69,7 @@ func drawBox(area int, boxLen int) (box [3]string) {
 		bottomCon = config.BC
 	}
 	// can we walk to the east?
-	if config.GetAreaByID(area).Directions[2] == 0 {
+	if area.Directions[2] == 0 {
 		// no => draw a vertical line
 		rightCon = fmt.Sprintf("%s ", config.VL)
 	} else {
@@ -77,7 +77,7 @@ func drawBox(area int, boxLen int) (box [3]string) {
 		rightCon = fmt.Sprintf("%s%s", config.RC, config.HL)
 	}
 	// can we walk to the west?
-	if config.GetAreaByID(area).Directions[3] == 0 {
+	if area.Directions[3] == 0 {
 		// no => draw a vertical line
 		leftCon = fmt.Sprintf(" %s", config.VL)
 	} else {
@@ -90,10 +90,9 @@ func drawBox(area int, boxLen int) (box [3]string) {
 	return
 }
 
-func DrawMap(area int) (text []string) {
-	coordinates := config.GetAreaByID(area).Coordinates
-	x := coordinates.X
-	y := coordinates.Y
+func DrawMap(area config.Area) (text []string) {
+	x := area.Coordinates.X
+	y := area.Coordinates.Y
 	// max x = 9, don't go further east than 8
 	/*
 		if x > 8 {
@@ -107,16 +106,16 @@ func DrawMap(area int) (text []string) {
 		// outside y range => draw empty boxes
 		if iy < 0 || iy > 11 {
 			for j := 0; j < 5; j++ {
-				boxes[j] = drawBox(0, boxLen)
+				boxes[j] = drawBox((config.Area{}), boxLen)
 			}
 		} else {
 			for j := 0; j < 5; j++ {
 				ix := x + j - 2
 				if ix < 0 || ix > 9 {
-					boxes[j] = drawBox(0, boxLen)
+					boxes[j] = drawBox((config.Area{}), boxLen)
 				} else {
 					v := visibleMap[iy][ix]
-					boxes[j] = drawBox(v, boxLen)
+					boxes[j] = drawBox(config.GetAreaByID(v), boxLen)
 				}
 			}
 		}
@@ -137,8 +136,8 @@ func DrawMap(area int) (text []string) {
 }
 
 func RevealArea(area int) {
-	coordinates := config.GetAreaByID(area).Coordinates
-	visibleMap[coordinates.Y][coordinates.X] = area
+	a := config.GetAreaByID(area)
+	visibleMap[a.Coordinates.Y][a.Coordinates.X] = area
 	switch area {
 	case 5:
 		if AreaVisible(36) {

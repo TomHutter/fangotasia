@@ -114,9 +114,9 @@ func main() {
 	setupCloseHandler()
 	prelude()
 	view.Scanner("once: true")
-	area := 1
+	area := config.GetAreaByID(1)
 	//oldArea := area
-	movement.RevealArea(area)
+	movement.RevealArea(area.ID)
 	//var dir rune
 	//var direction int
 	//var text []string
