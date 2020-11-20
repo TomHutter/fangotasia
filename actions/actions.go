@@ -145,7 +145,7 @@ func Parse(input string, area config.Area, text []string) config.Area {
 	var notice []string
 	var color string
 	switch knownVerb.Func {
-	case "Move":
+	case "Move", "Climb":
 		if val[0].Bool() == true {
 			fmt.Printf("New area: %d\n", val[1].Int())
 			return config.GetAreaByID(int(val[1].Int()))
@@ -499,6 +499,31 @@ func use(object int, area int) {
 		608 return
 		if objectsInArea[object][0] != area
 	*/
+}
+
+func (v *verb) Climb(object config.Object, area config.Area) (ok bool, newArea int, answer []string) {
+	if area.ID == 31 {
+		ok = true
+		newArea = 9
+		return
+	}
+	if area.ID == 9 && object.ID == 27 {
+		ok = true
+		newArea = 31
+		movement.RevealArea(31)
+		return
+	}
+	if !objectAvailable(object, area) {
+		ok = false
+		answer = append(answer, config.Answers[16])
+		return
+	}
+	if object.ID != 27 {
+		ok = false
+		answer = append(answer, config.Answers[0])
+		return
+	}
+	return
 }
 
 func (v *verb) Verbs() (verbs []string) {

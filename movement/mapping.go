@@ -24,9 +24,9 @@ func AreaVisible(a int) bool {
 	return visibleMap[area.Coordinates.Y][area.Coordinates.X] != 0
 }
 
-func drawBox(area config.Area, boxLen int) (box [3]string) {
+func drawBox(a int, boxLen int) (box [3]string) {
 	// draw emty field, if area == 0
-	if area == (config.Area{}) {
+	if a == 0 {
 		// boxlen + left an right connection
 		spacer := strings.Repeat(" ", boxLen+2)
 		for l := 0; l < 3; l++ {
@@ -35,15 +35,17 @@ func drawBox(area config.Area, boxLen int) (box [3]string) {
 		return
 	}
 	// we have an overwrite for this box?
-	if len(config.Overwrites) >= area.ID && len(config.Overwrites[area.ID][0]) > 0 {
+	ov := config.GetOverwriteByArea(a)
+	if ov != (config.MapOverwrites{}) {
 		var dummy [3]string
-		for i, v := range config.Overwrites[area.ID] {
+		for i, v := range ov.Content {
 			dummy[i] = v
 		}
 		box = dummy
 		return
 	}
 	var leftCon, rightCon, topCon, bottomCon string
+	area := config.GetAreaByID(a)
 	// get first line of area from locations
 	text := area.Description.Short
 	textLen := len([]rune(text)) + 2 // two space left and right
@@ -106,16 +108,16 @@ func DrawMap(area config.Area) (text []string) {
 		// outside y range => draw empty boxes
 		if iy < 0 || iy > 11 {
 			for j := 0; j < 5; j++ {
-				boxes[j] = drawBox((config.Area{}), boxLen)
+				boxes[j] = drawBox(0, boxLen)
 			}
 		} else {
 			for j := 0; j < 5; j++ {
 				ix := x + j - 2
 				if ix < 0 || ix > 9 {
-					boxes[j] = drawBox((config.Area{}), boxLen)
+					boxes[j] = drawBox(0, boxLen)
 				} else {
 					v := visibleMap[iy][ix]
-					boxes[j] = drawBox(config.GetAreaByID(v), boxLen)
+					boxes[j] = drawBox(v, boxLen)
 				}
 			}
 		}

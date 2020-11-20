@@ -14,7 +14,7 @@ overwrites:
   - area: 31
     content:
     - "━━━━━━━━━━━┓         "
-    - " Baumkrone ┃         "
+    - "mkrone     ┃         "
     - "━━━━━━━━━━━┛         "
 
   - area: 52
@@ -32,19 +32,19 @@ overwrites:
   - area: 54
     content:
     - " ┏━━━━━━━━┻━━━━━━┻━┓ "
-    - "━┫     Heide (hoch)┣━"
+    - "━┫      Heide      ┣━"
     - " ┗━━━━━━━━┳━━━━━━━━┛ "
 
   - area: 55
     content:
     - "          ┃ ┏━━━━━━━━"
-    - "          ┃ ┃(runter)"
+    - "          ┃ ┃     Bau"
     - "          ┃ ┗━━━━┳━━━"
 
   - area: 56
     content:
     - "            ┏━━━━━━━━"
-    - "            ┃(runter)"
+    - "            ┃     Bau"
     - "            ┗━━━━┳━━━"
 
   - area: 57

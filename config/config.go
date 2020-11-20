@@ -10,7 +10,7 @@ import (
 
 var GameObjects []Object
 var GameAreas []Area
-var Overwrites [][3]string
+var Overwrites []MapOverwrites
 var Answers []string
 
 type Verb struct {
@@ -30,7 +30,7 @@ type conf struct {
 	Objects    []Object        `yaml:"objects"`
 	Answers    []string        `yaml:"answers"`
 	Locations  []Area          `yaml:"locations"`
-	Overwrites []mapOverwrites `yaml:"overwrites"`
+	Overwrites []MapOverwrites `yaml:"overwrites"`
 }
 
 // Long and short description and the article for the noun
@@ -64,7 +64,7 @@ type Coordinates struct {
 	//Visible bool
 }
 
-type mapOverwrites struct {
+type MapOverwrites struct {
 	Area    int
 	Content [3]string
 }
@@ -198,31 +198,16 @@ func (c *conf) getConf(filename string) {
 	}
 }
 
-func getMapOverwrites() (overwrites [][3]string) {
+func getMapOverwrites() (overwrites []MapOverwrites) {
 	var c conf
 	c.getConf("config/map_overwrites.yaml")
 	for _, v := range c.Overwrites {
-		// overwrites is already large enough to address v.Area
-		if v.Area < len(overwrites) {
-			var dummy [3]string
-			for i, line := range v.Content {
-				dummy[i] = line
-			}
-			overwrites[v.Area] = dummy
+		var o MapOverwrites
+		o.Area = v.Area
+		for i, line := range v.Content {
+			o.Content[i] = line
 		}
-		// overwrites needs expansion to address v.Area
-		if v.Area > len(overwrites) {
-			var dummy = make([][3]string, v.Area)
-			copy(dummy, overwrites)
-			overwrites = dummy
-		}
-		if v.Area == len(overwrites) {
-			var dummy [3]string
-			for i, line := range v.Content {
-				dummy[i] = line
-			}
-			overwrites = append(overwrites, dummy)
-		}
+		overwrites = append(overwrites, o)
 	}
 	return
 }
@@ -288,6 +273,15 @@ func GetAreaByID(id int) (area Area) {
 	for _, a := range GameAreas {
 		if a.ID == id {
 			return a
+		}
+	}
+	return
+}
+
+func GetOverwriteByArea(area int) (o MapOverwrites) {
+	for _, o := range Overwrites {
+		if o.Area == area {
+			return o
 		}
 	}
 	return
