@@ -38,7 +38,7 @@ func Surroundings(area config.Area) (text []string) {
 	//appendText(&text, fmt.Sprintf("Ich bin %s", locations[area-1]), yellow)
 	var items []string
 	for _, object := range config.ObjectsInArea(area) {
-		item := object.Description.Long
+		item := object.Properties.Description.Long
 		if strings.Contains(item, "::") {
 			item = strings.ReplaceAll(item, "::", "")
 			items = append(items, fmt.Sprintf("%s  - %s", config.WHITE, item))

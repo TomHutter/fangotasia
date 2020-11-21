@@ -8,10 +8,10 @@ import (
 	"gopkg.in/yaml.v2"
 )
 
-var GameObjects []Object
+var GameObjects map[int]ObjectProperties
 var GameAreas []Area
 var Overwrites []MapOverwrites
-var Answers []string
+var Answers map[string]string
 
 type Verb struct {
 	Name   string
@@ -25,12 +25,13 @@ var BoxLen int
 
 // Conf : Struct to read from yaml config files
 type conf struct {
-	Verbs      []Verb          `yaml:"verbs"`
-	Nouns      []string        `yaml:"nouns"`
-	Objects    []Object        `yaml:"objects"`
-	Answers    []string        `yaml:"answers"`
-	Locations  []Area          `yaml:"locations"`
-	Overwrites []MapOverwrites `yaml:"overwrites"`
+	Verbs      []Verb                   `yaml:"verbs"`
+	Nouns      []string                 `yaml:"nouns"`
+	Objects    map[int]ObjectProperties `yaml:"objects"`
+	ID         int
+	Answers    map[string]string `yaml:"answers"`
+	Locations  []Area            `yaml:"locations"`
+	Overwrites []MapOverwrites   `yaml:"overwrites"`
 }
 
 // Long and short description and the article for the noun
@@ -40,9 +41,13 @@ type description struct {
 	Article string
 }
 
-// ObjectProperties : Contains long and short description of locations.
 type Object struct {
-	ID          int
+	ID         int
+	Properties ObjectProperties
+}
+
+// ObjectProperties : Contains long and short description of locations.
+type ObjectProperties struct {
 	Description description
 	Area        int
 	Value       int
@@ -243,30 +248,25 @@ func Init() {
 }
 
 func ObjectsInArea(area Area) (objects []Object) {
-	for _, o := range GameObjects {
-		if o.Area == area.ID {
-			objects = append(objects, o)
+	for id, prop := range GameObjects {
+		if prop.Area == area.ID {
+			objects = append(objects, Object{id, prop})
 		}
 	}
 	return
 }
 
 func GetObjectByName(name string) (object Object) {
-	for _, o := range GameObjects {
-		if strings.ToLower(o.Description.Short) == strings.ToLower(name) {
-			return o
+	for id, prop := range GameObjects {
+		if strings.ToLower(prop.Description.Short) == strings.ToLower(name) {
+			return Object{id, prop}
 		}
 	}
 	return
 }
 
-func GetObjectByID(id int) (object *Object) {
-	for i, o := range GameObjects {
-		if o.ID == id {
-			return &GameObjects[i]
-		}
-	}
-	return
+func GetObjectByID(id int) (object Object) {
+	return Object{id, GameObjects[id]}
 }
 
 func GetAreaByID(id int) (area Area) {

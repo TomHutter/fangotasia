@@ -1,257 +1,257 @@
 objects:
-  - id: 9
+  9:
     description:
       long: einen Zauberkuchen
       short: Zauberkuchen
       article: der
     area: 28
     value: 0
-  - id: 10
+  10:
     description:
       long: eine haarige Raupe
       short: Raupe
       article: die
     area: 29
     value: 0
-  - id: 11
+  11:
     description:
       long: ein grünes Buch
       short: Buch
       article: das
     area: 8
     value: 0
-  - id: 12
+  12:
     description:
       long: einen Zettel
       short: Zettel
       article: der
     area: 24
     value: 0
-  - id: 13
+  13:
     description:
       long: eine Tarnkappe
       short: Tarnkappe
       article: die
     area: 2
     value: 0
-  - id: 14
+  14:
     description:
       long: eine Riesenfrucht 
       short: Riesenfrucht
       article: die
     area: 26
     value: 0
-  - id: 15
+  15:
     description:
       long: "::ein Feuerschwert::"
       short: Feuerschwert
       article: das
     area: 20
     value: 10
-  - id: 16
+  16:
     description:
       long:  einen grossen Bären
       short: Bär
       article: der
     area: 19
     value: 0
-  - id: 17
+  17:
     description:
       long: "::einen Schild aus bronze::"
       short: Schild
       article: der
     area: 19
     value: 22
-  - id: 18
+  18:
     description:
       long: einen Zwerg
       short: Zwerg
       article: der
     area: 18
     value: 0
-  - id: 19
+  19:
     description:
       long: "::goldene Dracheneier::"
       short: Dracheneier
       article: die
     area: 18
     value: 20
-  - id: 20
+  20:
     description:
       long: einen Stein 
       short: Stein
       article: der
     area: 16
     value: 0
-  - id: 21
+  21:
     description:
       long: eine Hölenmalerei 
       short: Hölenmalerei
       article: die
     area: 13
     value: 0
-  - id: 22
+  22:
     description:
       long: einen hässlichen Strauch 
       short: Strauch
       article: der
     area: 14
     value: 0
-  - id: 23
+  23:
     description:
       long: viele rote Beeren 
       short: Beeren
       article: die
     area: 0
     value: 0
-  - id: 24
+  24:
     description:
       long: "::goldene Blätter::"
       short: Blätter
       article: die
     area: 0
     value: 26
-  - id: 25
+  25:
     description:
       long: "::ein Diamantmesser::"
       short: Diamantmesser
       article: das
     area: 15
     value: 5
-  - id: 26
+  26:
     description:
       long: "::einen Silberschlüssel::"
       short: Silberschlüssel
       article: der
     area: 8
     value: 5
-  - id: 27
+  27:
     description:
       long: einen dürren Baum 
       short: Baum
       article: der
     area: 9
     value: 0
-  - id: 28
+  28:
     description:
       long: ein vergilbtes Pergament 
       short: Pergament
       article: das
     area: 11
     value: 0
-  - id: 29
+  29:
     description:
       long: eine grosse Steinschleuder 
       short: Steinschleuder
       article: die
     area: 12
     value: 0
-  - id: 30
+  30:
     description:
       long: einen leeren Wasserkrug 
       short: Wasserkrug
       article: der
     area: 1
     value: 0
-  - id: 31
+  31:
     description:
       long: ein Paar Zauberschuhe 
       short: Zauberschuhe
       article: die
     area: 1
     value: 0
-  - id: 32
+  32:
     description:
       long: eine Schrifttafel 
       short: Schrifttafel
       article: die
     area: 1
     value: 0
-  - id: 33
+  33:
     description:
       long: "::einen Zwergendolch::"
       short: Zwergendolch
       article: der
     area: 3
     value: 7
-  - id: 34
+  34:
     description:
       long: eine grosse Kugel 
       short: Kugel
       article: die
     area: 4
     value: 0
-  - id: 35
+  35:
     description:
       long: ein rotes Kästchen 
       short: Kästchen
       article: das
     area: 4
     value: 0
-  - id: 36
+  36:
     description:
       long: einen bösen Gnom 
       short: Gnom
       article: der
     area: 4
     value: 0
-  - id: 37
+  37:
     description:
       long: einen eisernen Ring 
       short: Ring
       article: der
     area: 0
     value: 0
-  - id: 38
+  38:
     description:
       long: einen Brief 
       short: Brief
       article: der
     area: 0
     value: 0
-  - id: 39
+  39:
     description:
       long: "::einen roten Rubin::"
       short: Rubin
       article: der
     area: 0
     value: 18
-  - id: 40
+  40:
     description:
       long: eine Tür im Norden 
       short: Tür
       article: die
     area: 25
     value: 0
-  - id: 45
+  45:
     description:
       long: eine Tür im Süden 
       short: Tür
       article: die
     area: 30
     value: 0
-  - id: 41
+  41:
     description:
       long: "::goldenes Feenhaar::"
       short: Feenhaar
       article: das
     area: 33
     value: 10
-  - id: 42
+  42:
     description:
       long: einen feuerspeienden Drachen 
       short: Drachen
       article: der
     area: 51
     value: 0
-  - id: 43
+  43:
     description:
       long: eine verwitterte Holztafel 
       short: Holztafel
       article: die
     area: 40
     value: 0
-  - id: 44
+  44:
     description:
       long: "::einen silbernen Pokal::"
       short: Pokal

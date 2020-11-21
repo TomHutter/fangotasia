@@ -13,7 +13,7 @@ import (
 )
 
 type verb config.Verb
-type storage []config.Object
+type Object config.Object
 type reaction struct {
 	OK     bool
 	KO     bool
@@ -21,8 +21,6 @@ type reaction struct {
 	Sleep  int
 }
 
-var inventory storage
-var inUse storage
 var object string
 var moves int
 var visited [51]bool
@@ -44,7 +42,7 @@ func Parse(input string, area config.Area, text []string) config.Area {
 	// pop parts
 	parts = parts[1:]
 
-	fmt.Println(parts) // ["Have", "a", "great", "day!"]
+	//fmt.Println(parts) // ["Have", "a", "great", "day!"]
 	//parts := strings.r  Split(input, )
 	for _, v := range config.Verbs {
 		if v.Name == command {
@@ -59,7 +57,7 @@ func Parse(input string, area config.Area, text []string) config.Area {
 		return area
 	}
 
-	fmt.Printf("Valid verb '%s' found.\n", knownVerb.Name)
+	//fmt.Printf("Valid verb '%s' found.\n", knownVerb.Name)
 	if knownVerb.Single {
 		call := reflect.ValueOf(&order).MethodByName(knownVerb.Func)
 		//view.Flash(text, fmt.Sprintf("%s", call.IsNil()), 2, config.RED)
@@ -227,84 +225,53 @@ func Parse(input string, area config.Area, text []string) config.Area {
 	*/
 }
 
-func objectInArea(object config.Object, area config.Area) bool {
-	return object.Area == area.ID
+func (object Object) inArea(area config.Area) bool {
+	return object.Properties.Area == area.ID
 }
 
-func objectInInventory(object config.Object) bool {
-	return object.Area == -1
+func (object Object) inInventory() bool {
+	return object.Properties.Area == -1
 }
 
-func objectInUse(object config.Object) bool {
-	return object.Area == -2
+func (object Object) inUse() bool {
+	return object.Properties.Area == -2
 }
 
-func objectAvailable(object config.Object, area config.Area) bool {
-	return objectInArea(object, area) || objectInInventory(object) || objectInUse(object)
+func (object Object) available(area config.Area) bool {
+	return object.inArea(area) || object.inInventory() || object.inUse()
 }
 
-func (inv *storage) add(object config.Object) (r reaction) {
-	if len(*inv) > 6 {
-		r.Answer = append(r.Answer, config.Answers[6])
-		r.OK = false
-		r.KO = false
-		r.Sleep = 2000
-		return
-	}
-	*inv = append(*inv, object)
-	o := config.GetObjectByID(object.ID)
-	o.Area = -1
-	r.Answer = append(r.Answer, config.Answers[7])
-	r.OK = true
-	r.KO = false
-	r.Sleep = 1000
-	return
-}
-
-func (inv storage) drop(object config.Object, area config.Area) (ok bool, answer []string) {
-	var newInv storage
-	for _, o := range inv {
-		if o.ID == object.ID {
-			obj := config.GetObjectByID(object.ID)
-			obj.Area = area.ID
-			continue
-		}
-		newInv = append(newInv, o)
-	}
-	copy(inv, newInv)
-	answer = append(answer, config.Answers[7])
-	return true, answer
-}
-
-func snatch(area config.Area, opponent config.Object, object config.Object) (r reaction) {
-	if objectInArea(opponent, area) && !objectInUse(*config.GetObjectByID(13)) {
+func (object Object) snatchFrom(opponent Object) (r reaction) {
+	hood := Object(config.GetObjectByID(13))
+	area := config.GetAreaByID(object.Properties.Area)
+	if opponent.inArea(area) && !hood.inUse() {
 		r.Answer = append(r.Answer, fmt.Sprintf("%s %s %s",
-			strings.Title(opponent.Description.Article),
-			opponent.Description.Short,
-			config.Answers[3]))
+			strings.Title(opponent.Properties.Description.Article),
+			opponent.Properties.Description.Short,
+			config.Answers["wontLet"]))
 		r.OK = false
 		r.KO = false
 		r.Sleep = 2000
 		return
 	}
-	return inventory.add(object)
+	return object.pick()
 }
 
-func (v *verb) Open(object config.Object, area int) (ok bool, answer []string) {
+func (object Object) Open(area int) (ok bool, answer []string) {
 	answer = append(answer, "lässt sich öffnen")
 	return true, answer
 }
 
-func (v *verb) Take(object config.Object, area config.Area) (r reaction) {
-	if !objectAvailable(object, area) {
-		r.Answer = append(r.Answer, config.Answers[16])
+func (object Object) Take(area config.Area) (r reaction) {
+	if !object.available(area) {
+		r.Answer = append(r.Answer, config.Answers["dontSee"])
 		r.OK = false
 		r.KO = false
 		r.Sleep = 2000
 		return
 	}
-	if objectInInventory(object) || objectInUse(object) {
-		r.Answer = append(r.Answer, config.Answers[17])
+	if object.inInventory() || object.inUse() {
+		r.Answer = append(r.Answer, config.Answers["haveAlready"])
 		r.OK = false
 		r.KO = false
 		r.Sleep = 2000
@@ -313,41 +280,41 @@ func (v *verb) Take(object config.Object, area config.Area) (r reaction) {
 
 	switch object.ID {
 	case 10, 16, 18, 21, 22, 27, 36, 40, 42:
-		r.Answer = append(r.Answer, config.Answers[0])
+		r.Answer = append(r.Answer, config.Answers["silly"])
 		r.OK = false
 		r.KO = false
 		r.Sleep = 2000
 		return
 	case 29, 14:
-		r.Answer = append(r.Answer, config.Answers[4])
+		r.Answer = append(r.Answer, config.Answers["tooHeavy"])
 		r.OK = false
 		r.KO = false
 		r.Sleep = 2000
 		return
 	case 34:
-		if !objectInUse(*config.GetObjectByID(9)) {
-			r.Answer = append(r.Answer, config.Answers[4])
+		if !Object(config.GetObjectByID(9)).inUse() {
+			r.Answer = append(r.Answer, config.Answers["tooHeavy"])
 			r.OK = false
 			r.KO = false
 			r.Sleep = 2000
 			return
 		}
 	case 17:
-		return snatch(area, *config.GetObjectByID(16), object)
+		return object.snatchFrom(Object(config.GetObjectByID(16)))
 	case 19:
-		return snatch(area, *config.GetObjectByID(18), object)
+		return object.snatchFrom(Object(config.GetObjectByID(18)))
 	case 35:
-		return snatch(area, *config.GetObjectByID(36), object)
+		return object.snatchFrom(Object(config.GetObjectByID(36)))
 	case 44:
-		return snatch(area, *config.GetObjectByID(42), object)
+		return object.snatchFrom(Object(config.GetObjectByID(42)))
 	case 32, 43:
-		r.Answer = append(r.Answer, config.Answers[5])
+		r.Answer = append(r.Answer, config.Answers["unreachable"])
 		r.OK = false
 		r.KO = false
 		r.Sleep = 2000
 		return
 	}
-	return snatch(area, *config.GetObjectByID(10), object)
+	return object.snatchFrom(Object(config.GetObjectByID(10)))
 	/*
 		opponent := config.GetObjectByID(10)
 		if opponent.Area == area && !objectInUse(*config.GetObjectByID(13)) {
@@ -379,11 +346,11 @@ func (v *verb) Take(object config.Object, area config.Area) (r reaction) {
 	*/
 }
 
-func (v *verb) Stab(object config.Object, area config.Area) (r reaction) {
-	if !objectInInventory(*config.GetObjectByID(15)) &&
-		!objectInInventory(*config.GetObjectByID(25)) &&
-		!objectInInventory(*config.GetObjectByID(33)) {
-		r.Answer = append(r.Answer, config.Answers[0])
+func (object Object) Stab(area config.Area) (r reaction) {
+	if !Object(config.GetObjectByID(15)).inInventory() &&
+		!Object(config.GetObjectByID(25)).inInventory() &&
+		!Object(config.GetObjectByID(33)).inInventory() {
+		r.Answer = append(r.Answer, config.Answers["noTool"])
 		r.OK = false
 		r.KO = false
 		r.Sleep = 2000
@@ -391,62 +358,47 @@ func (v *verb) Stab(object config.Object, area config.Area) (r reaction) {
 	}
 	switch object.ID {
 	case 14:
-		r.Answer = append(r.Answer, config.Answers[10])
+		r.Answer = append(r.Answer, config.Answers["tryCut"])
 		r.OK = true
 		r.KO = false
 		r.Sleep = 2000
 		return
 	case 10:
-		r.Answer = append(r.Answer, config.Answers[11])
+		r.Answer = append(r.Answer, config.Answers["stabGrub"])
 		r.OK = true
 		r.KO = false
 		r.Sleep = 2000
 		return
 	case 16:
-		r.Answer = append(r.Answer, config.Answers[12])
+		r.Answer = append(r.Answer, config.Answers["starbBaer"])
 		r.OK = true
 		r.KO = false
 		r.Sleep = 2000
 		return
 	case 18:
-		r.Answer = append(r.Answer, config.Answers[13])
+		r.Answer = append(r.Answer, config.Answers["stabDwarf"])
 		r.OK = false
 		r.KO = true
 		r.Sleep = 2000
 		return
 	case 36:
-		r.Answer = append(r.Answer, config.Answers[14])
+		r.Answer = append(r.Answer, config.Answers["stabGnome"])
 		r.OK = false
 		r.KO = true
 		r.Sleep = 2000
 		return
 	case 42:
-		r.Answer = append(r.Answer, config.Answers[15])
+		r.Answer = append(r.Answer, config.Answers["stabDragon"])
 		r.OK = false
 		r.KO = true
 		r.Sleep = 2000
 		return
 	}
-	r.Answer = append(r.Answer, config.Answers[1])
+	r.Answer = append(r.Answer, config.Answers["dontKnow"])
 	r.OK = true
 	r.KO = false
 	r.Sleep = 2000
 	return
-	/*
-		345 rem ** stich **********************
-		346 f=0:gosub605:iffl=1thenfl=0:goto280
-		347 ifno<>10andno<>14andno<>16andno<>18andno<>36andno<>42thenfl=1
-		348 iffl=1thenfl=0:printa$(2):goto280
-		349 ifno=14thenprint"versuche 'schneide'.":goto280
-		350 ifge(15)<>-1andge(25)<>-1andge(33)<>-1thenfl=1
-		351 iffl=1thenfl=0:printa$(1):goto280
-		352 ifno=10thenprint"die raupe ist kitzelig und lacht laut !":goto281
-		353 ifno=16thenprint"der baer brummt unwillig.":goto281
-		354 ifno=18thenprint"der zwerg wird boes und toetet mich !":goto357
-		355 ifno=36thenprint"der gnom verzaubert mich !":goto357
-		356 ifno=42thenprint"der drache verbrennt mich !"
-		357 fori=1to2000:next:goto611
-	*/
 }
 
 func (v *verb) Move(area config.Area, dir string) (ok bool, newArea int, answer []string) {
@@ -458,20 +410,20 @@ func (v *verb) Move(area config.Area, dir string) (ok bool, newArea int, answer 
 
 	newArea = area.Directions[direction[dir]]
 	if newArea == 0 {
-		answer = append(answer, config.Answers[8])
+		answer = append(answer, config.Answers["noWay"])
 		return false, area.ID, answer
 		//view.Flash(text, "In diese Richtung führt kein Weg.")
 		//return area
 	}
 	// Area 30 and 25 are connected by a door. Is it open?
 	if (area.ID == 30 || area.ID == 25 && direction[dir] == 0) && !config.DoorOpen {
-		answer = append(answer, config.Answers[9])
+		answer = append(answer, config.Answers["locked"])
 		return false, area.ID, answer
 		//view.Flash(text, "Die Tür ist versperrt.")
 		//return area
 	}
 	movement.RevealArea(newArea)
-	answer = append(answer, config.Answers[7])
+	answer = append(answer, config.Answers["ok"])
 	moves += 1
 	visited[area.ID] = true
 	return true, newArea, answer
@@ -501,7 +453,7 @@ func use(object int, area int) {
 	*/
 }
 
-func (v *verb) Climb(object config.Object, area config.Area) (ok bool, newArea int, answer []string) {
+func (object Object) Climb(area config.Area) (ok bool, newArea int, answer []string) {
 	if area.ID == 31 {
 		ok = true
 		newArea = 9
@@ -513,14 +465,14 @@ func (v *verb) Climb(object config.Object, area config.Area) (ok bool, newArea i
 		movement.RevealArea(31)
 		return
 	}
-	if !objectAvailable(object, area) {
+	if !object.available(area) {
 		ok = false
-		answer = append(answer, config.Answers[16])
+		answer = append(answer, config.Answers["dontSee"])
 		return
 	}
 	if object.ID != 27 {
 		ok = false
-		answer = append(answer, config.Answers[0])
+		answer = append(answer, config.Answers["silly"])
 		return
 	}
 	return
@@ -541,6 +493,7 @@ func (v *verb) Verbs() (verbs []string) {
 	return
 }
 
+/*
 func (c *verb) Inventory() (inv []string) {
 	if len(inventory) == 0 {
 		//fmt.Println("Ich habe nichts dabei.")
@@ -554,13 +507,16 @@ func (c *verb) Inventory() (inv []string) {
 	}
 	return
 }
+*/
 
 func (v *verb) GameOver() {
 	var board []string
 	sum := 0
-	for _, o := range inventory {
-		sum += o.Value
-	}
+	/*
+		for _, o := range inventory {
+			sum += o.Value
+		}
+	*/
 	// all valuable objects found
 	if sum == 170 {
 		switch {
@@ -605,3 +561,40 @@ func (v *verb) GameOver() {
 
 //func (obj object) hit(inv []string) {
 //}
+
+func (obj Object) pick() (r reaction) {
+	inv := config.GetAreaByID(-1)
+	inventory := config.ObjectsInArea(inv)
+	if len(inventory) > 6 {
+		r.Answer = append(r.Answer, config.Answers["invFull"])
+		r.OK = false
+		r.KO = false
+		r.Sleep = 2000
+		return
+	}
+
+	obj.Properties.Area = -1
+	config.GameObjects[obj.ID] = obj.Properties
+	r.Answer = append(r.Answer, config.Answers["ok"])
+	r.OK = true
+	r.KO = false
+	r.Sleep = 1000
+	return
+}
+
+func (obj Object) drop(area config.Area) (r reaction) {
+	if obj.Properties.Area != -1 {
+		r.Answer = append(r.Answer, config.Answers["dontHave"])
+		r.OK = false
+		r.KO = false
+		r.Sleep = 2000
+		return
+	}
+	obj.Properties.Area = area.ID
+	config.GameObjects[obj.ID] = obj.Properties
+	r.Answer = append(r.Answer, config.Answers["ok"])
+	r.OK = true
+	r.KO = false
+	r.Sleep = 1000
+	return
+}

@@ -1,4 +1,12 @@
 locations:
+  - id: -2
+    description:
+      long: Objects in use
+      short: inUse
+  - id: -1
+    description:
+      long: Inventory
+      short: Inventory
   - id: 1
     description:
       long: vor einem riesigem Torbogen.
