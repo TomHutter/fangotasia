@@ -59,6 +59,14 @@ verbs:
     func: Use
     single: false
     sleep: 2
+  - name: verwende
+    func: Use
+    single: false
+    sleep: 2
+  - name: trage
+    func: Use
+    single: false
+    sleep: 2
   - name: simsalabim
     func: Simsalabim
     single: true
@@ -119,7 +127,7 @@ verbs:
     func: Turn
     single: false
     sleep: 2
-  - name: springe
+  - name: spring
     func: Jump
     single: true
     sleep: 2

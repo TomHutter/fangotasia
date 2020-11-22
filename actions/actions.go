@@ -19,6 +19,7 @@ type reaction struct {
 	KO     bool
 	Answer []string
 	Sleep  int
+	AreaID int
 }
 
 var object string
@@ -53,8 +54,8 @@ func Parse(input string, area config.Area, text []string) config.Area {
 	}
 
 	if knownVerb == (config.Verb{}) {
-		notice := fmt.Sprintf("'%s' kenne ich nicht.\nDas Kommando 'Verben' gibt eine Liste aller verfügbaren Verben aus.\n", command)
-		view.Flash(text, notice, 2, config.RED)
+		notice := fmt.Sprintf(config.Answers["unknownVerb"], command)
+		view.Flash(text, notice, 4, config.RED)
 		return area
 	}
 
@@ -96,6 +97,11 @@ func Parse(input string, area config.Area, text []string) config.Area {
 		argv = append(argv, reflect.ValueOf(area))
 		argv = append(argv, reflect.ValueOf(knownVerb.Name))
 	default:
+		if len(parts) < 1 {
+			notice := fmt.Sprintln(config.Answers["needObject"])
+			view.Flash(text, notice, knownVerb.Sleep, config.RED)
+			return area
+		}
 		// call reflec.Call for verb with arguments
 		// - first valid noun
 		// - area
@@ -124,7 +130,7 @@ func Parse(input string, area config.Area, text []string) config.Area {
 	}
 
 	if len(argv) < 1 {
-		notice := fmt.Sprintf("'%s' kenne ich nicht.\n", strings.Join(parts, " "))
+		notice := fmt.Sprintf(config.Answers["unknownNoun"], strings.Join(parts, " "))
 		view.Flash(text, notice, knownVerb.Sleep, config.RED)
 		return area
 	}
@@ -145,14 +151,22 @@ func Parse(input string, area config.Area, text []string) config.Area {
 	var color string
 	switch knownVerb.Func {
 	case "Move", "Climb":
-		if val[0].Bool() == true {
-			fmt.Printf("New area: %d\n", val[1].Int())
-			return config.GetAreaByID(int(val[1].Int()))
+		// Answer
+		for i := 0; i < val[0].Field(2).Len(); i++ {
+			notice = append(notice, val[0].Field(2).Index(i).String())
 		}
-		for i := 0; i < val[2].Len(); i++ {
-			notice = append(notice, val[2].Index(i).String())
+		sleep := int(val[0].Field(3).Int())
+		view.Flash(text, strings.Join(notice, "\n"), sleep, config.RED)
+		// OK
+		if val[0].Field(0).Bool() == true {
+			//fmt.Printf("New area: %d\n", val[0].Field(4).Int())
+			// Area
+			return config.GetAreaByID(int(val[0].Field(4).Int()))
 		}
-		view.Flash(text, strings.Join(notice, "\n"), knownVerb.Sleep, config.RED)
+		// KO
+		if val[0].Field(1).Bool() == true {
+			GameOver()
+		}
 	//case "Stab":
 	default:
 		// OK
@@ -170,7 +184,7 @@ func Parse(input string, area config.Area, text []string) config.Area {
 		view.Flash(text, strings.Join(notice, "\n"), int(sleep), color)
 		// KO
 		if val[0].Field(1).Bool() == true {
-			order.GameOver()
+			GameOver()
 		}
 	}
 	/*
@@ -403,32 +417,60 @@ func (object Object) Stab(area config.Area) (r reaction) {
 }
 
 // As Move is called in context of object handling, Move reflects on Object even obj is not used.
-func (obj Object) Move(area config.Area, dir string) (ok bool, newArea int, answer []string) {
+func (obj Object) Move(area config.Area, dir string) (r reaction) {
 	//func Move(area int, direction int, text []string) int {
 	//if direction == 0 {
 	//	return 0, "Ich brauche eine Richtung."
 	//}
+	// barefoot on unknown terrain?
+	if !Object(config.GetObjectByID(31)).inUse() {
+		r.Answer = append(r.Answer, config.Answers["noShoes"])
+		r.OK = false
+		r.KO = true
+		r.Sleep = 3
+		return
+	}
+
+	// wearing the hood?
+	hood := config.GetObjectByID(13)
+	if Object(hood).inUse() {
+		hood.Properties.Area = -1
+		config.GameObjects[hood.ID] = hood.Properties
+		r.Answer = append(r.Answer, config.Answers["hoodInUse"])
+		r.Sleep = 2
+	}
+
 	var direction = map[string]int{"n": 0, "s": 1, "o": 2, "w": 3}
 
-	newArea = area.Properties.Directions[direction[dir]]
+	newArea := area.Properties.Directions[direction[dir]]
 	if newArea == 0 {
-		answer = append(answer, config.Answers["noWay"])
-		return false, area.ID, answer
+		r.Answer = append(r.Answer, config.Answers["noWay"])
+		r.OK = false
+		r.KO = false
+		r.Sleep = 2
+		r.AreaID = area.ID
+		return
 		//view.Flash(text, "In diese Richtung führt kein Weg.")
 		//return area
 	}
 	// Area 30 and 25 are connected by a door. Is it open?
 	if (area.ID == 30 || area.ID == 25 && direction[dir] == 0) && !config.DoorOpen {
-		answer = append(answer, config.Answers["locked"])
-		return false, area.ID, answer
+		r.Answer = append(r.Answer, config.Answers["locked"])
+		r.OK = false
+		r.KO = false
+		r.Sleep = 2
+		r.AreaID = area.ID
+		return
 		//view.Flash(text, "Die Tür ist versperrt.")
 		//return area
 	}
 	movement.RevealArea(newArea)
-	answer = append(answer, config.Answers["ok"])
 	moves += 1
 	visited[area.ID] = true
-	return true, newArea, answer
+	r.OK = true
+	r.KO = false
+	r.AreaID = newArea
+	return
 }
 
 func useDoor() {
@@ -444,37 +486,64 @@ func useDoor() {
 	*/
 }
 
-func use(object int, area int) {
-	/*
-		604 rem ** unterprogramm **************
-		605 ifge(no)<>oaandge(no)<>-1andge(no)<>-2thenfl=1
-		606 iffl=1thenprint"sehe ich hier nicht.":return
-		607 iffl=1andge(no)<>-1andge(no)<>-2thenprint"habe ich nicht dabei.":fl=1
-		608 return
-		if objectsInArea[object][0] != area
-	*/
+func (obj Object) Use(area config.Area) (r reaction) {
+	r.KO = false
+	r.Sleep = 2
+	switch obj.ID {
+
+	case 13:
+		if !obj.inInventory() {
+			r.Answer = append(r.Answer, config.Answers["dontHave"])
+			r.OK = false
+		} else {
+			obj.Properties.Area = 2000
+			config.GameObjects[obj.ID] = obj.Properties
+			r.Answer = append(r.Answer, config.Answers["hood"])
+			r.OK = true
+		}
+	case 31:
+		if !obj.inInventory() {
+			r.Answer = append(r.Answer, config.Answers["dontHave"])
+			r.OK = false
+		} else {
+			obj.Properties.Area = 2000
+			config.GameObjects[obj.ID] = obj.Properties
+			r.Answer = append(r.Answer, config.Answers["shoes"])
+			r.OK = true
+		}
+	default:
+		r.Answer = append(r.Answer, config.Answers["dontKnow"])
+		r.OK = false
+	}
+	return
 }
 
-func (object Object) Climb(area config.Area) (ok bool, newArea int, answer []string) {
+func (object Object) Climb(area config.Area) (r reaction) {
 	if area.ID == 31 {
-		ok = true
-		newArea = 9
+		r.OK = true
+		r.AreaID = 9
 		return
 	}
 	if area.ID == 9 && object.ID == 27 {
-		ok = true
-		newArea = 31
 		movement.RevealArea(31)
+		r.OK = true
+		r.AreaID = 31
 		return
 	}
 	if !object.available(area) {
-		ok = false
-		answer = append(answer, config.Answers["dontSee"])
+		r.Answer = append(r.Answer, config.Answers["dontSee"])
+		r.OK = false
+		r.KO = false
+		r.Sleep = 2
+		r.AreaID = area.ID
 		return
 	}
 	if object.ID != 27 {
-		ok = false
-		answer = append(answer, config.Answers["silly"])
+		r.Answer = append(r.Answer, config.Answers["silly"])
+		r.OK = false
+		r.KO = false
+		r.Sleep = 2
+		r.AreaID = area.ID
 		return
 	}
 	return
@@ -510,7 +579,7 @@ func (c *verb) Inventory() (inv []string) {
 	return
 }
 
-func (v *verb) GameOver() {
+func GameOver() {
 	var board []string
 	sum := 0
 	/*
