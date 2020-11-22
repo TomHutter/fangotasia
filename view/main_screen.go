@@ -19,6 +19,12 @@ import (
 	"unicode/utf8"
 )
 
+var notice struct {
+	Message string
+	Color   string
+	Sleep   int
+}
+
 func AppendText(block *[]string, newText string, color ...string) {
 	text := *block
 	if color == nil {
@@ -27,29 +33,38 @@ func AppendText(block *[]string, newText string, color ...string) {
 	*block = append(text, fmt.Sprintf("%s%s%s", color[0], newText, config.WHITE))
 }
 
-func Flash(text []string, notice string, sleep int, color string) {
-	flashText := make([]string, len(text))
-	copy(flashText, text)
-	flashText = append(text, "")
-	flashText = append(text, fmt.Sprintf("%s%s%s", color, notice, config.NEUTRAL))
-	if sleep < 0 {
-		flashText = append(flashText, "")
-		flashText = append(flashText, "Weiter \u23CE")
-		PrintScreen(flashText)
+func AddFlashNotice(message string, sleep int, color string) {
+	notice.Message = message
+	notice.Color = color
+	notice.Sleep = sleep
+}
+
+func FlashNotice() bool {
+	if len(notice.Message) == 0 {
+		return false
+	}
+	fmt.Printf("\n%s%s%s\n", notice.Color, notice.Message, config.NEUTRAL)
+	if notice.Sleep < 0 {
+		fmt.Printf("\nWeiter \u23CE\n")
 		Scanner("once: true")
 	} else {
-		PrintScreen(flashText)
-		time.Sleep(time.Duration(sleep) * time.Second)
+		time.Sleep(time.Duration(notice.Sleep) * time.Second)
 	}
-	//time.Sleep(time.Duration(sleep) * time.Millisecond)
-	PrintScreen(text)
+	notice.Message = ""
+	notice.Color = ""
+	notice.Sleep = 0
+	return true
 }
 
 func PrintScreen(text []string) {
 	// clear screen
-	fmt.Print("\033[H\033[2J")
 	block := strings.Join(text, "\n")
+	fmt.Print("\033[H\033[2J")
 	fmt.Println(block)
+	if FlashNotice() {
+		fmt.Print("\033[H\033[2J")
+		fmt.Println(block)
+	}
 }
 
 /*

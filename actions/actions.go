@@ -55,7 +55,7 @@ func Parse(input string, area config.Area, text []string) config.Area {
 
 	if knownVerb == (config.Verb{}) {
 		notice := fmt.Sprintf(config.Answers["unknownVerb"], command)
-		view.Flash(text, notice, 4, config.RED)
+		view.AddFlashNotice(notice, 4, config.RED)
 		return area
 	}
 
@@ -66,7 +66,7 @@ func Parse(input string, area config.Area, text []string) config.Area {
 		//fmt.Println(call.String())
 		//fmt.Println(call.IsValid())
 		if !call.IsValid() {
-			view.Flash(text, fmt.Sprintf("Func '%s' not yet implemented\n", knownVerb.Func), 2, config.RED)
+			view.AddFlashNotice(fmt.Sprintf("Func '%s' not yet implemented\n", knownVerb.Func), 2, config.RED)
 			return area
 		}
 		//val := reflect.ValueOf(&order).MethodByName(knownVerb.Func).Call(argv)
@@ -81,7 +81,7 @@ func Parse(input string, area config.Area, text []string) config.Area {
 		for i := 0; i < val[0].Len(); i++ {
 			notice = append(notice, val[0].Index(i).String())
 		}
-		view.Flash(text, strings.Join(notice, "\n"), knownVerb.Sleep, config.GREEN)
+		view.AddFlashNotice(strings.Join(notice, "\n"), knownVerb.Sleep, config.GREEN)
 		//for i := 0; i < val[0].Len(); i++ {
 		//	fmt.Println(val[0].Index(i).String())
 		//}
@@ -99,7 +99,7 @@ func Parse(input string, area config.Area, text []string) config.Area {
 	default:
 		if len(parts) < 1 {
 			notice := fmt.Sprintln(config.Answers["needObject"])
-			view.Flash(text, notice, knownVerb.Sleep, config.RED)
+			view.AddFlashNotice(notice, knownVerb.Sleep, config.RED)
 			return area
 		}
 		// call reflec.Call for verb with arguments
@@ -110,7 +110,7 @@ func Parse(input string, area config.Area, text []string) config.Area {
 		for _, p := range parts {
 			obj = Object(config.GetObjectByName(p))
 			if obj != (Object{}) {
-				fmt.Printf("Valid object '%s' found.\n", obj.Properties.Description.Short)
+				//fmt.Printf("Valid object '%s' found.\n", obj.Properties.Description.Short)
 				//argv = append(argv, reflect.ValueOf(o))
 				argv = append(argv, reflect.ValueOf(area))
 				break
@@ -131,7 +131,7 @@ func Parse(input string, area config.Area, text []string) config.Area {
 
 	if len(argv) < 1 {
 		notice := fmt.Sprintf(config.Answers["unknownNoun"], strings.Join(parts, " "))
-		view.Flash(text, notice, knownVerb.Sleep, config.RED)
+		view.AddFlashNotice(notice, knownVerb.Sleep, config.RED)
 		return area
 	}
 
@@ -141,7 +141,7 @@ func Parse(input string, area config.Area, text []string) config.Area {
 	//fmt.Println(call.String())
 	//fmt.Println(call.IsValid())
 	if !call.IsValid() {
-		view.Flash(text, fmt.Sprintf("Func '%s' not yet implemented\n", knownVerb.Func), 2, config.RED)
+		view.AddFlashNotice(fmt.Sprintf("Func '%s' not yet implemented\n", knownVerb.Func), 2, config.RED)
 		return area
 	}
 	//val := reflect.ValueOf(&order).MethodByName(knownVerb.Func).Call(argv)
@@ -156,7 +156,8 @@ func Parse(input string, area config.Area, text []string) config.Area {
 			notice = append(notice, val[0].Field(2).Index(i).String())
 		}
 		sleep := int(val[0].Field(3).Int())
-		view.Flash(text, strings.Join(notice, "\n"), sleep, config.RED)
+		view.AddFlashNotice(strings.Join(notice, "\n"), sleep, config.RED)
+		view.FlashNotice()
 		// OK
 		if val[0].Field(0).Bool() == true {
 			//fmt.Printf("New area: %d\n", val[0].Field(4).Int())
@@ -181,7 +182,8 @@ func Parse(input string, area config.Area, text []string) config.Area {
 		for i := 0; i < val[0].Field(2).Len(); i++ {
 			notice = append(notice, val[0].Field(2).Index(i).String())
 		}
-		view.Flash(text, strings.Join(notice, "\n"), int(sleep), color)
+		view.AddFlashNotice(strings.Join(notice, "\n"), int(sleep), color)
+		view.FlashNotice()
 		// KO
 		if val[0].Field(1).Bool() == true {
 			GameOver()
@@ -520,12 +522,15 @@ func (obj Object) Use(area config.Area) (r reaction) {
 
 func (object Object) Climb(area config.Area) (r reaction) {
 	if area.ID == 31 {
+		moves += 1
 		r.OK = true
 		r.AreaID = 9
 		return
 	}
 	if area.ID == 9 && object.ID == 27 {
 		movement.RevealArea(31)
+		moves += 1
+		visited[31] = true
 		r.OK = true
 		r.AreaID = 31
 		return
@@ -582,35 +587,59 @@ func (c *verb) Inventory() (inv []string) {
 func GameOver() {
 	var board []string
 	sum := 0
-	/*
-		for _, o := range inventory {
-			sum += o.Value
+	board = append(board, fmt.Sprintln("G A M E    O V E R"))
+	//board = append(board, fmt.Sprint(""))
+	inv := config.ObjectsInArea(config.GetAreaByID(1000))
+	if len(inv) > 0 {
+		board = append(board, fmt.Sprintln("Du besitzt:"))
+		//board = append(board, fmt.Sprint(""))
+	}
+	for _, o := range inv {
+		val := o.Properties.Value
+		if val > 0 {
+			sum += val
+			desc := strings.Replace(o.Properties.Description.Long, "::", "", -1)
+			board = append(board, fmt.Sprintf("- %s: %d Punkte", desc, val))
 		}
-	*/
+	}
+	board = append(board, fmt.Sprint(""))
 	// all valuable objects found
 	if sum == 170 {
 		switch {
 		case moves < 500:
+			board = append(board, fmt.Sprintf("- Du hast weniger als %d Züge gebraucht: 7 Punkte", 500))
 			sum += 7
 			fallthrough
 		case moves < 400:
+			board = append(board, fmt.Sprintf("- Du hast weniger als %d Züge gebraucht: 7 Punkte", 400))
 			sum += 7
 			fallthrough
 		case moves < 300:
+			board = append(board, fmt.Sprintf("- Du hast weniger als %d Züge gebraucht: 7 Punkte", 300))
 			sum += 7
 		}
 	}
-	switch {
-	case visited[5]:
+	board = append(board, fmt.Sprint(""))
+	if visited[5] {
+		board = append(board, fmt.Sprintf("- Du bist im Moor gewesen: %d Punkte", 2))
 		sum += 2
-	case visited[29]:
+	}
+	if visited[29] {
+		board = append(board, fmt.Sprintf("- Du hast die verlassene Burg besucht: %d Punkte", 3))
 		sum += 3
-	case visited[31]:
+	}
+	if visited[31] {
+		board = append(board, fmt.Sprintf("- Du bist auf einen Baum geklettert: %d Punkte", 4))
 		sum += 4
 	}
-	board = append(board, fmt.Sprintf("Du hast %d von 200 Punkten!\n", sum))
-	board = append(board, "Noch ein Spiel (j/n)?\n")
-	view.Flash(board, "", -1, "")
+	board = append(board, fmt.Sprint(""))
+	board = append(board, fmt.Sprintf("Du hast %d von 200 Punkten!", sum))
+	board = append(board, fmt.Sprint("Noch ein Spiel (j/n)?"))
+	view.PrintScreen(board)
+	res := view.Scanner("once: true")
+	if strings.ToLower(res) == "j" {
+		config.Init()
+	}
 	/*
 		621 poke214,9:poke211,13:sysvd:printb$"-rang ";
 		622 ifpu=0thenprint"10 -":goto632
