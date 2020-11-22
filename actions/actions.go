@@ -149,26 +149,20 @@ func Parse(input string, area config.Area, text []string) config.Area {
 
 	var notice []string
 	var color string
+	// Answer
+	for i := 0; i < val[0].Field(2).Len(); i++ {
+		notice = append(notice, val[0].Field(2).Index(i).String())
+	}
+	// Sleep
+	sleep := int(val[0].Field(3).Int())
 	switch knownVerb.Func {
 	case "Move", "Climb":
-		// Answer
-		for i := 0; i < val[0].Field(2).Len(); i++ {
-			notice = append(notice, val[0].Field(2).Index(i).String())
-		}
-		sleep := int(val[0].Field(3).Int())
-		view.AddFlashNotice(strings.Join(notice, "\n"), sleep, config.RED)
-		view.FlashNotice()
+		color = config.RED
 		// OK
 		if val[0].Field(0).Bool() == true {
-			//fmt.Printf("New area: %d\n", val[0].Field(4).Int())
 			// Area
-			return config.GetAreaByID(int(val[0].Field(4).Int()))
+			area = config.GetAreaByID(int(val[0].Field(4).Int()))
 		}
-		// KO
-		if val[0].Field(1).Bool() == true {
-			GameOver()
-		}
-	//case "Stab":
 	default:
 		// OK
 		if val[0].Field(0).Bool() == true {
@@ -176,70 +170,14 @@ func Parse(input string, area config.Area, text []string) config.Area {
 		} else {
 			color = config.RED
 		}
-		// Sleep
-		sleep := val[0].Field(3).Int()
-		// Answer
-		for i := 0; i < val[0].Field(2).Len(); i++ {
-			notice = append(notice, val[0].Field(2).Index(i).String())
-		}
-		view.AddFlashNotice(strings.Join(notice, "\n"), int(sleep), color)
-		view.FlashNotice()
-		// KO
-		if val[0].Field(1).Bool() == true {
-			GameOver()
-		}
 	}
-	/*
-		default:
-			fmt.Println(val[0])
-			sleep := 1
-			if val[0].Bool() == false {
-				color = config.RED
-				sleep = knownVerb.Sleep
-			} else {
-				color = config.GREEN
-			}
-			for i := 0; i < val[1].Len(); i++ {
-				//fmt.Println(val[1].Index(i).String())
-				notice = append(notice, val[1].Index(i).String())
-				view.Flash(text, strings.Join(notice, "\n"), sleep, color)
-			}
-		}*/
+	view.AddFlashNotice(strings.Join(notice, "\n"), int(sleep), color)
+	view.FlashNotice()
+	// KO
+	if val[0].Field(1).Bool() == true {
+		GameOver()
+	}
 	return area
-
-	/*
-			279 rem ** kommandoabfrage ************
-		280 ifge(13)=-2thenge(13)=-4
-		281 ifoa<>olorve=3thenprinte$:ol=oa:gosub311
-		282 ifge(13)=-2thenprintf$"die tarnkappe hat sich in luft"
-		283 ifge(13)=-2thenprint"aufgeloest !":ge(13)=2:in=in-1
-		284 ifge(13)=-4thenge(13)=-2
-		285 pokevc,peek(vc)or16
-		286 ze=ze+1:ko$="":printc$f$"und nun ";:inputko$:printd$;
-		287 iflen(ko$)=0thenprintchr$(145)chr$(145);:goto286
-		288 v$="":n$="":ve=0:no=0
-		289 fori=1tolen(ko$)
-		290 ifmid$(ko$,i,1)<>" "thenv$=v$+mid$(ko$,i,1):next
-		291 iflen(v$)+1>=len(ko$)then293
-		292 n$=right$(ko$,(len(ko$)-i))
-		293 fori=1to31:ifv$=ve$(i)thenve=i:goto297
-		294 next
-		295 ifn$=""thenn$=v$
-		296 goto298
-		297 ifv$=ko$thengoto300
-		298 fori=1to44:ifn$=no$(i)thenno=i:goto300
-		299 next
-		300 ifno<9andno<>0and(ve=0orve=1)thenve=1
-		301 iflen(n$)>0andno=0andve<>16thenve=0:fl=1
-		302 iffl=1thenfl=0:printchr$(34);n$;chr$(34);" kenne ich nicht.":goto280
-		303 ifn$=""and(ve>8orve=2)andve<>22andve<>15andve<>30thenfl=1
-		304 iffl=1thenfl=0:print"bitte gib ein objekt an.":goto280
-		305 ifve=0thenprintchr$(34);v$;chr$(34);"kenne ich nicht.":goto280
-		306 onvegoto338,346,280,376,567,586,390,397,403,413,417
-		307 onve-11goto438,446,455,461,466,555,471,477,487,496
-		308 onve-21goto383,504,510,517,360,529,535,539,547,517
-		309 :
-	*/
 }
 
 func (object Object) inArea(area config.Area) bool {
@@ -332,35 +270,6 @@ func (object Object) Take(area config.Area) (r reaction) {
 		return
 	}
 	return object.snatchFrom(Object(config.GetObjectByID(10)))
-	/*
-		opponent := config.GetObjectByID(10)
-		if opponent.Area == area && !objectInUse(*config.GetObjectByID(13)) {
-			answer = append(answer, fmt.Sprintf("%s %s %s",
-				strings.Title(opponent.Description.Article),
-				opponent.Description.Short,
-				config.Answers[3]))
-			return false, answer
-		}
-		return inventory.add(object)
-	*/
-	/*
-			359 rem ** nimm ***********************
-		360 f=0:gosub605:iffl=1thenfl=0:goto280
-		361 ifge(no)=-1orge(no)=-2thenprint"habe ich dabei.":goto280
-		362 ifno=10orno=16orno=18orno=21orno=22orno=27orno=36orno=40orno=42thenfl=1
-		363 iffl=1thenfl=0:printa$(0):goto280
-		364 ifno=29orno=14or(no=34andge(9)<>-3)thenprint"zu schwer.":goto280
-		365 ifno=17andge(16)=oaandge(13)<>-2thenprint"der baer";a$(3):goto281
-		366 ifno=19andge(18)=oaandge(13)<>-2thenprint"der zwerg";a$(3):goto281
-		367 ifno=35andge(36)=oaandge(13)<>-2thenprint"der gnom";a$(3):goto281
-		368 ifge(10)=oaandge(13)<>-2thenprint"die raupe";a$(3):goto281
-		369 ifno=44andge(42)=oaandge(13)<>-2thenprint"der drache";a$(3):goto281
-		370 ifno=32orno=43thenprint"kann ich nicht erreichen.":goto280
-		371 ifin+1>7thenprint"ich habe zuviel zu tragen."
-		372 ifin+1>7thenprint"ich muesste etwas weglegen.":goto280
-		373 in=in+1:ge(no)=-1:print"gut.":goto281
-		374 :
-	*/
 }
 
 func (object Object) Stab(area config.Area) (r reaction) {
