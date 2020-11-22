@@ -18,3 +18,5 @@ answers:
   dontSee: "Sehe ich hier nicht."
   haveAlready: "Hab ich schon."
   dontHave: "Hab ich nicht dabei."
+  invEmpty: "Ich habe nichts dabei."
+  inv: "Ich habe:"

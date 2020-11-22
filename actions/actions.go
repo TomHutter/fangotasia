@@ -34,6 +34,7 @@ func Parse(input string, area config.Area, text []string) config.Area {
 	var command string
 	var order verb
 	var knownVerb config.Verb
+	var obj Object
 
 	re := regexp.MustCompile("[\\s,\\t]+")
 
@@ -90,6 +91,8 @@ func Parse(input string, area config.Area, text []string) config.Area {
 
 	switch knownVerb.Name {
 	case "n", "s", "o", "w":
+		//obj = Object(config.GetObjectByName(knownVerb.Func))
+		obj = Object{}
 		argv = append(argv, reflect.ValueOf(area))
 		argv = append(argv, reflect.ValueOf(knownVerb.Name))
 	default:
@@ -99,37 +102,35 @@ func Parse(input string, area config.Area, text []string) config.Area {
 		//argv := make([]reflect.Value, 1)
 		// loop over all input parts and see if we find a valid object
 		for _, p := range parts {
-			word := strings.ToLower(p)
-			for _, o := range config.GameObjects {
-				if strings.ToLower(o.Description.Short) == word {
-					fmt.Printf("Valid object '%s' found.\n", o.Description.Short)
-					argv = append(argv, reflect.ValueOf(o))
-					argv = append(argv, reflect.ValueOf(area))
-					break
+			obj = Object(config.GetObjectByName(p))
+			if obj != (Object{}) {
+				fmt.Printf("Valid object '%s' found.\n", obj.Properties.Description.Short)
+				//argv = append(argv, reflect.ValueOf(o))
+				argv = append(argv, reflect.ValueOf(area))
+				break
 
-					/*
-						//val := reflect.ValueOf(&order).MethodByName(v.Func).Call(argv)
-						//val := reflect.ValueOf(&order).MethodByName(v.Func).Call([]reflect.Value{reflect.ValueOf(order)})
-						val := reflect.ValueOf(&order).MethodByName(knownVerb.Func).Call(argv)
-						for i := 0; i < val[0].Len(); i++ {
-							fmt.Println(val[0].Index(i).String())
-						}
-						fmt.Println(val[1])
-						return
-					*/
-				}
+				/*
+					//val := reflect.ValueOf(&order).MethodByName(v.Func).Call(argv)
+					//val := reflect.ValueOf(&order).MethodByName(v.Func).Call([]reflect.Value{reflect.ValueOf(order)})
+					val := reflect.ValueOf(&order).MethodByName(knownVerb.Func).Call(argv)
+					for i := 0; i < val[0].Len(); i++ {
+						fmt.Println(val[0].Index(i).String())
+					}
+					fmt.Println(val[1])
+					return
+				*/
 			}
 		}
 	}
 
-	if len(argv) < 2 {
+	if len(argv) < 1 {
 		notice := fmt.Sprintf("'%s' kenne ich nicht.\n", strings.Join(parts, " "))
 		view.Flash(text, notice, knownVerb.Sleep, config.RED)
 		return area
 	}
 
 	// now method and all args should be known
-	call := reflect.ValueOf(&order).MethodByName(knownVerb.Func)
+	call := reflect.ValueOf(obj).MethodByName(knownVerb.Func)
 	//view.Flash(text, fmt.Sprintf("%s", call.IsNil()), 2, config.RED)
 	//fmt.Println(call.String())
 	//fmt.Println(call.IsValid())
@@ -251,7 +252,7 @@ func (object Object) snatchFrom(opponent Object) (r reaction) {
 			config.Answers["wontLet"]))
 		r.OK = false
 		r.KO = false
-		r.Sleep = 2000
+		r.Sleep = 2
 		return
 	}
 	return object.pick()
@@ -267,14 +268,14 @@ func (object Object) Take(area config.Area) (r reaction) {
 		r.Answer = append(r.Answer, config.Answers["dontSee"])
 		r.OK = false
 		r.KO = false
-		r.Sleep = 2000
+		r.Sleep = 2
 		return
 	}
 	if object.inInventory() || object.inUse() {
 		r.Answer = append(r.Answer, config.Answers["haveAlready"])
 		r.OK = false
 		r.KO = false
-		r.Sleep = 2000
+		r.Sleep = 2
 		return
 	}
 
@@ -283,20 +284,20 @@ func (object Object) Take(area config.Area) (r reaction) {
 		r.Answer = append(r.Answer, config.Answers["silly"])
 		r.OK = false
 		r.KO = false
-		r.Sleep = 2000
+		r.Sleep = 2
 		return
 	case 29, 14:
 		r.Answer = append(r.Answer, config.Answers["tooHeavy"])
 		r.OK = false
 		r.KO = false
-		r.Sleep = 2000
+		r.Sleep = 2
 		return
 	case 34:
 		if !Object(config.GetObjectByID(9)).inUse() {
 			r.Answer = append(r.Answer, config.Answers["tooHeavy"])
 			r.OK = false
 			r.KO = false
-			r.Sleep = 2000
+			r.Sleep = 2
 			return
 		}
 	case 17:
@@ -311,7 +312,7 @@ func (object Object) Take(area config.Area) (r reaction) {
 		r.Answer = append(r.Answer, config.Answers["unreachable"])
 		r.OK = false
 		r.KO = false
-		r.Sleep = 2000
+		r.Sleep = 2
 		return
 	}
 	return object.snatchFrom(Object(config.GetObjectByID(10)))
@@ -353,7 +354,7 @@ func (object Object) Stab(area config.Area) (r reaction) {
 		r.Answer = append(r.Answer, config.Answers["noTool"])
 		r.OK = false
 		r.KO = false
-		r.Sleep = 2000
+		r.Sleep = 2
 		return
 	}
 	switch object.ID {
@@ -361,47 +362,48 @@ func (object Object) Stab(area config.Area) (r reaction) {
 		r.Answer = append(r.Answer, config.Answers["tryCut"])
 		r.OK = true
 		r.KO = false
-		r.Sleep = 2000
+		r.Sleep = 2
 		return
 	case 10:
 		r.Answer = append(r.Answer, config.Answers["stabGrub"])
 		r.OK = true
 		r.KO = false
-		r.Sleep = 2000
+		r.Sleep = 2
 		return
 	case 16:
 		r.Answer = append(r.Answer, config.Answers["starbBaer"])
 		r.OK = true
 		r.KO = false
-		r.Sleep = 2000
+		r.Sleep = 2
 		return
 	case 18:
 		r.Answer = append(r.Answer, config.Answers["stabDwarf"])
 		r.OK = false
 		r.KO = true
-		r.Sleep = 2000
+		r.Sleep = 2
 		return
 	case 36:
 		r.Answer = append(r.Answer, config.Answers["stabGnome"])
 		r.OK = false
 		r.KO = true
-		r.Sleep = 2000
+		r.Sleep = 2
 		return
 	case 42:
 		r.Answer = append(r.Answer, config.Answers["stabDragon"])
 		r.OK = false
 		r.KO = true
-		r.Sleep = 2000
+		r.Sleep = 2
 		return
 	}
 	r.Answer = append(r.Answer, config.Answers["dontKnow"])
 	r.OK = true
 	r.KO = false
-	r.Sleep = 2000
+	r.Sleep = 2
 	return
 }
 
-func (v *verb) Move(area config.Area, dir string) (ok bool, newArea int, answer []string) {
+// As Move is called in context of object handling, Move reflects on Object even obj is not used.
+func (obj Object) Move(area config.Area, dir string) (ok bool, newArea int, answer []string) {
 	//func Move(area int, direction int, text []string) int {
 	//if direction == 0 {
 	//	return 0, "Ich brauche eine Richtung."
@@ -493,21 +495,20 @@ func (v *verb) Verbs() (verbs []string) {
 	return
 }
 
-/*
 func (c *verb) Inventory() (inv []string) {
-	if len(inventory) == 0 {
+	objects := config.ObjectsInArea(config.GetAreaByID(-1))
+	if len(objects) == 0 {
 		//fmt.Println("Ich habe nichts dabei.")
-		inv = append(inv, "Ich habe nichts dabei.")
+		inv = append(inv, config.Answers["invEmpty"])
 		return
 	}
 
-	inv = append(inv, "Ich habe:")
-	for _, i := range inventory {
-		inv = append(inv, fmt.Sprintf("- %s", i.Description.Long))
+	inv = append(inv, config.Answers["inv"])
+	for _, o := range objects {
+		inv = append(inv, fmt.Sprintf("- %s", o.Properties.Description.Long))
 	}
 	return
 }
-*/
 
 func (v *verb) GameOver() {
 	var board []string
@@ -569,7 +570,7 @@ func (obj Object) pick() (r reaction) {
 		r.Answer = append(r.Answer, config.Answers["invFull"])
 		r.OK = false
 		r.KO = false
-		r.Sleep = 2000
+		r.Sleep = 2
 		return
 	}
 
@@ -578,7 +579,7 @@ func (obj Object) pick() (r reaction) {
 	r.Answer = append(r.Answer, config.Answers["ok"])
 	r.OK = true
 	r.KO = false
-	r.Sleep = 1000
+	r.Sleep = 1
 	return
 }
 
@@ -587,7 +588,7 @@ func (obj Object) drop(area config.Area) (r reaction) {
 		r.Answer = append(r.Answer, config.Answers["dontHave"])
 		r.OK = false
 		r.KO = false
-		r.Sleep = 2000
+		r.Sleep = 2
 		return
 	}
 	obj.Properties.Area = area.ID
@@ -595,6 +596,6 @@ func (obj Object) drop(area config.Area) (r reaction) {
 	r.Answer = append(r.Answer, config.Answers["ok"])
 	r.OK = true
 	r.KO = false
-	r.Sleep = 1000
+	r.Sleep = 1
 	return
 }
