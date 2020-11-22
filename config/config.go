@@ -9,7 +9,7 @@ import (
 )
 
 var GameObjects map[int]ObjectProperties
-var GameAreas []Area
+var GameAreas map[int]AreaProperties
 var Overwrites []MapOverwrites
 var Answers map[string]string
 
@@ -29,9 +29,9 @@ type conf struct {
 	Nouns      []string                 `yaml:"nouns"`
 	Objects    map[int]ObjectProperties `yaml:"objects"`
 	ID         int
-	Answers    map[string]string `yaml:"answers"`
-	Locations  []Area            `yaml:"locations"`
-	Overwrites []MapOverwrites   `yaml:"overwrites"`
+	Answers    map[string]string      `yaml:"answers"`
+	Locations  map[int]AreaProperties `yaml:"locations"`
+	Overwrites []MapOverwrites        `yaml:"overwrites"`
 }
 
 // Long and short description and the article for the noun
@@ -53,11 +53,15 @@ type ObjectProperties struct {
 	Value       int
 }
 
+type Area struct {
+	ID         int
+	Properties AreaProperties
+}
+
 // Area : long and short description of locations.
 //        directions: which area will be nearby in n,s,e,w
 //        coordinates: y and x coordinates for area on map
-type Area struct {
-	ID          int
+type AreaProperties struct {
 	Description description
 	Directions  [4]int
 	Coordinates Coordinates
@@ -270,12 +274,7 @@ func GetObjectByID(id int) (object Object) {
 }
 
 func GetAreaByID(id int) (area Area) {
-	for _, a := range GameAreas {
-		if a.ID == id {
-			return a
-		}
-	}
-	return
+	return Area{id, GameAreas[id]}
 }
 
 func GetOverwriteByArea(area int) (o MapOverwrites) {

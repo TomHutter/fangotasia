@@ -1,13 +1,13 @@
 locations:
-  - id: -2
+  1000:
     description:
       long: Objects in use
       short: inUse
-  - id: -1
+  2000:
     description:
       long: Inventory
       short: Inventory
-  - id: 1
+  1:
     description:
       long: vor einem riesigem Torbogen.
       short: Torbogen
@@ -19,7 +19,7 @@ locations:
     coordinates:
       y: 11
       x: 0
-  - id: 2
+  2:
     description:
       long: auf einer Blumenwiese.
       short: Blumenwiese
@@ -31,7 +31,7 @@ locations:
     coordinates:
       y: 11
       x: 1
-  - id: 3
+  3:
     description:
       long: an einem Seerosenteich.
       short: Seerosenteich
@@ -43,7 +43,7 @@ locations:
     coordinates:
       y: 11
       x: 2
-  - id: 4
+  4:
     description:
       long: in einer trostlosen Einöde.
       short: Einöde
@@ -55,7 +55,7 @@ locations:
     coordinates:
       y: 11
       x: 3
-  - id: 5
+  5:
     description:
       long: in einem nebligem Moor.
       short: Moor
@@ -67,7 +67,7 @@ locations:
     coordinates:
       y: 11
       x: 4
-  - id: 6
+  6:
     description:
       long: in einer feenhaften Grotte.
       short: Grotte
@@ -79,7 +79,7 @@ locations:
     coordinates:
       y: 9
       x: 0
-  - id: 7
+  7:
     description:
       long: an einer zerklüfteten Felswand.
       short: Felswand
@@ -91,7 +91,7 @@ locations:
     coordinates:
       y: 9
       x: 1
-  - id: 8
+  8:
     description:
       long: in einem lichten Auwald.
       short: Auwald
@@ -103,7 +103,7 @@ locations:
     coordinates:
       y: 10
       x: 1
-  - id: 9
+  9:
     description:
       long: auf einer blühenden Heide.
       short: Heide
@@ -115,7 +115,7 @@ locations:
     coordinates:
       y: 10
       x: 2
-  - id: 10
+  10:
     description:
       long: in einer verdorrten Steppe.
       short: Steppe
@@ -127,7 +127,7 @@ locations:
     coordinates:
       y: 10
       x: 3
-  - id: 11
+  11:
     description:
       long: auf dem Versammlungsplatz der Gnome.
       short: Versammlungsplatz
@@ -139,7 +139,7 @@ locations:
     coordinates:
       y: 10
       x: 4
-  - id: 12
+  12:
     description:
       long: in der Waffenkammer der Gnome.
       short: Waffenkammer
@@ -151,7 +151,7 @@ locations:
     coordinates:
       y: 10
       x: 5
-  - id: 13
+  13:
     description:
       long: in einer Tropfsteinhöhle.
       short: Tropfsteinhöhle
@@ -163,7 +163,7 @@ locations:
     coordinates:
       y: 8
       x: 0
-  - id: 14
+  14:
     description:
       long: am Fuß eines Berges.
       short: Berg
@@ -175,7 +175,7 @@ locations:
     coordinates:
       y: 8
       x: 1
-  - id: 15
+  15:
     description:
       long: in der Schatzkammer der Elfen.
       short: Schatzkammer
@@ -190,7 +190,7 @@ locations:
 
 
 
-  - id: 16
+  16:
     description:
       long: auf einer Bergwiese.
       short: Bergwiese
@@ -202,7 +202,7 @@ locations:
     coordinates:
       y: 7
       x: 0
-  - id: 17
+  17:
     description:
       long: an einer silbernen Quelle.
       short: Quelle
@@ -214,7 +214,7 @@ locations:
     coordinates:
       y: 7
       x: 1
-  - id: 18
+  18:
     description:
       long: in einer Schlucht mit vielen Farnen.
       short: Schlucht
@@ -226,7 +226,7 @@ locations:
     coordinates:
       y: 7
       x: 2
-  - id: 19
+  19:
     description:
       long: in einer Bärenhöhle.
       short: Bärenhöhle
@@ -238,7 +238,7 @@ locations:
     coordinates:
       y: 7
       x: 3
-  - id: 20
+  20:
     description:
       long: auf einer schwankenden Hängebrücke.
       short: Hängebrücke
@@ -250,7 +250,7 @@ locations:
     coordinates:
       y: 7
       x: 4
-  - id: 21
+  21:
     description:
       long: an einem Wiesenhang.
       short: Wiesenhang
@@ -262,7 +262,7 @@ locations:
     coordinates:
       y: 7
       x: 5
-  - id: 22
+  22:
     description:
       long: in einer Rosenlaube.
       short: Rosenlaube
@@ -274,7 +274,7 @@ locations:
     coordinates:
       y: 6
       x: 0
-  - id: 23
+  23:
     description:
       long: in einem Kräutergarten.
       short: Kräutergarten
@@ -286,7 +286,7 @@ locations:
     coordinates:
       y: 6
       x: 1
-  - id: 24
+  24:
     description:
       long: auf einem verschlungenen Weg.
       short: Weg
@@ -298,7 +298,7 @@ locations:
     coordinates:
       y: 6
       x: 2
-  - id: 25
+  25:
     description:
       long: an einer verfallenen Burgruine.
       short: Burgruine
@@ -310,7 +310,7 @@ locations:
     coordinates:
       y: 6
       x: 3
-  - id: 26
+  26:
     description:
       long: in einem sonnigen Obsthain.
       short: Obsthain
@@ -322,7 +322,7 @@ locations:
     coordinates:
       y: 6
       x: 5
-  - id: 27
+  27:
     description:
       long: in einem verwilderten Park.
       short: Park
@@ -334,7 +334,7 @@ locations:
     coordinates:
       y: 5
       x: 0
-  - id: 28
+  28:
     description:
       long: in einer finsteren Hexenküche.
       short: Hexenküche
@@ -346,7 +346,7 @@ locations:
     coordinates:
       y: 5
       x: 1
-  - id: 29
+  29:
     description:
       long: im Hof einer verlassenen Burg.
       short: Burg
@@ -358,7 +358,7 @@ locations:
     coordinates:
       y: 5
       x: 2
-  - id: 30
+  30:
     description:
       long: in einem finsteren Burgverlies.
       short: Burgverlies
@@ -370,7 +370,7 @@ locations:
     coordinates:
       y: 5
       x: 3
-  - id: 31
+  31:
     description:
       long: in der Krone eines Baumes.\n++Ich kann nicht weit sehen.++
       short: Baumkrone
@@ -382,7 +382,7 @@ locations:
     coordinates:
       y: 9
       x: 3
-  - id: 32
+  32:
     description:
       long: in einem feuchten Laubwald.
       short: Laubwald
@@ -394,7 +394,7 @@ locations:
     coordinates:
       y: 3
       x: 5
-  - id: 33
+  33:
     description:
       long: im Reich der Feen.
       short: Feenreich
@@ -406,7 +406,7 @@ locations:
     coordinates:
       y: 3
       x: 4
-  - id: 34
+  34:
     description:
       long: in einer grauen Steinwüste.
       short: Steinwüste
@@ -418,7 +418,7 @@ locations:
     coordinates:
       y: 4
       x: 4
-  - id: 35
+  35:
     description:
       long: an einem breiten Fluss.\n++Am anderen Ufer bewegt sich etwas.++
       short: Fluss
@@ -430,7 +430,7 @@ locations:
     coordinates:
       y: 4
       x: 3
-  - id: 36
+  36:
     description:
       long: auf einem dreckigem Pfad.
       short: Pfad
@@ -442,7 +442,7 @@ locations:
     coordinates:
       y: 5
       x: 4
-  - id: 37
+  37:
     description:
       long: in einem Dornengestrüpp.\n++Ich finde mich nicht mehr zurecht.++
       short: Dornengestrüpp
@@ -454,7 +454,7 @@ locations:
     coordinates:
       y: 4
       x: 6
-  - id: 38
+  38:
     description:
       long: in einem Dornengestrüpp.\n++Ich finde mich nicht mehr zurecht.++
       short: Dornengestrüpp
@@ -466,7 +466,7 @@ locations:
     coordinates:
       y: 5
       x: 6
-  - id: 39
+  39:
     description:
       long: in einem Dornengestrüpp.\n++Ich finde mich nicht mehr zurecht.++
       short: Dornengestrüpp
@@ -478,7 +478,7 @@ locations:
     coordinates:
       y: 4
       x: 7
-  - id: 40
+  40:
     description:
       long: auf einem Hohlweg.
       short: Hohlweg
@@ -490,7 +490,7 @@ locations:
     coordinates:
       y: 3
       x: 7
-  - id: 41
+  41:
     description:
       long: in einem unheimlichen Wald.\n++Man sieht kaum einen Weg. Ob hier ein\nDrache haust?!++
       short: Wald
@@ -502,7 +502,7 @@ locations:
     coordinates:
       y: 2
       x: 6
-  - id: 42
+  42:
     description:
       long: in einem unheimlichen Wald.\n++Man sieht kaum einen Weg. Ob hier ein\nDrache haust?!++
       short: Wald
@@ -514,7 +514,7 @@ locations:
     coordinates:
       y: 2
       x: 7
-  - id: 43
+  43:
     description:
       long: in einem unheimlichen Wald.\n++Man sieht kaum einen Weg. Ob hier ein\nDrache haust?!++
       short: Wald
@@ -526,7 +526,7 @@ locations:
     coordinates:
       y: 1
       x: 6
-  - id: 44
+  44:
     description:
       long: in einem unheimlichen Wald.\n++Man sieht kaum einen Weg. Ob hier ein\nDrache haust?!++
       short: Wald
@@ -538,7 +538,7 @@ locations:
     coordinates:
       y: 1
       x: 7
-  - id: 45
+  45:
     description:
       long: in einem unheimlichen Wald.\n++Man sieht kaum einen Weg. Ob hier ein\nDrache haust?!++
       short: Wald
@@ -550,7 +550,7 @@ locations:
     coordinates:
       y: 1
       x: 8
-  - id: 46
+  46:
     description:
       long: in einem unheimlichen Wald.\n++Man sieht kaum einen Weg. Ob hier ein\nDrache haust?!++
       short: Wald
@@ -562,7 +562,7 @@ locations:
     coordinates:
       y: 1
       x: 9
-  - id: 47
+  47:
     description:
       long: in einem unheimlichen Wald.\n++Man sieht kaum einen Weg. Ob hier ein\nDrache haust?!++
       short: Wald
@@ -574,7 +574,7 @@ locations:
     coordinates:
       y: 0
       x: 6
-  - id: 48
+  48:
     description:
       long: in einem unheimlichen Wald.\n++Man sieht kaum einen Weg. Ob hier ein\nDrache haust?!++
       short: Wald
@@ -586,7 +586,7 @@ locations:
     coordinates:
       y: 0
       x: 7
-  - id: 49
+  49:
     description:
       long: in einem unheimlichen Wald.\n++Man sieht kaum einen Weg. Ob hier ein\nDrache haust?!++
       short: Wald
@@ -598,7 +598,7 @@ locations:
     coordinates:
       y: 0
       x: 8
-  - id: 50
+  50:
     description:
       long: in einem unheimlichen Wald.\n++Man sieht kaum einen Weg. Ob hier ein\nDrache haust?!++
       short: Wald
@@ -610,7 +610,7 @@ locations:
     coordinates:
       y: 0
       x: 9
-  - id: 51
+  51:
     description:
       long: auf einer unzugänglichen Waldlichtung.
       short: Waldlichtung

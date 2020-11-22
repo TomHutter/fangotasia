@@ -231,11 +231,11 @@ func (object Object) inArea(area config.Area) bool {
 }
 
 func (object Object) inInventory() bool {
-	return object.Properties.Area == -1
+	return object.Properties.Area == 1000
 }
 
 func (object Object) inUse() bool {
-	return object.Properties.Area == -2
+	return object.Properties.Area == 2000
 }
 
 func (object Object) available(area config.Area) bool {
@@ -410,7 +410,7 @@ func (obj Object) Move(area config.Area, dir string) (ok bool, newArea int, answ
 	//}
 	var direction = map[string]int{"n": 0, "s": 1, "o": 2, "w": 3}
 
-	newArea = area.Directions[direction[dir]]
+	newArea = area.Properties.Directions[direction[dir]]
 	if newArea == 0 {
 		answer = append(answer, config.Answers["noWay"])
 		return false, area.ID, answer
@@ -496,7 +496,7 @@ func (v *verb) Verbs() (verbs []string) {
 }
 
 func (c *verb) Inventory() (inv []string) {
-	objects := config.ObjectsInArea(config.GetAreaByID(-1))
+	objects := config.ObjectsInArea(config.GetAreaByID(1000))
 	if len(objects) == 0 {
 		//fmt.Println("Ich habe nichts dabei.")
 		inv = append(inv, config.Answers["invEmpty"])
@@ -564,7 +564,7 @@ func (v *verb) GameOver() {
 //}
 
 func (obj Object) pick() (r reaction) {
-	inv := config.GetAreaByID(-1)
+	inv := config.GetAreaByID(1000)
 	inventory := config.ObjectsInArea(inv)
 	if len(inventory) > 6 {
 		r.Answer = append(r.Answer, config.Answers["invFull"])
@@ -574,7 +574,7 @@ func (obj Object) pick() (r reaction) {
 		return
 	}
 
-	obj.Properties.Area = -1
+	obj.Properties.Area = 1000
 	config.GameObjects[obj.ID] = obj.Properties
 	r.Answer = append(r.Answer, config.Answers["ok"])
 	r.OK = true
@@ -584,7 +584,7 @@ func (obj Object) pick() (r reaction) {
 }
 
 func (obj Object) drop(area config.Area) (r reaction) {
-	if obj.Properties.Area != -1 {
+	if obj.Properties.Area != 1000 {
 		r.Answer = append(r.Answer, config.Answers["dontHave"])
 		r.OK = false
 		r.KO = false

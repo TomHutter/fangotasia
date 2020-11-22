@@ -21,7 +21,7 @@ func initVisibleAreas() {
 
 func AreaVisible(a int) bool {
 	area := config.GetAreaByID(a)
-	return visibleMap[area.Coordinates.Y][area.Coordinates.X] != 0
+	return visibleMap[area.Properties.Coordinates.Y][area.Properties.Coordinates.X] != 0
 }
 
 func drawBox(a int, boxLen int) (box [3]string) {
@@ -47,14 +47,14 @@ func drawBox(a int, boxLen int) (box [3]string) {
 	var leftCon, rightCon, topCon, bottomCon string
 	area := config.GetAreaByID(a)
 	// get first line of area from locations
-	text := area.Description.Short
+	text := area.Properties.Description.Short
 	textLen := len([]rune(text)) + 2 // two space left and right
 	leftSpacer := strings.Repeat(" ", (boxLen-textLen)/2)
 	rightSpacer := strings.Repeat(" ", boxLen-len(leftSpacer)-textLen)
 	// horizontal line - left/right corner and middle connection element
 	horLine := strings.Repeat(config.HL, (boxLen-3)/2)
 	// can we walk to the north?
-	if area.Directions[0] == 0 {
+	if area.Properties.Directions[0] == 0 {
 
 		// no => draw a hoizontal line
 		topCon = config.HL
@@ -63,7 +63,7 @@ func drawBox(a int, boxLen int) (box [3]string) {
 		topCon = config.TC
 	}
 	// can we walk to the south?
-	if area.Directions[1] == 0 {
+	if area.Properties.Directions[1] == 0 {
 		// no => draw a hoizontal line
 		bottomCon = config.HL
 	} else {
@@ -71,7 +71,7 @@ func drawBox(a int, boxLen int) (box [3]string) {
 		bottomCon = config.BC
 	}
 	// can we walk to the east?
-	if area.Directions[2] == 0 {
+	if area.Properties.Directions[2] == 0 {
 		// no => draw a vertical line
 		rightCon = fmt.Sprintf("%s ", config.VL)
 	} else {
@@ -79,7 +79,7 @@ func drawBox(a int, boxLen int) (box [3]string) {
 		rightCon = fmt.Sprintf("%s%s", config.RC, config.HL)
 	}
 	// can we walk to the west?
-	if area.Directions[3] == 0 {
+	if area.Properties.Directions[3] == 0 {
 		// no => draw a vertical line
 		leftCon = fmt.Sprintf(" %s", config.VL)
 	} else {
@@ -93,8 +93,8 @@ func drawBox(a int, boxLen int) (box [3]string) {
 }
 
 func DrawMap(area config.Area) (text []string) {
-	x := area.Coordinates.X
-	y := area.Coordinates.Y
+	x := area.Properties.Coordinates.X
+	y := area.Properties.Coordinates.Y
 	// max x = 9, don't go further east than 8
 	/*
 		if x > 8 {
@@ -139,7 +139,7 @@ func DrawMap(area config.Area) (text []string) {
 
 func RevealArea(area int) {
 	a := config.GetAreaByID(area)
-	visibleMap[a.Coordinates.Y][a.Coordinates.X] = area
+	visibleMap[a.Properties.Coordinates.Y][a.Properties.Coordinates.X] = area
 	switch area {
 	case 5:
 		if AreaVisible(36) {
