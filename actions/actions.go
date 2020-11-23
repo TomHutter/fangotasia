@@ -163,6 +163,8 @@ func Parse(input string, area config.Area, text []string) config.Area {
 			// Area
 			area = config.GetAreaByID(int(val[0].Field(4).Int()))
 		}
+		// add notice. Give feedback in the next screen.
+		view.AddFlashNotice(strings.Join(notice, "\n"), int(sleep), color)
 	default:
 		// OK
 		if val[0].Field(0).Bool() == true {
@@ -170,9 +172,10 @@ func Parse(input string, area config.Area, text []string) config.Area {
 		} else {
 			color = config.RED
 		}
+		// add notice and give feedback in this screen.
+		view.AddFlashNotice(strings.Join(notice, "\n"), int(sleep), color)
+		view.FlashNotice()
 	}
-	view.AddFlashNotice(strings.Join(notice, "\n"), int(sleep), color)
-	view.FlashNotice()
 	// KO
 	if val[0].Field(1).Bool() == true {
 		GameOver()
@@ -302,16 +305,36 @@ func (object Object) Stab(area config.Area) (r reaction) {
 		r.Sleep = 2
 		return
 	case 18:
-		r.Answer = append(r.Answer, config.Answers["stabDwarf"])
-		r.OK = false
-		r.KO = true
-		r.Sleep = 2
+		if Object(config.GetObjectByID(13)).inUse() {
+			dwarf := config.GetObjectByID(18)
+			dwarf.Properties.Area = -1
+			config.GameObjects[dwarf.ID] = dwarf.Properties
+			r.Answer = append(r.Answer, config.Answers["stabDwarfHooded"])
+			r.OK = true
+			r.KO = false
+			r.Sleep = 1
+		} else {
+			r.Answer = append(r.Answer, config.Answers["stabDwarf"])
+			r.OK = false
+			r.KO = true
+			r.Sleep = 2
+		}
 		return
 	case 36:
-		r.Answer = append(r.Answer, config.Answers["stabGnome"])
-		r.OK = false
-		r.KO = true
-		r.Sleep = 2
+		if Object(config.GetObjectByID(13)).inUse() {
+			gnome := config.GetObjectByID(36)
+			gnome.Properties.Area = -1
+			config.GameObjects[gnome.ID] = gnome.Properties
+			r.Answer = append(r.Answer, config.Answers["stabGnomeHooded"])
+			r.OK = true
+			r.KO = false
+			r.Sleep = 1
+		} else {
+			r.Answer = append(r.Answer, config.Answers["stabGnome"])
+			r.OK = false
+			r.KO = true
+			r.Sleep = 2
+		}
 		return
 	case 42:
 		r.Answer = append(r.Answer, config.Answers["stabDragon"])
@@ -381,6 +404,16 @@ func (obj Object) Move(area config.Area, dir string) (r reaction) {
 	r.OK = true
 	r.KO = false
 	r.AreaID = newArea
+	// Direction Moor?
+	if newArea == 5 {
+		for _, o := range config.ObjectsInArea(config.GetAreaByID(1000)) {
+			o.Properties.Area = 29
+			config.GameObjects[o.ID] = o.Properties
+		}
+		r.Answer = append(r.Answer, config.Answers["inTheMoor"])
+		r.Sleep = 6
+		r.OK = true
+	}
 	return
 }
 
