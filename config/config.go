@@ -3,80 +3,12 @@ package config
 import (
 	"io/ioutil"
 	"log"
+	"path"
+	"runtime"
 	"strings"
 
 	"gopkg.in/yaml.v2"
 )
-
-var GameObjects map[int]ObjectProperties
-var GameAreas map[int]AreaProperties
-var Overwrites []MapOverwrites
-var Answers map[string]string
-
-type Verb struct {
-	Name   string
-	Func   string
-	Single bool
-	Sleep  int
-}
-
-var Verbs []Verb
-var BoxLen int
-
-// Conf : Struct to read from yaml config files
-type conf struct {
-	Verbs      []Verb                   `yaml:"verbs"`
-	Nouns      []string                 `yaml:"nouns"`
-	Objects    map[int]ObjectProperties `yaml:"objects"`
-	ID         int
-	Answers    map[string]string      `yaml:"answers"`
-	Locations  map[int]AreaProperties `yaml:"locations"`
-	Overwrites []MapOverwrites        `yaml:"overwrites"`
-}
-
-// Long and short description and the article for the noun
-type description struct {
-	Long    string
-	Short   string
-	Article string
-}
-
-type Object struct {
-	ID         int
-	Properties ObjectProperties
-}
-
-// ObjectProperties : Contains long and short description of locations.
-type ObjectProperties struct {
-	Description description
-	Area        int
-	Value       int
-}
-
-type Area struct {
-	ID         int
-	Properties AreaProperties
-}
-
-// Area : long and short description of locations.
-//        directions: which area will be nearby in n,s,e,w
-//        coordinates: y and x coordinates for area on map
-type AreaProperties struct {
-	Description description
-	Directions  [4]int
-	Coordinates Coordinates
-}
-
-type Coordinates struct {
-	Y int
-	X int
-	//Visible bool
-}
-
-type MapOverwrites struct {
-	Area    int
-	Content [3]string
-}
 
 // Make life more colorful :-)
 const (
@@ -107,6 +39,87 @@ const (
 	AU  = "\u2BC5"
 	AD  = "\u2BC6"
 )
+
+type Verb struct {
+	Name   string
+	Func   string
+	Single bool
+	Sleep  int
+}
+
+// Conf : Struct to read from yaml config files
+type conf struct {
+	Verbs      []Verb                   `yaml:"verbs"`
+	Nouns      []string                 `yaml:"nouns"`
+	Objects    map[int]ObjectProperties `yaml:"objects"`
+	ID         int
+	Answers    map[string]string      `yaml:"answers"`
+	Locations  map[int]AreaProperties `yaml:"locations"`
+	Overwrites []MapOverwrites        `yaml:"overwrites"`
+}
+
+// Long and short description and the article for the noun
+type description struct {
+	Long    string
+	Short   string
+	Article string
+}
+
+type Object struct {
+	ID         int
+	Properties ObjectProperties
+}
+
+// ObjectProperties : Contain long and short description of locations.
+type ObjectProperties struct {
+	Description description
+	Area        int
+	Value       int
+}
+
+type Area struct {
+	ID         int
+	Properties AreaProperties
+}
+
+// Area : long and short description of locations.
+//        directions: which area will be reachable in n,s,e,w
+//        coordinates: y and x coordinates for area on map
+type AreaProperties struct {
+	Description description
+	Directions  [4]int
+	Coordinates Coordinates
+	Visited     bool
+}
+
+type Coordinates struct {
+	Y int
+	X int
+}
+
+type MapOverwrites struct {
+	Area    int
+	Content [3]string
+}
+
+var GameObjects map[int]ObjectProperties
+var GameAreas map[int]AreaProperties
+var Overwrites []MapOverwrites
+var Answers map[string]string
+var Verbs []Verb
+
+var BoxLen int
+
+var Map [12][10]int
+
+func initMap() {
+	Map[11][0] = 1
+}
+
+func AreaVisible(a int) bool {
+	area := GetAreaByID(a)
+	return Map[area.Properties.Coordinates.Y][area.Properties.Coordinates.X] != 0
+}
 
 /*
 // Areas start at 1 in the original game.
@@ -207,9 +220,9 @@ func (c *conf) getConf(filename string) {
 	}
 }
 
-func getMapOverwrites() (overwrites []MapOverwrites) {
+func getMapOverwrites(pathname string) (overwrites []MapOverwrites) {
 	var c conf
-	c.getConf("config/map_overwrites.yaml")
+	c.getConf(pathname + "/map_overwrites.yaml")
 	for _, v := range c.Overwrites {
 		var o MapOverwrites
 		o.Area = v.Area
@@ -239,16 +252,19 @@ func initBoxLen() {
 
 func Init() {
 	var c conf
-	c.getConf("config/objects.yaml")
+	_, filename, _, _ := runtime.Caller(0)
+	pathname := path.Dir(filename)
+	c.getConf(pathname + "/objects.yaml")
 	GameObjects = c.Objects
-	c.getConf("config/locations.yaml")
+	c.getConf(pathname + "/locations.yaml")
 	GameAreas = c.Locations
-	c.getConf("config/answers.yaml")
+	c.getConf(pathname + "/answers.yaml")
 	Answers = c.Answers
-	c.getConf("config/verbs.yaml")
+	c.getConf(pathname + "/verbs.yaml")
 	Verbs = c.Verbs
-	Overwrites = getMapOverwrites()
+	Overwrites = getMapOverwrites(pathname)
 	initBoxLen()
+	initMap()
 }
 
 func ObjectsInArea(area Area) (objects []Object) {
