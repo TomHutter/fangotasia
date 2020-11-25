@@ -1,20 +1,20 @@
 package movement
 
 import (
-	"fantasia/config"
+	"fantasia/setup"
 	"fmt"
 	"strings"
 )
 
-func Surroundings(area config.Area) (text []string) {
+func Surroundings(area setup.Area) (text []string) {
 	/*
 		if area == 25 {
-			config.ObjectsInArea[40][0] = 25
-			config.Objects[40-9] = "eine Tür im Norden"
+			setup.ObjectsInArea[40][0] = 25
+			setup.Objects[40-9] = "eine Tür im Norden"
 		}
 		if area == 30 {
-			config.ObjectsInArea[40][0] = 30
-			config.Objects[40-9] = "eine Tür im Süden"
+			setup.ObjectsInArea[40][0] = 30
+			setup.Objects[40-9] = "eine Tür im Süden"
 		}
 	*/
 
@@ -24,37 +24,37 @@ func Surroundings(area config.Area) (text []string) {
 	//var text []string
 	desc := strings.Split(area.Properties.Description.Long, "\\n")
 	desc0, desc := desc[0], desc[1:]
-	text = append(text, fmt.Sprintf("%sIch bin %s", config.YELLOW, desc0))
+	text = append(text, fmt.Sprintf("%sIch bin %s", setup.YELLOW, desc0))
 	for _, v := range desc {
 		if strings.Contains(v, "++") {
 			v = strings.ReplaceAll(v, "++", "")
-			text = append(text, fmt.Sprintf("%s%s", config.CYAN, v))
+			text = append(text, fmt.Sprintf("%s%s", setup.CYAN, v))
 		} else {
-			text = append(text, fmt.Sprintf("%s%s", config.YELLOW, v))
+			text = append(text, fmt.Sprintf("%s%s", setup.YELLOW, v))
 		}
 		//text = append(text, v)
 	}
-	text = append(text, config.NEUTRAL)
+	text = append(text, setup.NEUTRAL)
 	//appendText(&text, fmt.Sprintf("Ich bin %s", locations[area-1]), yellow)
 	var items []string
-	for _, object := range config.ObjectsInArea(area) {
+	for _, object := range setup.ObjectsInArea(area) {
 		item := object.Properties.Description.Long
 		if strings.Contains(item, "::") {
 			item = strings.ReplaceAll(item, "::", "")
-			items = append(items, fmt.Sprintf("%s  - %s", config.WHITE, item))
+			items = append(items, fmt.Sprintf("%s  - %s", setup.WHITE, item))
 			//appendText(&text, fmt.Sprintf("  - %s", item), white)
 		} else {
-			items = append(items, fmt.Sprintf("%s  - %s", config.BLUE, item))
+			items = append(items, fmt.Sprintf("%s  - %s", setup.BLUE, item))
 			//appendText(&text, fmt.Sprintf("  - %s", item), blue)
 		}
 	}
 	if len(items) > 0 {
 		//text = append(text, "")
-		text = append(text, fmt.Sprintf("%sIch sehe:", config.BLUE))
+		text = append(text, fmt.Sprintf("%sIch sehe:", setup.BLUE))
 		for _, item := range items {
 			text = append(text, item)
 		}
-		text = append(text, config.NEUTRAL)
+		text = append(text, setup.NEUTRAL)
 	}
 	var directions []string
 	for d := 0; d < 4; d++ {
@@ -72,7 +72,7 @@ func Surroundings(area config.Area) (text []string) {
 		}
 	}
 	//text = append(text, "")
-	text = append(text, fmt.Sprintf("%sRaum: %d, Richtungen: %s", config.WHITE, area.ID, strings.Join(directions, ", ")))
+	text = append(text, fmt.Sprintf("%sRaum: %d, Richtungen: %s", setup.WHITE, area.ID, strings.Join(directions, ", ")))
 	//printScreen(text)
 	return
 	//appendText(&text, "Ich sehe:", blue)
@@ -121,7 +121,7 @@ func Move(area int, direction int, text []string) int {
 	//if direction == 0 {
 	//	return 0, "Ich brauche eine Richtung."
 	//}
-	newArea := config.Areas[area][direction]
+	newArea := setup.Areas[area][direction]
 	if newArea == 0 {
 		view.Flash(text, "In diese Richtung führt kein Weg.")
 		return area

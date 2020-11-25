@@ -1,7 +1,7 @@
 package view_test
 
 import (
-	"fantasia/config"
+	"fantasia/setup"
 	"fantasia/view"
 	"testing"
 
@@ -9,11 +9,11 @@ import (
 )
 
 func TestInit(t *testing.T) {
-	config.Init()
+	setup.Init()
 }
 
 func TestFlashNotice(t *testing.T) {
 	assert.False(t, view.FlashNotice())
-	view.AddFlashNotice("test", 3, config.BLUE)
+	view.AddFlashNotice("test", 3, setup.BLUE)
 	assert.True(t, view.FlashNotice())
 }

@@ -8,7 +8,7 @@ extern void enableRawMode();
 //import "C"
 
 import (
-	"fantasia/config"
+	"fantasia/setup"
 	"fmt"
 	"os"
 	"os/exec"
@@ -35,7 +35,7 @@ func FlashNotice() bool {
 	if len(notice.Message) == 0 {
 		return false
 	}
-	fmt.Printf("\n%s%s%s\n", notice.Color, notice.Message, config.NEUTRAL)
+	fmt.Printf("\n%s%s%s\n", notice.Color, notice.Message, setup.NEUTRAL)
 	if notice.Sleep < 0 {
 		fmt.Printf("\nWeiter \u23CE\n")
 		Scanner("once: true")
@@ -61,7 +61,7 @@ func PrintScreen(text []string) {
 
 /*
 func Input() {
-	verbs := config.Verbs
+	verbs := setup.Verbs
 	app := tview.NewApplication()
 	inputField := tview.NewInputField().
 		SetLabel("Enter a verb: ").

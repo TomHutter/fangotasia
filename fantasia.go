@@ -2,7 +2,7 @@ package main
 
 import (
 	"fantasia/actions"
-	"fantasia/config"
+	"fantasia/setup"
 	"fantasia/movement"
 	"fantasia/view"
 	"fmt"
@@ -96,7 +96,7 @@ func main() {
 	//verbs := c.Verbs
 	//c.getConf("nouns.yaml")
 	//nouns := c.Nouns
-	config.Init()
+	setup.Init()
 	/*
 		c.getConf("config/objects.yaml")
 		objects = c.Objects
@@ -141,7 +141,7 @@ func main() {
 	setupCloseHandler()
 	prelude()
 	intro()
-	area := config.GetAreaByID(1)
+	area := setup.GetAreaByID(1)
 	//oldArea := area
 	movement.RevealArea(area.ID)
 	//var dir rune
