@@ -25,14 +25,6 @@ var notice struct {
 	Sleep   int
 }
 
-func AppendText(block *[]string, newText string, color ...string) {
-	text := *block
-	if color == nil {
-		*block = append(text, newText)
-	}
-	*block = append(text, fmt.Sprintf("%s%s%s", color[0], newText, config.WHITE))
-}
-
 func AddFlashNotice(message string, sleep int, color string) {
 	notice.Message = message
 	notice.Color = color

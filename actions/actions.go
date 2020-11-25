@@ -344,7 +344,7 @@ func (object Object) Stab(area config.Area) (r reaction) {
 		r.Sleep = 2
 		return
 	}
-	r.Answer = append(r.Answer, config.Answers["dontKnow"])
+	r.Answer = append(r.Answer, config.Answers["dontKnowHow"])
 	r.OK = true
 	r.KO = false
 	r.Sleep = 2
@@ -357,15 +357,6 @@ func (obj Object) Move(area config.Area, dir string) (r reaction) {
 	//if direction == 0 {
 	//	return 0, "Ich brauche eine Richtung."
 	//}
-	// barefoot on unknown terrain?
-	if !Object(config.GetObjectByID(31)).inUse() {
-		r.Answer = append(r.Answer, config.Answers["noShoes"])
-		r.OK = false
-		r.KO = true
-		r.Sleep = 3
-		return
-	}
-
 	// wearing the hood?
 	hood := config.GetObjectByID(13)
 	if Object(hood).inUse() {
@@ -388,6 +379,16 @@ func (obj Object) Move(area config.Area, dir string) (r reaction) {
 		//view.Flash(text, "In diese Richtung führt kein Weg.")
 		//return area
 	}
+
+	// barefoot on unknown terrain?
+	if !Object(config.GetObjectByID(31)).inUse() {
+		r.Answer = append(r.Answer, config.Answers["noShoes"])
+		r.OK = false
+		r.KO = true
+		r.Sleep = 3
+		return
+	}
+
 	// Area 30 and 25 are connected by a door. Is it open?
 	if (area.ID == 30 || area.ID == 25 && direction[dir] == 0) && !config.DoorOpen {
 		r.Answer = append(r.Answer, config.Answers["locked"])
@@ -456,7 +457,7 @@ func (obj Object) Use(area config.Area) (r reaction) {
 			r.OK = true
 		}
 	default:
-		r.Answer = append(r.Answer, config.Answers["dontKnow"])
+		r.Answer = append(r.Answer, config.Answers["dontKnowHow"])
 		r.OK = false
 	}
 	return

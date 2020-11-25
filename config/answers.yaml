@@ -1,7 +1,7 @@
 answers:
   silly: "Sei nicht albern."
   noTool: "Ich habe nicht das richtige Werkzeug."
-  dontKnow: "Ich weis nicht wie das geht."
+  dontKnowHow: "Ich weis nicht wie das geht."
   wontLet: "lässt mich nicht."
   tooHeavy: "Zu schwer."
   unreachable: "Kann ich nicht erreichen."
