@@ -24,7 +24,6 @@ type reaction struct {
 
 var object string
 var moves int
-var visited [51]bool
 
 //type verb []string
 
@@ -162,6 +161,8 @@ func Parse(input string, area config.Area, text []string) config.Area {
 		if val[0].Field(0).Bool() == true {
 			// Area
 			area = config.GetAreaByID(int(val[0].Field(4).Int()))
+			area.Properties.Visited = true
+			config.GameAreas[area.ID] = area.Properties
 		}
 		// add notice. Give feedback in the next screen.
 		view.AddFlashNotice(strings.Join(notice, "\n"), int(sleep), color)
@@ -400,7 +401,6 @@ func (obj Object) Move(area config.Area, dir string) (r reaction) {
 	}
 	movement.RevealArea(newArea)
 	moves += 1
-	visited[area.ID] = true
 	r.OK = true
 	r.KO = false
 	r.AreaID = newArea
@@ -472,7 +472,9 @@ func (object Object) Climb(area config.Area) (r reaction) {
 	if area.ID == 9 && object.ID == 27 {
 		movement.RevealArea(31)
 		moves += 1
-		visited[31] = true
+		tree := config.GetAreaByID(31)
+		tree.Properties.Visited = true
+		config.GameAreas[tree.ID] = tree.Properties
 		r.OK = true
 		r.AreaID = 31
 		return
@@ -562,15 +564,15 @@ func GameOver() {
 		}
 	}
 	board = append(board, fmt.Sprint(""))
-	if visited[5] {
+	if config.GetAreaByID(5).Properties.Visited {
 		board = append(board, fmt.Sprintf("- Du bist im Moor gewesen: %d Punkte", 2))
 		sum += 2
 	}
-	if visited[29] {
+	if config.GetAreaByID(29).Properties.Visited {
 		board = append(board, fmt.Sprintf("- Du hast die verlassene Burg besucht: %d Punkte", 3))
 		sum += 3
 	}
-	if visited[31] {
+	if config.GetAreaByID(31).Properties.Visited {
 		board = append(board, fmt.Sprintf("- Du bist auf einen Baum geklettert: %d Punkte", 4))
 		sum += 4
 	}

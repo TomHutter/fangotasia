@@ -6,24 +6,6 @@ import (
 	"strings"
 )
 
-var visibleMap [12][10]int
-
-func initVisibleAreas() {
-	// set all areas to invisible
-	for y := 0; y < 12; y++ {
-		for x := 0; x < 10; x++ {
-			visibleMap[y][x] = 0
-		}
-	}
-	// show first area
-	visibleMap[11][0] = 1
-}
-
-func AreaVisible(a int) bool {
-	area := config.GetAreaByID(a)
-	return visibleMap[area.Properties.Coordinates.Y][area.Properties.Coordinates.X] != 0
-}
-
 func drawBox(a int, boxLen int) (box [3]string) {
 	// draw emty field, if area == 0
 	if a == 0 {
@@ -116,7 +98,7 @@ func DrawMap(area config.Area) (text []string) {
 				if ix < 0 || ix > 9 {
 					boxes[j] = drawBox(0, boxLen)
 				} else {
-					v := visibleMap[iy][ix]
+					v := config.Map[iy][ix]
 					boxes[j] = drawBox(v, boxLen)
 				}
 			}
@@ -139,149 +121,149 @@ func DrawMap(area config.Area) (text []string) {
 
 func RevealArea(area int) {
 	a := config.GetAreaByID(area)
-	visibleMap[a.Properties.Coordinates.Y][a.Properties.Coordinates.X] = area
+	config.Map[a.Properties.Coordinates.Y][a.Properties.Coordinates.X] = area
 	switch area {
 	case 5:
-		if AreaVisible(36) {
-			visibleMap[11][4] = 57
-			visibleMap[11][5] = 58
-			visibleMap[5][5] = 59
+		if config.AreaVisible(36) {
+			config.Map[11][4] = 57
+			config.Map[11][5] = 58
+			config.Map[5][5] = 59
 		}
 	case 6:
-		if AreaVisible(7) {
-			visibleMap[9][1] = 52
+		if config.AreaVisible(7) {
+			config.Map[9][1] = 52
 		}
 	case 7:
-		if AreaVisible(6) {
-			visibleMap[9][1] = 52
+		if config.AreaVisible(6) {
+			config.Map[9][1] = 52
 		}
 	case 9:
-		if AreaVisible(31) {
-			visibleMap[10][2] = 54
+		if config.AreaVisible(31) {
+			config.Map[10][2] = 54
 		}
 	case 15:
-		if AreaVisible(31) {
-			visibleMap[9][2] = 55
+		if config.AreaVisible(31) {
+			config.Map[9][2] = 55
 		} else {
-			visibleMap[9][2] = 53
+			config.Map[9][2] = 53
 		}
 	case 31:
-		visibleMap[10][2] = 54
-		if AreaVisible(15) {
-			visibleMap[9][2] = 55
+		config.Map[10][2] = 54
+		if config.AreaVisible(15) {
+			config.Map[9][2] = 55
 		} else {
-			visibleMap[9][2] = 56
+			config.Map[9][2] = 56
 		}
 	case 32:
-		if AreaVisible(37) {
-			visibleMap[4][5] = 60
+		if config.AreaVisible(37) {
+			config.Map[4][5] = 60
 		} else {
-			visibleMap[4][5] = 53
+			config.Map[4][5] = 53
 		}
-		if visibleMap[11][5] != 0 {
-			visibleMap[5][5] = 59
+		if config.Map[11][5] != 0 {
+			config.Map[5][5] = 59
 		} else {
-			visibleMap[5][5] = 53
+			config.Map[5][5] = 53
 		}
 	case 37:
-		visibleMap[4][5] = 60
-		if AreaVisible(40) {
-			visibleMap[3][6] = 61
-			visibleMap[4][6] = 62
+		config.Map[4][5] = 60
+		if config.AreaVisible(40) {
+			config.Map[3][6] = 61
+			config.Map[4][6] = 62
 		}
 	case 38:
-		if AreaVisible(40) {
-			visibleMap[5][6] = 63
-			visibleMap[6][6] = 64
+		if config.AreaVisible(40) {
+			config.Map[5][6] = 63
+			config.Map[6][6] = 64
 		} else {
-			visibleMap[5][6] = 0
+			config.Map[5][6] = 0
 		}
 	case 39:
-		if AreaVisible(40) {
-			visibleMap[4][7] = 65
-			visibleMap[5][7] = 64
+		if config.AreaVisible(40) {
+			config.Map[4][7] = 65
+			config.Map[5][7] = 64
 		} else {
-			visibleMap[4][7] = 0
+			config.Map[4][7] = 0
 		}
 	case 40:
-		visibleMap[3][6] = 61
-		visibleMap[4][6] = 62
-		visibleMap[5][6] = 63
-		visibleMap[6][6] = 64
-		visibleMap[4][7] = 65
-		visibleMap[5][7] = 64
+		config.Map[3][6] = 61
+		config.Map[4][6] = 62
+		config.Map[5][6] = 63
+		config.Map[6][6] = 64
+		config.Map[4][7] = 65
+		config.Map[5][7] = 64
 	case 41:
-		if AreaVisible(51) {
-			visibleMap[2][6] = 66
-			if AreaVisible(40) {
-				visibleMap[3][6] = 64
+		if config.AreaVisible(51) {
+			config.Map[2][6] = 66
+			if config.AreaVisible(40) {
+				config.Map[3][6] = 64
 			} else {
-				visibleMap[3][6] = 67
+				config.Map[3][6] = 67
 			}
 		}
 	case 42:
-		if AreaVisible(51) {
-			visibleMap[2][7] = 68
+		if config.AreaVisible(51) {
+			config.Map[2][7] = 68
 		} else {
-			visibleMap[2][7] = 42
+			config.Map[2][7] = 42
 		}
 	case 43:
-		if AreaVisible(51) {
-			visibleMap[1][6] = 69
+		if config.AreaVisible(51) {
+			config.Map[1][6] = 69
 		} else {
-			visibleMap[1][6] = 0
+			config.Map[1][6] = 0
 		}
 	case 44:
-		if AreaVisible(51) {
-			visibleMap[1][7] = 70
+		if config.AreaVisible(51) {
+			config.Map[1][7] = 70
 		} else {
-			visibleMap[1][7] = 0
+			config.Map[1][7] = 0
 		}
 	case 45:
-		if AreaVisible(51) {
-			visibleMap[1][8] = 71
-			visibleMap[2][8] = 64
+		if config.AreaVisible(51) {
+			config.Map[1][8] = 71
+			config.Map[2][8] = 64
 		} else {
-			visibleMap[1][8] = 0
-			visibleMap[2][8] = 0
+			config.Map[1][8] = 0
+			config.Map[2][8] = 0
 		}
 	case 46:
-		if !AreaVisible(51) {
-			visibleMap[1][9] = 0
+		if !config.AreaVisible(51) {
+			config.Map[1][9] = 0
 		}
 	case 47:
-		if AreaVisible(51) {
-			visibleMap[0][6] = 72
+		if config.AreaVisible(51) {
+			config.Map[0][6] = 72
 		} else {
-			visibleMap[0][6] = 0
+			config.Map[0][6] = 0
 		}
 	case 48:
-		if AreaVisible(51) {
-			visibleMap[0][7] = 73
+		if config.AreaVisible(51) {
+			config.Map[0][7] = 73
 		} else {
-			visibleMap[0][7] = 0
+			config.Map[0][7] = 0
 		}
 	case 49:
-		if !AreaVisible(51) {
-			visibleMap[0][8] = 0
+		if !config.AreaVisible(51) {
+			config.Map[0][8] = 0
 		}
 	case 50:
-		if !AreaVisible(51) {
-			visibleMap[0][9] = 0
+		if !config.AreaVisible(51) {
+			config.Map[0][9] = 0
 		}
 	case 51:
-		visibleMap[2][6] = 66
-		visibleMap[3][6] = 67
-		visibleMap[2][7] = 68
-		visibleMap[2][7] = 68
-		visibleMap[1][6] = 69
-		visibleMap[1][7] = 70
-		visibleMap[1][8] = 71
-		visibleMap[2][8] = 64
-		visibleMap[0][6] = 72
-		visibleMap[0][7] = 73
-		visibleMap[1][9] = 46
-		visibleMap[0][8] = 49
-		visibleMap[0][9] = 50
+		config.Map[2][6] = 66
+		config.Map[3][6] = 67
+		config.Map[2][7] = 68
+		config.Map[2][7] = 68
+		config.Map[1][6] = 69
+		config.Map[1][7] = 70
+		config.Map[1][8] = 71
+		config.Map[2][8] = 64
+		config.Map[0][6] = 72
+		config.Map[0][7] = 73
+		config.Map[1][9] = 46
+		config.Map[0][8] = 49
+		config.Map[0][9] = 50
 	}
 }

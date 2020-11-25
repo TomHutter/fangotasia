@@ -150,9 +150,11 @@ func Scanner(params ...string) (line string) {
 
 		// backspace was pressed
 		if b[0] == 127 {
-			fmt.Print("\b\033[K")
-			_, lastSize := utf8.DecodeLastRuneInString(line)
-			line = line[:len(line)-lastSize]
+			if len(line) > 0 {
+				fmt.Print("\b\033[K")
+				_, lastRuneSize := utf8.DecodeLastRuneInString(line)
+				line = line[:len(line)-lastRuneSize]
+			}
 			continue
 		}
 

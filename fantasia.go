@@ -78,6 +78,7 @@ func setupCloseHandler() {
 //}
 
 func main() {
+
 	//var c conf
 	/*
 		visibleMap[11][1] = 2
@@ -192,23 +193,25 @@ func main() {
 	surroundings = movement.Surroundings(area)
 	text = append(text, surroundings...)
 	view.PrintScreen(text)
-	actions.Parse("klettere baum", area, text)
-	actions.Parse("klettere baum", area, text)
-	area = actions.Parse("o", area, text)
-	text = movement.DrawMap(area)
-	surroundings = movement.Surroundings(area)
-	text = append(text, surroundings...)
-	view.PrintScreen(text)
-	area = actions.Parse("s", area, text)
-	text = movement.DrawMap(area)
-	surroundings = movement.Surroundings(area)
-	text = append(text, surroundings...)
-	view.PrintScreen(text)
-	area = actions.Parse("o", area, text)
-	text = movement.DrawMap(area)
-	surroundings = movement.Surroundings(area)
-	text = append(text, surroundings...)
-	view.PrintScreen(text)
+	/*
+		actions.Parse("klettere baum", area, text)
+		actions.Parse("klettere baum", area, text)
+		area = actions.Parse("o", area, text)
+		text = movement.DrawMap(area)
+		surroundings = movement.Surroundings(area)
+		text = append(text, surroundings...)
+		view.PrintScreen(text)
+		area = actions.Parse("s", area, text)
+		text = movement.DrawMap(area)
+		surroundings = movement.Surroundings(area)
+		text = append(text, surroundings...)
+		view.PrintScreen(text)
+		area = actions.Parse("o", area, text)
+		text = movement.DrawMap(area)
+		surroundings = movement.Surroundings(area)
+		text = append(text, surroundings...)
+		view.PrintScreen(text)
+	*/
 	//actions.Parse("stich gnom", area, text)
 	//actions.Parse("n", area, text)
 	//actions.Parse("öffne	Tür", area)

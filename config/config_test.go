@@ -2,6 +2,7 @@ package config_test
 
 import (
 	"fantasia/config"
+	"strings"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -26,23 +27,38 @@ func TestGameObjects(t *testing.T) {
 func TestGetAreaByID(t *testing.T) {
 	area := config.GetAreaByID(9)
 	assert.Equal(t, 9, area.ID, "Area ID not equal.")
-	assert.Equal(t, "auf einer blühenden Heide.", area.Properties.Description.Long, "Long area description not equal.")
-	assert.Equal(t, "Heide", area.Properties.Description.Short, "Short area description not equal.")
-	assert.Equal(t, [4]int{15, 3, 10, 8}, area.Properties.Directions, "Area directions not equal.")
-	assert.Equal(t, 2, area.Properties.Coordinates.X, "Area x coordinates not equal.")
-	assert.Equal(t, 10, area.Properties.Coordinates.Y, "Area y coordinates not equal.")
-	assert.Equal(t, false, area.Properties.Visited, "Area should not be visited.")
+	assert.True(t, strings.Contains(area.Properties.Description.Long,
+		area.Properties.Description.Short), "Short area description is not in long description.")
+	assert.IsType(t, [4]int{}, area.Properties.Directions, "Area directions have to be type [4]int.")
+	assert.IsType(t, 0, area.Properties.Coordinates.X, "Area x coordinates shoud by type int.")
+	assert.IsType(t, 0, area.Properties.Coordinates.Y, "Area y coordinates should be type int.")
+	assert.False(t, area.Properties.Visited, "Area should not be visited.")
 }
 
 func TestGetObjectByID(t *testing.T) {
 	obj := config.GetObjectByID(15)
 	assert.Equal(t, 15, obj.ID, "Object ID not equal.")
-	assert.Equal(t, "::ein Feuerschwert::", obj.Properties.Description.Long, "Long object description not equal.")
-	assert.Equal(t, "Feuerschwert", obj.Properties.Description.Short, "Short object description not equal.")
-	assert.Equal(t, "das", obj.Properties.Description.Article, "Object article not equal.")
+	assert.True(t, strings.Contains(obj.Properties.Description.Long,
+		obj.Properties.Description.Short), "Short object description is not in long description.")
+	assert.IsType(t, "das", obj.Properties.Description.Article, "Object article not type string.")
 	assert.Equal(t, 20, obj.Properties.Area, "Object area not equal.")
 	assert.Equal(t, 10, obj.Properties.Value, "Object value not equal.")
 }
+
+func TestGetObjectByName(t *testing.T) {
+	obj := config.GetObjectByName("Zauberkuchen")
+	assert.Equal(t, 9, obj.ID, "Object ID not equal.")
+	assert.Equal(t, "einen Zauberkuchen", obj.Properties.Description.Long, "The cake is a lie.")
+}
+
 func TestObjectsInArea(t *testing.T) {
-	assert.Equal(t, "einen Zauberkuchen", config.GameObjects[9].Description.Long, "The cake is a lie.")
+	area := config.GetAreaByID(1)
+	objects := config.ObjectsInArea(area)
+	assert.Equal(t, 3, len(objects), "There sould be 3 object in area 1.")
+}
+
+func TestGetOverwriteByArea(t *testing.T) {
+	o := config.GetOverwriteByArea(52)
+	assert.Equal(t, 52, o.Area, "Object ID not equal.")
+	assert.True(t, strings.Contains(o.Content[1], "Felswand"))
 }
