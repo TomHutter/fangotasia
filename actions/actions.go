@@ -1,15 +1,20 @@
 package actions
 
 import (
-	"fantasia/setup"
 	"fantasia/movement"
+	"fantasia/setup"
 	"fantasia/view"
 	"fmt"
+	"io/ioutil"
 	"os"
 	"os/exec"
+	"path"
 	"reflect"
 	"regexp"
+	"runtime"
 	"strings"
+
+	"gopkg.in/yaml.v2"
 )
 
 type verb setup.Verb
@@ -95,6 +100,12 @@ func Parse(input string, area setup.Area, text []string) setup.Area {
 		obj = Object{}
 		argv = append(argv, reflect.ValueOf(area))
 		argv = append(argv, reflect.ValueOf(knownVerb.Name))
+	case "load":
+		obj = Object{}
+		argv = append(argv, reflect.ValueOf(area))
+	case "save":
+		obj = Object{}
+		argv = append(argv, reflect.ValueOf(area))
 	default:
 		if len(parts) < 1 {
 			notice := fmt.Sprintln(setup.Answers["needObject"])
@@ -155,7 +166,7 @@ func Parse(input string, area setup.Area, text []string) setup.Area {
 	// Sleep
 	sleep := int(val[0].Field(3).Int())
 	switch knownVerb.Func {
-	case "Move", "Climb":
+	case "Move", "Climb", "Load":
 		color = setup.RED
 		// OK
 		if val[0].Field(0).Bool() == true {
@@ -640,5 +651,88 @@ func (obj Object) drop(area setup.Area) (r reaction) {
 	r.OK = true
 	r.KO = false
 	r.Sleep = 1
+	return
+}
+
+func folderListing() (filename string) {
+	_, caller, _, _ := runtime.Caller(0)
+	pathname := path.Dir(caller) + "/../save/"
+	files, err := ioutil.ReadDir(pathname)
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	fmt.Println("Files:")
+
+	for _, f := range files {
+		fmt.Println(f.Name())
+	}
+	//filename = pathname + view.Scanner("prompt: filename > ")
+	filename = pathname + "mrgl"
+	return
+}
+
+func (obj Object) Save(area setup.Area) (ok bool, err error) {
+	m := make(map[interface{}]interface{})
+	m["area"] = area.ID
+	m["map"] = setup.Map
+	m["objects"] = setup.GameObjects
+
+	filename := folderListing()
+
+	file, err := os.Create(filename)
+	if err != nil {
+		fmt.Println(err)
+		return false, err
+	}
+
+	defer file.Close()
+
+	if err = yaml.NewEncoder(file).Encode(m); err != nil {
+		fmt.Println(err)
+		return false, err
+	}
+
+	fmt.Printf("File %s written successfully\n", filename)
+	/*
+		err = file.Close()
+		if err != nil {
+			fmt.Println(err)
+			return false, err
+		}
+	*/
+	return true, nil
+}
+
+func (obj Object) Load(area setup.Area) (r reaction) {
+	var content struct {
+		AreaID  int                            `yaml:"area"`
+		AreaMap [12][10]int                    `yaml:"map"`
+		Objects map[int]setup.ObjectProperties `yaml:"objects"`
+	}
+
+	filename := folderListing()
+
+	yamlFile, err := ioutil.ReadFile(filename)
+	if err != nil {
+		r.Answer = append(r.Answer, err.Error())
+		r.OK = false
+		return
+	}
+	err = yaml.Unmarshal(yamlFile, &content)
+	if err != nil {
+		r.Answer = append(r.Answer, err.Error())
+		r.OK = false
+		return
+	}
+
+	setup.GameObjects = content.Objects
+	setup.Map = content.AreaMap
+
+	r.OK = true
+	r.KO = false
+	r.AreaID = content.AreaID
+	r.Answer = append(r.Answer, "Spiel erfolgreich geladen.")
+
 	return
 }

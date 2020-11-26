@@ -21,11 +21,11 @@ verbs:
     sleep: -1
   - name: save
     func: Save
-    single: true
+    single: false
     sleep: -1
   - name: load
     func: Load
-    single: true
+    single: false
     sleep: -1
   - name: fantasia
     func: Fantasia

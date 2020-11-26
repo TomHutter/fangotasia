@@ -2,8 +2,8 @@ package main
 
 import (
 	"fantasia/actions"
-	"fantasia/setup"
 	"fantasia/movement"
+	"fantasia/setup"
 	"fantasia/view"
 	"fmt"
 	"os"
@@ -167,6 +167,7 @@ func main() {
 	//text = append(text, surroundings...)
 	//view.PrintScreen(text)
 	//actions.Parse("inventar", area)
+	actions.Parse("load", area, text)
 	//actions.Parse("nimm Zwergendolch", area, text)
 	//actions.Parse("Inventar", area, text)
 	//actions.Parse("n", area, text)
