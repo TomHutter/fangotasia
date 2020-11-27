@@ -2,156 +2,117 @@ verbs:
   - name: gehe
     func: Go
     single: false
-    sleep: 2
   - name: stich
     func: Stab
     single: false
-    sleep: 2
   - name: schau
     func: Look
     single: true
-    sleep: 2
   - name: inventar
     func: Inventory
     single: true
-    sleep: -1
   - name: inv
     func: Inventory
     single: true
-    sleep: -1
   - name: save
     func: Save
     single: false
-    sleep: -1
   - name: load
     func: Load
     single: false
-    sleep: -1
   - name: fantasia
     func: Fantasia
     single: true
-    sleep: -1
   - name: ende
     func: End
     single: true
-    sleep: -1
   - name: wirf
     func: Throw
     single: false
-    sleep: 2
   - name: töte
     func: Kill
     single: false
-    sleep: 2
   - name: lies
     func: Read
     single: false
-    sleep: 2
   - name: fülle
     func: Fill
     single: false
-    sleep: 2
   - name: öffne
     func: Open
     single: false
-    sleep: 2
   - name: benutze
     func: Use
     single: false
-    sleep: 2
   - name: verwende
     func: Use
     single: false
-    sleep: 2
   - name: trage
     func: Use
     single: false
-    sleep: 2
   - name: simsalabim
     func: Simsalabim
     single: true
-    sleep: -1
   - name: sage
     func: Say
     single: false
-    sleep: 2
   - name: gieße
     func: Pour
     single: false
-    sleep: 2
   - name: schieße
     func: Shoot
     single: false
-    sleep: 2
   - name: füttere
     func: Feed
     single: false
-    sleep: 2
   - name: schneide
     func: Cut
     single: false
-    sleep: 2
   - name: sperre
     func: Unlock
     single: false
-    sleep: 2
   - name: hilfe
     func: Help
     single: true
-    sleep: 2
   - name: klettere
     func: Climb
     single: false
-    sleep: 2
   - name: schleudere
     func: Catapult
     single: false
-    sleep: 2
   - name: iss
     func: Eat
     single: false
-    sleep: 2
   - name: nimm
     func: Take
     single: false
-    sleep: 2
   - name: verjage
     func: Chase
     single: false
-    sleep: 2
   - name: lege
     func: Put
     single: false
-    sleep: 2
   - name: drehe
     func: Turn
     single: false
-    sleep: 2
   - name: spring
     func: Jump
     single: true
-    sleep: 2
   - name: trinke
     func: Drink
     single: false
-    sleep: 2
   - name: verben
     func: Verbs
     single: true
-    sleep: -1
   - name: n
     func: Move
     single: false
-    sleep: 2
   - name: s
     func: Move
     single: false
-    sleep: 2
   - name: o
     func: Move
     single: false
-    sleep: 2
   - name: w
     func: Move
     single: false
-    sleep: 2

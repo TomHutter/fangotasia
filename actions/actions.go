@@ -70,8 +70,9 @@ func Parse(input string, area setup.Area, text []string) setup.Area {
 		for i := 0; i < val[0].Len(); i++ {
 			notice = append(notice, val[0].Index(i).String())
 		}
+		sleep := int(val[1].Int())
 		// ToDo: get rid of knownVerb.Sleep
-		view.AddFlashNotice(strings.Join(notice, "\n"), knownVerb.Sleep, setup.GREEN)
+		view.AddFlashNotice(strings.Join(notice, "\n"), sleep, setup.GREEN)
 		return area
 	}
 
@@ -307,6 +308,7 @@ func (obj Object) Move(area setup.Area, dir string) (r setup.Reaction, areaID in
 	// barefoot on unknown terrain?
 	if !Object(setup.GetObjectByID(31)).inUse() {
 		r = setup.Reactions["noShoes"]
+		areaID = area.ID
 		return
 	}
 
@@ -404,7 +406,7 @@ func (object Object) Climb(area setup.Area) (r setup.Reaction, areaID int) {
 	return
 }
 
-func (v *verb) Verbs() (verbs []string) {
+func (v *verb) Verbs() (verbs []string, sleep int) {
 	//func (c *command) Verben() {
 	verbs = append(verbs, "Verben, die ich kenne: ")
 	var line []string
@@ -416,10 +418,11 @@ func (v *verb) Verbs() (verbs []string) {
 		line = append(line, string(val.Name))
 	}
 	verbs = append(verbs, strings.Join(line, ", "))
+	sleep = -1
 	return
 }
 
-func (c *verb) Inventory() (inv []string) {
+func (v *verb) Inventory() (inv []string, sleep int) {
 	objects := setup.ObjectsInArea(setup.GetAreaByID(1000))
 	if len(objects) == 0 {
 		//fmt.Println("Ich habe nichts dabei.")
@@ -431,6 +434,7 @@ func (c *verb) Inventory() (inv []string) {
 	for _, o := range objects {
 		inv = append(inv, fmt.Sprintf("- %s", o.Properties.Description.Long))
 	}
+	sleep = -1
 	return
 }
 

@@ -44,7 +44,6 @@ type Verb struct {
 	Name   string
 	Func   string
 	Single bool
-	Sleep  int
 }
 
 // Conf : Struct to read from yaml config files
