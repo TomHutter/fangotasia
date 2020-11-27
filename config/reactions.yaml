@@ -1,0 +1,193 @@
+reactions:
+  silly:
+    statement: "Sei nicht albern."
+    ok: false
+    ko: false
+    color: RED
+    sleep: 3
+  noTool:
+    statement: "Ich habe nicht das richtige Werkzeug."
+    ok: false
+    ko: false
+    color: RED
+    sleep: 3
+  dontKnowHow:
+    statement: "Ich weis nicht wie das geht."
+    ok: false
+    ko: false
+    color: RED
+    sleep: 2
+  wontLet:
+    statement: "lässt mich nicht."
+    ok: false
+    ko: false
+    color: RED
+    sleep: 4
+  tooHeavy:
+    statement: "Zu schwer."
+    ok: false
+    ko: false
+    color: RED
+    sleep: 2
+  unreachable:
+    statement: "Kann ich nicht erreichen."
+    ok: false
+    ko: false
+    color: RED
+    sleep: 2
+  invFull:
+    statement: "Ich habe zuviel zu tragen.\nIch müsste etwas weglegen."
+    ok: false
+    ko: false
+    color: RED
+    sleep: 4
+  ok:
+    statement: "Gut."
+    ok: true
+    ko: false
+    color: GREEN
+    sleep: 1
+  noWay:
+    statement: "In diese Richtung führt kein Weg."
+    ok: false
+    ko: false
+    color: RED
+    sleep: 2
+  noShoes:
+    statement: "Hilfe !   Ich versinke im Boden."
+    ok: false
+    ko: true
+    color: RED
+    sleep: 6
+  locked:
+    statement: "Die Tür ist versperrt."
+    ok: false
+    ko: false
+    color: RED
+    sleep: 2
+  tryCut:
+    statement: "Versuche schneide."
+    ok: true
+    ko: false
+    color: GREEN
+    sleep: 2
+  stabGrub:
+    statement: "Die Raupe ist kitzelig und lacht laut!"
+    ok: true
+    ko: false
+    color: GREEN
+    sleep: 4
+  stabBear:
+    statement: "Der Bär brummt unwillig."
+    ok: true
+    ko: false
+    color: GREEN
+    sleep: 4
+  stabDwarf:
+    statement: "Der Zwerg wird böse und tötet mich!"
+    ok: false
+    ko: true
+    color: RED
+    sleep: 6
+  stabDwarfHooded:
+    statement: "Der Zwerg erschrickt und rennt weg."
+    ok: true
+    ko: false
+    color: GREEN
+    sleep: 4
+  stabGnome:
+    statement: "Der Gnom verzaubert mich!"
+    ok: false
+    ko: true
+    color: RED
+    sleep: 6
+  stabGnomeHooded:
+    statement: "Der Gnom erschrickt und rennt weg"
+    ok: true
+    ko: false
+    color: GREEN
+    sleep: 4
+  stabDragon:
+    statement: "Der Drache verbrennt mich!"
+    ok: false
+    ko: true
+    color: RED
+    sleep: 6
+  dontSee:
+    statement: "Sehe ich hier nicht."
+    ok: false
+    ko: false
+    color: RED
+    sleep: 2
+  haveAlready:
+    statement: "Hab ich schon."
+    ok: true
+    ko: false
+    color: GREEN
+    sleep: 2
+  dontHave:
+    statement: "Hab ich nicht dabei."
+    ok: false
+    ko: false
+    color: RED
+    sleep: 2
+  invEmpty:
+    statement: "Ich habe nichts dabei."
+    ok: true
+    ko: false
+    color: GREEN
+    sleep: 2
+  inv:
+    statement: "Ich habe:"
+    ok: true
+    ko: false
+    color: GREEN
+    sleep: 3
+  useHood:
+    statement: "Gut. Ich setze die Tarnkappe auf."
+    ok: true
+    ko: false
+    color: GREEN
+    sleep: 3
+  hoodInUse:
+    statement: "Die Tarnkappe hat sich in Luft aufgelöst!"
+    ok: false
+    ko: false
+    color: RED
+    sleep: 3
+  useShoes:
+    statement: "Gut. Ich zog die Zauberschuhe an."
+    ok: true
+    ko: false
+    color: GREEN
+    sleep: 3
+  unknownVerb:
+    statement: "'%s' kenne ich nicht.\nDas Kommando 'Verben' gibt eine Liste aller verfügbaren Verben aus.\n"
+    ok: true
+    ko: false
+    color: RED
+    sleep: 5
+  unknownNoun:
+    statement: "'%s' kenne ich nicht.\n"
+    ok: false
+    ko: false
+    color: RED
+    sleep: 2
+  needObject:
+    statement: "Bitte gib ein Objekt an."
+    ok: false
+    ko: false
+    color: RED
+    sleep: 2
+  inTheMoor:
+    statement: "Im Moor ist alles verschwunden, was ich bei mir hatte!"
+    ok: false
+    ko: false
+    color: RED
+    sleep: 6
+  loaded:
+    statement: "Spiel erfolgreich geladen."
+    ok: true
+    ko: false
+    color: GREEN
+    sleep: 2

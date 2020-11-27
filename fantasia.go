@@ -176,6 +176,7 @@ func main() {
 	//actions.Parse("stich Gnom", area, text)
 	//actions.Parse("Inventar", area, text)
 	//surroundings = movement.Surroundings(area)
+	actions.Parse("nimm zauberschuhe", area, text)
 	/*
 		actions.Parse("nimm zauberschuhe", area, text)
 		actions.Parse("trage zauberschuhe", area, text)

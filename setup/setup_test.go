@@ -12,7 +12,7 @@ func TestInit(t *testing.T) {
 	assert.Greater(t, len(setup.GameObjects), 1)
 	assert.Greater(t, len(setup.GameAreas), 1)
 	assert.Greater(t, len(setup.Overwrites), 1)
-	assert.Greater(t, len(setup.Answers), 1)
+	assert.Greater(t, len(setup.Reactions), 1)
 	assert.Greater(t, len(setup.Verbs), 1)
 	assert.Greater(t, setup.BoxLen, 1)
 	assert.Greater(t, len(setup.Map), 1)

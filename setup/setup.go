@@ -53,7 +53,7 @@ type conf struct {
 	Nouns      []string                 `yaml:"nouns"`
 	Objects    map[int]ObjectProperties `yaml:"objects"`
 	ID         int
-	Answers    map[string]string      `yaml:"answers"`
+	Reactions  map[string]Reaction    `yaml:"reactions"`
 	Locations  map[int]AreaProperties `yaml:"locations"`
 	Overwrites []MapOverwrites        `yaml:"overwrites"`
 }
@@ -102,10 +102,18 @@ type MapOverwrites struct {
 	Content [3]string
 }
 
+type Reaction struct {
+	Statement string
+	OK        bool
+	KO        bool
+	Color     string
+	Sleep     int
+}
+
 var GameObjects map[int]ObjectProperties
 var GameAreas map[int]AreaProperties
 var Overwrites []MapOverwrites
-var Answers map[string]string
+var Reactions map[string]Reaction
 var Verbs []Verb
 
 var BoxLen int
@@ -172,8 +180,8 @@ func Init() {
 	GameObjects = c.Objects
 	c.getConf(pathname + "/../config/locations.yaml")
 	GameAreas = c.Locations
-	c.getConf(pathname + "/../config/answers.yaml")
-	Answers = c.Answers
+	c.getConf(pathname + "/../config/reactions.yaml")
+	Reactions = c.Reactions
 	c.getConf(pathname + "/../config/verbs.yaml")
 	Verbs = c.Verbs
 	Overwrites = getMapOverwrites(pathname)
