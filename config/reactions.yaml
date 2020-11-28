@@ -227,7 +227,7 @@ reactions:
     ko: false
     color: RED
     sleep: 3
-  greenBook:
+  book:
     statement: |
       Im Buch steht: 
       Messer sind zum stechen da!
@@ -335,5 +335,5 @@ reactions:
     statement: "Ist schon offen."
     ok: true
     ko: false
-    color: RED
+    color: GREEN
     sleep: 2

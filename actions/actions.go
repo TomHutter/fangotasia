@@ -252,24 +252,25 @@ func (obj Object) Throw(area setup.Area) (r setup.Reaction) {
 
 func (obj Object) Read(area setup.Area) (r setup.Reaction) {
 	var reaction = map[int]string{
-		21: "wallpainting",
-		32: "panel",
-		43: "rottenPanel",
+		11: "book",
 		12: "paper",
 		17: "shield",
+		21: "wallpainting",
 		28: "parchment",
+		32: "panel",
+		43: "rottenPanel",
 		38: "letter",
 		47: "readMap",
 	}
 	switch obj.ID {
-	case 12, 17, 28, 38, 47:
+	case 11, 12, 17, 28, 38, 47:
 		if !obj.inInventory() {
 			r = setup.Reactions["dontHave"]
 			return
 		}
 	}
 	switch obj.ID {
-	case 12, 17, 28, 38, 43, 47:
+	case 11, 12, 17, 28, 38, 43, 47:
 		r = setup.Reactions[reaction[obj.ID]]
 	case 32:
 		r = setup.Reactions[reaction[obj.ID]]

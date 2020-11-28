@@ -141,6 +141,16 @@ func TestUse(t *testing.T) {
 	dagger = setup.GetObjectByID(33)
 	assert.Equal(t, setup.Reactions["dontKnowHow"].Statement, res.Statement)
 	assert.False(t, res.OK)
+
+	// use map
+	m := setup.GetObjectByID(47)
+	m.Properties.Area = setup.INVENTORY
+	setup.GameObjects[m.ID] = m.Properties
+	res = actions.Object(m).Use(area)
+	assert.Equal(t, setup.Reactions["useMap"].Statement, res.Statement)
+	m = setup.GetObjectByID(47)
+	assert.True(t, res.OK)
+	assert.Equal(t, setup.INUSE, m.Properties.Area)
 }
 
 func TestClimb(t *testing.T) {
@@ -238,6 +248,7 @@ func TestRead(t *testing.T) {
 }
 
 func TestOpen(t *testing.T) {
+	setup.Init()
 	// open panel
 	area := setup.GetAreaByID(1)
 	panel := setup.GetObjectByID(32)

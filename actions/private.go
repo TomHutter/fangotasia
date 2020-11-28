@@ -2,6 +2,7 @@ package actions
 
 import (
 	"fantasia/setup"
+	"fantasia/view"
 	"fmt"
 	"strings"
 )
@@ -58,5 +59,28 @@ func (obj Object) drop(area setup.Area) (r setup.Reaction) {
 	obj.Properties.Area = area.ID
 	setup.GameObjects[obj.ID] = obj.Properties
 	r = setup.Reactions["ok"]
+	return
+}
+
+func getObjectByName(name string, area setup.Area) (object Object) {
+	found := false
+	for id, prop := range setup.GameObjects {
+		if strings.ToLower(prop.Description.Short) == strings.ToLower(name) {
+			found = true
+			obj := Object{id, prop}
+			if obj.available(area) {
+				return obj
+			}
+		}
+	}
+	// found an object but not in the current area?
+	if found {
+		r := setup.Reactions["dontSee"]
+		view.AddFlashNotice(r.Statement, r.Sleep, setup.RED)
+		return
+	}
+	// don't know what you are talking about
+	r := setup.Reactions["unknownNoun"]
+	view.AddFlashNotice(r.Statement, r.Sleep, setup.RED)
 	return
 }

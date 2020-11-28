@@ -92,7 +92,7 @@ func Parse(input string, area setup.Area, text []string) setup.Area {
 			return area
 		}
 		for _, p := range parts {
-			obj = Object(setup.GetObjectByName(p))
+			obj = Object(getObjectByName(p, area))
 			if obj != (Object{}) {
 				argv = append(argv, reflect.ValueOf(area))
 				break
@@ -101,9 +101,6 @@ func Parse(input string, area setup.Area, text []string) setup.Area {
 	}
 
 	if len(argv) < 1 {
-		answer := setup.Reactions["unknownNoun"]
-		notice := fmt.Sprintf(answer.Statement, strings.Join(parts, " "))
-		view.AddFlashNotice(notice, answer.Sleep, setup.RED)
 		return area
 	}
 

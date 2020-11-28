@@ -42,12 +42,6 @@ func TestGetObjectByID(t *testing.T) {
 	assert.Equal(t, 10, obj.Properties.Value, "Object value not equal.")
 }
 
-func TestGetObjectByName(t *testing.T) {
-	obj := setup.GetObjectByName("Zauberkuchen")
-	assert.Equal(t, 9, obj.ID, "Object ID not equal.")
-	assert.Equal(t, "einen Zauberkuchen", obj.Properties.Description.Long, "The cake is a lie.")
-}
-
 func TestObjectsInArea(t *testing.T) {
 	area := setup.GetAreaByID(1)
 	objects := setup.ObjectsInArea(area)

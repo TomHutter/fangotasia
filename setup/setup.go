@@ -206,15 +206,6 @@ func ObjectsInArea(area Area) (objects []Object) {
 	return
 }
 
-func GetObjectByName(name string) (object Object) {
-	for id, prop := range GameObjects {
-		if strings.ToLower(prop.Description.Short) == strings.ToLower(name) {
-			return Object{id, prop}
-		}
-	}
-	return
-}
-
 func GetObjectByID(id int) (object Object) {
 	return Object{id, GameObjects[id]}
 }
