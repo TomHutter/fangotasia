@@ -11,11 +11,11 @@ func (object Object) inArea(area setup.Area) bool {
 }
 
 func (object Object) inInventory() bool {
-	return object.Properties.Area == 1000
+	return object.Properties.Area == setup.INVENTORY
 }
 
 func (object Object) inUse() bool {
-	return object.Properties.Area == 2000
+	return object.Properties.Area == setup.INUSE
 }
 
 func (object Object) available(area setup.Area) bool {
@@ -37,21 +37,21 @@ func (object Object) snatchFrom(opponent Object) (r setup.Reaction) {
 }
 
 func (obj Object) pick() (r setup.Reaction) {
-	inv := setup.GetAreaByID(1000)
+	inv := setup.GetAreaByID(setup.INVENTORY)
 	inventory := setup.ObjectsInArea(inv)
 	if len(inventory) > 6 {
 		r = setup.Reactions["invFull"]
 		return
 	}
 
-	obj.Properties.Area = 1000
+	obj.Properties.Area = setup.INVENTORY
 	setup.GameObjects[obj.ID] = obj.Properties
 	r = setup.Reactions["ok"]
 	return
 }
 
 func (obj Object) drop(area setup.Area) (r setup.Reaction) {
-	if obj.Properties.Area != 1000 {
+	if obj.Properties.Area != setup.INVENTORY {
 		r = setup.Reactions["dontHave"]
 		return
 	}

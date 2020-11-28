@@ -75,6 +75,10 @@ func drawBox(a int, boxLen int) (box [3]string) {
 }
 
 func DrawMap(area setup.Area) (text []string) {
+	// no map today? ... my love is gone away
+	if !(setup.GetObjectByID(46).Properties.Area == setup.INUSE) {
+		return
+	}
 	x := area.Properties.Coordinates.X
 	y := area.Properties.Coordinates.Y
 	// max x = 9, don't go further east than 8

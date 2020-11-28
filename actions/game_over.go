@@ -14,7 +14,7 @@ func GameOver() {
 	sum := 0
 	board = append(board, fmt.Sprintln("G A M E    O V E R"))
 	//board = append(board, fmt.Sprint(""))
-	inv := setup.ObjectsInArea(setup.GetAreaByID(1000))
+	inv := setup.ObjectsInArea(setup.GetAreaByID(setup.INVENTORY))
 	if len(inv) > 0 {
 		board = append(board, fmt.Sprintln("Du besitzt:"))
 		//board = append(board, fmt.Sprint(""))

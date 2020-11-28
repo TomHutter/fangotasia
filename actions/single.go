@@ -2,6 +2,7 @@ package actions
 
 import (
 	"fantasia/setup"
+	"fantasia/view"
 	"fmt"
 	"strings"
 )
@@ -23,7 +24,7 @@ func (v *verb) Verbs() (verbs []string, sleep int) {
 }
 
 func (v *verb) Inventory() (inv []string, sleep int) {
-	objects := setup.ObjectsInArea(setup.GetAreaByID(1000))
+	objects := setup.ObjectsInArea(setup.GetAreaByID(setup.INVENTORY))
 	if len(objects) == 0 {
 		//fmt.Println("Ich habe nichts dabei.")
 		inv = append(inv, setup.Reactions["invEmpty"].Statement)
@@ -32,7 +33,8 @@ func (v *verb) Inventory() (inv []string, sleep int) {
 
 	inv = append(inv, setup.Reactions["inv"].Statement)
 	for _, o := range objects {
-		inv = append(inv, fmt.Sprintf("- %s", o.Properties.Description.Long))
+		obj := view.Highlight(o.Properties.Description.Long, setup.GREEN)
+		inv = append(inv, fmt.Sprintf("- %s", obj))
 	}
 	sleep = -1
 	return

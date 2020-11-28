@@ -1,8 +1,8 @@
 package actions
 
 import (
-	"fantasia/movement"
 	"fantasia/setup"
+	"fantasia/view"
 )
 
 func (object Object) Open(area int) (ok bool, answer []string) {
@@ -97,62 +97,6 @@ func (object Object) Stab(area setup.Area) (r setup.Reaction) {
 	return
 }
 
-// As Move is called in context of object handling, Move reflects on Object even obj is not used.
-func (obj Object) Move(area setup.Area, dir string) (r setup.Reaction, areaID int) {
-	//func Move(area int, direction int, text []string) int {
-	//if direction == 0 {
-	//	return 0, "Ich brauche eine Richtung."
-	//}
-	// wearing the hood?
-	hood := setup.GetObjectByID(13)
-	if Object(hood).inUse() {
-		hood.Properties.Area = -1
-		setup.GameObjects[hood.ID] = hood.Properties
-		r = setup.Reactions["hoodInUse"]
-	}
-
-	var direction = map[string]int{"n": 0, "s": 1, "o": 2, "w": 3}
-
-	newArea := area.Properties.Directions[direction[dir]]
-	if newArea == 0 {
-		r = setup.Reactions["noWay"]
-		areaID = area.ID
-		return
-		//view.Flash(text, "In diese Richtung führt kein Weg.")
-		//return area
-	}
-
-	// barefoot on unknown terrain?
-	if !Object(setup.GetObjectByID(31)).inUse() {
-		r = setup.Reactions["noShoes"]
-		areaID = area.ID
-		return
-	}
-
-	// Area 30 and 25 are connected by a door. Is it open?
-	if (area.ID == 30 || area.ID == 25 && direction[dir] == 0) && !setup.Flags["DoorOpen"] {
-		r = setup.Reactions["locked"]
-		areaID = area.ID
-		return
-		//view.Flash(text, "Die Tür ist versperrt.")
-		//return area
-	}
-	movement.RevealArea(newArea)
-	moves += 1
-	r.OK = true
-	r.KO = false
-	areaID = newArea
-	// Direction Moor?
-	if newArea == 5 {
-		for _, o := range setup.ObjectsInArea(setup.GetAreaByID(1000)) {
-			o.Properties.Area = 29
-			setup.GameObjects[o.ID] = o.Properties
-		}
-		r = setup.Reactions["inTheMoor"]
-	}
-	return
-}
-
 func useDoor() {
 	/*
 		495 rem ** sperre *********************
@@ -167,58 +111,27 @@ func useDoor() {
 }
 
 func (obj Object) Use(area setup.Area) (r setup.Reaction) {
-	r.KO = false
-	r.Sleep = 2
 	switch obj.ID {
-
-	case 13:
+	case 13, 31, 46:
 		if !obj.inInventory() {
 			r = setup.Reactions["dontHave"]
-		} else {
-			obj.Properties.Area = 2000
-			setup.GameObjects[obj.ID] = obj.Properties
-			r = setup.Reactions["useHood"]
-		}
-	case 31:
-		if !obj.inInventory() {
-			r = setup.Reactions["dontHave"]
-		} else {
-			obj.Properties.Area = 2000
-			setup.GameObjects[obj.ID] = obj.Properties
-			r = setup.Reactions["useShoes"]
+			return
 		}
 	default:
 		r = setup.Reactions["dontKnowHow"]
+		return
 	}
-	return
-}
 
-func (object Object) Climb(area setup.Area) (r setup.Reaction, areaID int) {
-	if area.ID == 31 {
-		moves += 1
-		r.OK = true
-		areaID = 9
-		return
-	}
-	if area.ID == 9 && object.ID == 27 {
-		movement.RevealArea(31)
-		moves += 1
-		treetop := setup.GetAreaByID(31)
-		treetop.Properties.Visited = true
-		setup.GameAreas[treetop.ID] = treetop.Properties
-		r.OK = true
-		areaID = 31
-		return
-	}
-	if !object.available(area) {
-		r = setup.Reactions["dontSee"]
-		areaID = area.ID
-		return
-	}
-	if object.ID != 27 {
-		r = setup.Reactions["silly"]
-		areaID = area.ID
-		return
+	obj.Properties.Area = setup.INUSE
+	setup.GameObjects[obj.ID] = obj.Properties
+
+	switch obj.ID {
+	case 13:
+		r = setup.Reactions["useHood"]
+	case 31:
+		r = setup.Reactions["useShoes"]
+	case 46:
+		r = setup.Reactions["useMap"]
 	}
 	return
 }
@@ -274,6 +187,36 @@ func (obj Object) Throw(area setup.Area) (r setup.Reaction) {
 		r = setup.Reactions["throw"]
 		obj.Properties.Area = area.ID
 		setup.GameObjects[obj.ID] = obj.Properties
+	}
+	return
+}
+
+func (obj Object) Read(area setup.Area) (r setup.Reaction) {
+	var reaction = map[int]string{
+		21: "wallpainting",
+		32: "panel",
+		43: "rottenPanel",
+		12: "paper",
+		17: "shield",
+		28: "parchment",
+		38: "letter",
+		46: "readMap",
+	}
+	switch obj.ID {
+	case 12, 17, 28, 38, 46:
+		if !obj.inInventory() {
+			r = setup.Reactions["dontHave"]
+			return
+		}
+	}
+	switch obj.ID {
+	case 12, 17, 28, 38, 43, 46:
+		r = setup.Reactions[reaction[obj.ID]]
+	case 32:
+		r = setup.Reactions[reaction[obj.ID]]
+		r.Statement = view.Highlight(r.Statement, setup.GREEN)
+	default:
+		r = setup.Reactions["dontKnowHow"]
 	}
 	return
 }

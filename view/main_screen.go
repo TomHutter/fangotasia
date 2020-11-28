@@ -13,6 +13,7 @@ import (
 	"os"
 	"os/exec"
 	"os/signal"
+	"regexp"
 	"strings"
 	"syscall"
 	"time"
@@ -23,6 +24,13 @@ var notice struct {
 	Message string
 	Color   string
 	Sleep   int
+}
+
+func Highlight(s string, c string) (h string) {
+	re := regexp.MustCompile("::(.+)::")
+
+	h = string(re.ReplaceAll([]byte(s), []byte(setup.WHITE+"$1"+c)))
+	return
 }
 
 func AddFlashNotice(message string, sleep int, color string) {

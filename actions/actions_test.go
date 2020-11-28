@@ -3,6 +3,7 @@ package actions_test
 import (
 	"fantasia/actions"
 	"fantasia/setup"
+	"fantasia/view"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -39,12 +40,12 @@ func TestTake(t *testing.T) {
 	// pick magic shoes
 	obj = setup.GetObjectByID(31)
 	res = actions.Object(obj).Take(area)
-	// reload obj to get new area => should be 1000 by taken into inv
+	// reload obj to get new area => should be setup.INVENTORY by taken into inv
 	obj = setup.GetObjectByID(31)
 	assert.Equal(t, setup.Reactions["ok"].Statement, res.Statement)
 	assert.True(t, res.OK)
 	// look up inventory
-	inv := setup.ObjectsInArea(setup.GetAreaByID(1000))
+	inv := setup.ObjectsInArea(setup.GetAreaByID(setup.INVENTORY))
 	assert.Contains(t, inv, obj)
 
 	// try to pick shoes again
@@ -117,15 +118,15 @@ func TestUse(t *testing.T) {
 	// pick magic shoes
 	shoes := setup.GetObjectByID(31)
 	actions.Object(shoes).Take(area)
-	// reload obj to get new area => should be 1000 (inventory)
+	// reload obj to get new area => should be setup.INVENTORY (inventory)
 	shoes = setup.GetObjectByID(31)
 	res := actions.Object(shoes).Use(area)
-	// reload obj to get new area => should be 2000 (inUse)
+	// reload obj to get new area => should be setup.INUSE (inUse)
 	shoes = setup.GetObjectByID(31)
 	assert.Equal(t, setup.Reactions["useShoes"].Statement, res.Statement)
 	assert.True(t, res.OK)
 	// look up inUse
-	inUse := setup.ObjectsInArea(setup.GetAreaByID(2000))
+	inUse := setup.ObjectsInArea(setup.GetAreaByID(setup.INUSE))
 	assert.Contains(t, inUse, shoes)
 
 	// go to area 3
@@ -133,10 +134,10 @@ func TestUse(t *testing.T) {
 	// pick magic shoes
 	dagger := setup.GetObjectByID(33)
 	actions.Object(dagger).Take(area)
-	// reload obj to get new area => should be 1000 (inventory)
+	// reload obj to get new area => should be setup.INVENTORY (inventory)
 	dagger = setup.GetObjectByID(33)
 	res = actions.Object(dagger).Use(area)
-	// reload obj to get new area => should be 2000 (inUse)
+	// reload obj to get new area => should be setup.INUSE (inUse)
 	dagger = setup.GetObjectByID(33)
 	assert.Equal(t, setup.Reactions["dontKnowHow"].Statement, res.Statement)
 	assert.False(t, res.OK)
@@ -167,7 +168,6 @@ func TestClimb(t *testing.T) {
 }
 
 func TestThrow(t *testing.T) {
-	setup.Init()
 	// not area 4 - sphere breaks
 	area := setup.GetAreaByID(1)
 	sphere := setup.GetObjectByID(34)
@@ -214,4 +214,25 @@ func TestThrow(t *testing.T) {
 	assert.True(t, res.OK)
 	assert.Equal(t, 9, setup.GetObjectByID(20).Properties.Area)
 	assert.Equal(t, 9, setup.GetObjectByID(46).Properties.Area)
+}
+
+func TestRead(t *testing.T) {
+	// read panel
+	area := setup.GetAreaByID(1)
+	panel := setup.GetObjectByID(32)
+	res := actions.Object(panel).Read(area)
+	assert.Equal(t, view.Highlight(setup.Reactions["panel"].Statement, setup.GREEN), res.Statement)
+	assert.True(t, res.OK)
+
+	// read letter
+	letter := setup.GetObjectByID(12)
+	res = actions.Object(letter).Read(area)
+	assert.Equal(t, setup.Reactions["dontHave"].Statement, res.Statement)
+	assert.False(t, res.OK)
+
+	// read letter in inv
+	letter.Properties.Area = setup.INVENTORY
+	res = actions.Object(letter).Read(area)
+	assert.Equal(t, setup.Reactions["paper"].Statement, res.Statement)
+	assert.True(t, res.OK)
 }

@@ -40,6 +40,11 @@ const (
 	AD  = "\u2BC6"
 )
 
+const (
+	INVENTORY = 1000
+	INUSE     = 2000
+)
+
 type Verb struct {
 	Name   string
 	Func   string
