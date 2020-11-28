@@ -337,3 +337,25 @@ reactions:
     ko: false
     color: GREEN
     sleep: 2
+  say:
+    statement: "'%s'\n...\n...\nNichts passiert."
+    ok: true
+    ko: false
+    color: GREEN
+    sleep: 4
+  simsalabim:
+    statement: "Der Zwerg verwandelt sich in einen bunten Vogel\nund fliegt davon!"
+    ok: true
+    ko: false
+    color: GREEN
+    sleep: 4
+  fantasia:
+    statement: |
+      Du hast %d von maximal 170 Punkten.
+      Dazu gibt es einen Bonus von bis zu 30
+      Punkten,wenn du aufhörst, also insge-
+      samt ein Maximum von 200 Punkten."
+    ok: true
+    ko: false
+    color: GREEN
+    sleep: -1

@@ -182,6 +182,13 @@ func main() {
 	area = actions.Parse("o", area, text)
 	actions.Parse("nimm zwergendolch", area, text)
 	actions.Parse("Inventar", area, text)
+	area = actions.Parse("w", area, text)
+	area = actions.Parse("w", area, text)
+	text = movement.DrawMap(area)
+	surroundings = movement.Surroundings(area)
+	text = append(text, surroundings...)
+	view.PrintScreen(text)
+	area = actions.Parse("sag simsalabim", area, text)
 	/*
 		actions.Parse("nimm zauberschuhe", area, text)
 		actions.Parse("trage zauberschuhe", area, text)

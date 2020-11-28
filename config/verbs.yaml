@@ -56,17 +56,11 @@ verbs:
   - name: gieße
     func: Pour
     single: false
-  - name: schieße
-    func: Shoot
-    single: false
   - name: füttere
     func: Feed
     single: false
   - name: schneide
     func: Cut
-    single: false
-  - name: sperre
-    func: Unlock
     single: false
   - name: hilfe
     func: Help

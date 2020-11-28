@@ -64,14 +64,19 @@ func (obj Object) drop(area setup.Area) (r setup.Reaction) {
 
 func getObjectByName(name string, area setup.Area) (object Object) {
 	found := false
+	var obj Object
 	for id, prop := range setup.GameObjects {
 		if strings.ToLower(prop.Description.Short) == strings.ToLower(name) {
 			found = true
-			obj := Object{id, prop}
+			obj = Object{id, prop}
 			if obj.available(area) {
 				return obj
 			}
 		}
+	}
+	// on treetop climbing down?
+	if area.ID == 31 && obj.ID == 27 {
+		return obj
 	}
 	// found an object but not in the current area?
 	if found {
@@ -81,6 +86,7 @@ func getObjectByName(name string, area setup.Area) (object Object) {
 	}
 	// don't know what you are talking about
 	r := setup.Reactions["unknownNoun"]
-	view.AddFlashNotice(r.Statement, r.Sleep, setup.RED)
+	statement := fmt.Sprintf(r.Statement, name)
+	view.AddFlashNotice(statement, r.Sleep, setup.RED)
 	return
 }

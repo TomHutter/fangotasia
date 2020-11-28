@@ -84,6 +84,10 @@ func Parse(input string, area setup.Area, text []string) setup.Area {
 	case "save":
 		obj = Object{}
 		argv = append(argv, reflect.ValueOf(area))
+	case "sag":
+		obj = Object{}
+		argv = append(argv, reflect.ValueOf(area))
+		argv = append(argv, reflect.ValueOf(strings.ToLower(parts[0])))
 	default:
 		if len(parts) < 1 {
 			answer := setup.Reactions["needObject"]

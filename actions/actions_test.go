@@ -4,6 +4,7 @@ import (
 	"fantasia/actions"
 	"fantasia/setup"
 	"fantasia/view"
+	"fmt"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -248,7 +249,6 @@ func TestRead(t *testing.T) {
 }
 
 func TestOpen(t *testing.T) {
-	setup.Init()
 	// open panel
 	area := setup.GetAreaByID(1)
 	panel := setup.GetObjectByID(32)
@@ -306,5 +306,61 @@ func TestOpen(t *testing.T) {
 	door = setup.GetObjectByID(45)
 	res = actions.Object(door).Open(area)
 	assert.Equal(t, setup.Reactions["alreadyOpen"].Statement, res.Statement)
+	assert.True(t, res.OK)
+}
+
+func TestPut(t *testing.T) {
+	setup.Init()
+	area := setup.GetAreaByID(1)
+	sword := setup.GetObjectByID(15)
+	dagger := setup.GetObjectByID(33)
+
+	// put sword into inv
+	sword.Properties.Area = setup.INVENTORY
+	setup.GameObjects[sword.ID] = sword.Properties
+
+	// try to put dagger
+	res := actions.Object(dagger).Put(area)
+	assert.Equal(t, setup.Reactions["dontHave"].Statement, res.Statement)
+	assert.False(t, res.OK)
+
+	// to put dagger
+	res = actions.Object(sword).Put(area)
+	assert.Equal(t, setup.Reactions["ok"].Statement, res.Statement)
+	assert.True(t, res.OK)
+	assert.Equal(t, 1, setup.GetObjectByID(15).Properties.Area)
+}
+
+func TestSay(t *testing.T) {
+	setup.Init()
+	area := setup.GetAreaByID(1)
+	sword := setup.GetObjectByID(15)
+	dagger := setup.GetObjectByID(33)
+	obj := actions.Object{}
+
+	// put sword in area 1
+	sword.Properties.Area = 1
+	setup.GameObjects[sword.ID] = sword.Properties
+
+	// put dagger in area 1
+	dagger.Properties.Area = 1
+	setup.GameObjects[dagger.ID] = dagger.Properties
+
+	// say "blubb"
+	res := actions.Object(obj).Say(area, "blubb")
+	s := fmt.Sprintf(setup.Reactions["say"].Statement, "blubb")
+	assert.Equal(t, s, res.Statement)
+	assert.True(t, res.OK)
+
+	// say "fantasia"
+	res = actions.Object(obj).Say(area, "fantasia")
+	s = fmt.Sprintf(setup.Reactions["fantasia"].Statement, sword.Properties.Value+dagger.Properties.Value)
+	assert.Equal(t, s, res.Statement)
+	assert.True(t, res.OK)
+
+	// say "simsalabim"
+	area = setup.GetAreaByID(18)
+	res = actions.Object(obj).Say(area, "simsalabim")
+	assert.Equal(t, setup.Reactions["simsalabim"].Statement, res.Statement)
 	assert.True(t, res.OK)
 }

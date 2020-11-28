@@ -3,6 +3,7 @@ package actions
 import (
 	"fantasia/setup"
 	"fantasia/view"
+	"fmt"
 )
 
 func (object Object) Open(area setup.Area) (r setup.Reaction) {
@@ -278,5 +279,42 @@ func (obj Object) Read(area setup.Area) (r setup.Reaction) {
 	default:
 		r = setup.Reactions["dontKnowHow"]
 	}
+	return
+}
+
+func (obj Object) Say(area setup.Area, word string) (r setup.Reaction) {
+	switch word {
+	case "simsalabim":
+		dwarf := Object(setup.GetObjectByID(18))
+		if dwarf.inArea(area) {
+			dwarf.Properties.Area = 0
+			setup.GameObjects[dwarf.ID] = dwarf.Properties
+			r = setup.Reactions["simsalabim"]
+			return
+		}
+	case "fantasia":
+		if area.ID == 1 {
+			var points int
+			for _, o := range setup.ObjectsInArea(area) {
+				points = points + int(o.Properties.Value)
+			}
+			r = setup.Reactions["fantasia"]
+			r.Statement = fmt.Sprintf(r.Statement, points)
+			return
+		}
+	}
+	r = setup.Reactions["say"]
+	r.Statement = fmt.Sprintf(r.Statement, word)
+	return
+}
+
+func (obj Object) Put(area setup.Area) (r setup.Reaction) {
+	if !obj.inInventory() {
+		r = setup.Reactions["dontHave"]
+		return
+	}
+	obj.Properties.Area = area.ID
+	setup.GameObjects[obj.ID] = obj.Properties
+	r = setup.Reactions["ok"]
 	return
 }
