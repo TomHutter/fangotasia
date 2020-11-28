@@ -319,3 +319,21 @@ reactions:
     ko: false
     color: GREEN
     sleep: 4
+  noKey:
+    statement: "Ich habe keinen Schlüssel."
+    ok: false
+    ko: false
+    color: RED
+    sleep: 3
+  openBox:
+    statement: "Zwei Dinge fallen heraus."
+    ok: true
+    ko: false
+    color: GREEN
+    sleep: 3
+  alreadyOpen:
+    statement: "Ist schon offen."
+    ok: true
+    ko: false
+    color: RED
+    sleep: 2

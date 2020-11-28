@@ -258,14 +258,14 @@ objects:
       article: der
     area: 51
     value: 47
-  45:
+  46:
     description:
       long: "::eine goldene Kugel::" 
       short: Kugel
       article: die
     area: 0
     value: 11
-  46:
+  47:
     description:
       long: "eine verbleichte Landkarte" 
       short: Landkarte

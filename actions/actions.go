@@ -5,9 +5,68 @@ import (
 	"fantasia/view"
 )
 
-func (object Object) Open(area int) (ok bool, answer []string) {
-	answer = append(answer, "lässt sich öffnen")
-	return true, answer
+func (object Object) Open(area setup.Area) (r setup.Reaction) {
+	if !object.available(area) {
+		r = setup.Reactions["dontSee"]
+		return
+	}
+
+	switch object.ID {
+	case 35, 40, 45:
+		// key present?
+		key := Object(setup.GetObjectByID(26))
+		if !key.inInventory() {
+			r = setup.Reactions["noKey"]
+			return
+		}
+	default:
+		r = setup.Reactions["dontKnowHow"]
+		return
+	}
+
+	switch object.ID {
+	// red box
+	case 35:
+		if setup.Flags["BoxOpen"] {
+			r = setup.Reactions["alreadyOpen"]
+			return
+		}
+		r = setup.Reactions["openBox"]
+		letter := setup.GetObjectByID(38)
+		letter.Properties.Area = area.ID
+		setup.GameObjects[letter.ID] = letter.Properties
+		ruby := setup.GetObjectByID(39)
+		ruby.Properties.Area = area.ID
+		setup.GameObjects[ruby.ID] = ruby.Properties
+		setup.Flags["BoxOpen"] = true
+
+		// door
+	case 40, 45:
+		if setup.Flags["DoorOpen"] {
+			r = setup.Reactions["alreadyOpen"]
+			return
+		}
+		setup.Flags["DoorOpen"] = true
+		r = setup.Reactions["ok"]
+	}
+	/*
+	   	446 f=0:gosub605:iffl=1thenfl=0:goto280
+	   447 ifno=40thenprint"versuche 'sperre'.":goto280
+	   496 f=0:gosub605:iffl=1thenfl=0:goto280
+	   497 ifno<>40andno<>35thenprinta$(2):goto280
+	   498 ifno=35thenprint"versuche 'oeffne'.":goto280
+	   499 iftu=1thenprint"ist schon offen !":goto280
+	   500 ifge(26)<>-1thenprint"ich habe keinen schluessel.":goto280
+	   501 print"gut.":tu=1:goto281
+
+
+	   448 f=1:gosub607:iffl=1thenfl=0:goto280
+	   449 ifno<>35thenprinta$(2):goto280
+	   450 ifge(38)<>0thenprint"gut. es ist leer.":goto281
+	   451 ifge(26)<>-1thenprinta$(1):goto280
+	   452 print"zwei dinge fallen heraus. sag 'sieh'.":ge(38)=oa:ge(39)=oa:goto281
+	*/
+	return
 }
 
 func (object Object) Take(area setup.Area) (r setup.Reaction) {
@@ -43,7 +102,7 @@ func (object Object) Take(area setup.Area) (r setup.Reaction) {
 	case 32, 43:
 		r = setup.Reactions["unreachable"]
 		return
-	case 46:
+	case 47:
 		if area.ID == 31 {
 			r = setup.Reactions["unreachable"]
 			return
@@ -112,7 +171,7 @@ func useDoor() {
 
 func (obj Object) Use(area setup.Area) (r setup.Reaction) {
 	switch obj.ID {
-	case 13, 31, 46:
+	case 13, 31, 47:
 		if !obj.inInventory() {
 			r = setup.Reactions["dontHave"]
 			return
@@ -130,7 +189,7 @@ func (obj Object) Use(area setup.Area) (r setup.Reaction) {
 		r = setup.Reactions["useHood"]
 	case 31:
 		r = setup.Reactions["useShoes"]
-	case 46:
+	case 47:
 		r = setup.Reactions["useMap"]
 	}
 	return
@@ -153,14 +212,14 @@ func (obj Object) Throw(area setup.Area) (r setup.Reaction) {
 		gnome.Properties.Area = 0
 		setup.GameObjects[gnome.ID] = gnome.Properties
 		// golden sphere appears
-		goldenSphere := Object(setup.GetObjectByID(45))
+		goldenSphere := Object(setup.GetObjectByID(46))
 		goldenSphere.Properties.Area = area.ID
 		setup.GameObjects[goldenSphere.ID] = goldenSphere.Properties
 		return
 	}
 	// on the tree trhowing stone?
 	if obj.ID == 20 && area.ID == 31 {
-		m := Object(setup.GetObjectByID(46))
+		m := Object(setup.GetObjectByID(47))
 		// Map here?
 		if !m.inArea(area) {
 			r = setup.Reactions["throw"]
@@ -183,7 +242,7 @@ func (obj Object) Throw(area setup.Area) (r setup.Reaction) {
 		setup.GameObjects[m.ID] = m.Properties
 		return
 	}
-	if obj.ID == 45 || obj.ID == 20 {
+	if obj.ID == 46 || obj.ID == 20 {
 		r = setup.Reactions["throw"]
 		obj.Properties.Area = area.ID
 		setup.GameObjects[obj.ID] = obj.Properties
@@ -200,17 +259,17 @@ func (obj Object) Read(area setup.Area) (r setup.Reaction) {
 		17: "shield",
 		28: "parchment",
 		38: "letter",
-		46: "readMap",
+		47: "readMap",
 	}
 	switch obj.ID {
-	case 12, 17, 28, 38, 46:
+	case 12, 17, 28, 38, 47:
 		if !obj.inInventory() {
 			r = setup.Reactions["dontHave"]
 			return
 		}
 	}
 	switch obj.ID {
-	case 12, 17, 28, 38, 43, 46:
+	case 12, 17, 28, 38, 43, 47:
 		r = setup.Reactions[reaction[obj.ID]]
 	case 32:
 		r = setup.Reactions[reaction[obj.ID]]

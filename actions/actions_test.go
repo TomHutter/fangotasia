@@ -185,11 +185,11 @@ func TestThrow(t *testing.T) {
 
 	// golden sphere
 	area = setup.GetAreaByID(1)
-	sphere = setup.GetObjectByID(45)
+	sphere = setup.GetObjectByID(46)
 	res = actions.Object(sphere).Throw(area)
 	assert.Equal(t, setup.Reactions["throw"].Statement, res.Statement)
 	assert.True(t, res.OK)
-	assert.Equal(t, 1, setup.GetObjectByID(45).Properties.Area)
+	assert.Equal(t, 1, setup.GetObjectByID(46).Properties.Area)
 
 	// stone
 	area = setup.GetAreaByID(9)
@@ -213,7 +213,7 @@ func TestThrow(t *testing.T) {
 	assert.Equal(t, setup.Reactions["hitMap"].Statement, res.Statement)
 	assert.True(t, res.OK)
 	assert.Equal(t, 9, setup.GetObjectByID(20).Properties.Area)
-	assert.Equal(t, 9, setup.GetObjectByID(46).Properties.Area)
+	assert.Equal(t, 9, setup.GetObjectByID(47).Properties.Area)
 }
 
 func TestRead(t *testing.T) {
@@ -234,5 +234,66 @@ func TestRead(t *testing.T) {
 	letter.Properties.Area = setup.INVENTORY
 	res = actions.Object(letter).Read(area)
 	assert.Equal(t, setup.Reactions["paper"].Statement, res.Statement)
+	assert.True(t, res.OK)
+}
+
+func TestOpen(t *testing.T) {
+	// open panel
+	area := setup.GetAreaByID(1)
+	panel := setup.GetObjectByID(32)
+	res := actions.Object(panel).Open(area)
+	assert.Equal(t, setup.Reactions["dontKnowHow"].Statement, res.Statement)
+	assert.False(t, res.OK)
+
+	// open red box
+	box := setup.GetObjectByID(35)
+	res = actions.Object(box).Open(area)
+	assert.Equal(t, setup.Reactions["dontSee"].Statement, res.Statement)
+	assert.False(t, res.OK)
+
+	// correct area
+	area = setup.GetAreaByID(4)
+	res = actions.Object(box).Open(area)
+	assert.Equal(t, setup.Reactions["noKey"].Statement, res.Statement)
+	assert.False(t, res.OK)
+	assert.False(t, setup.Flags["BoxOpen"])
+
+	// key in inv
+	key := setup.GetObjectByID(26)
+	key.Properties.Area = setup.INVENTORY
+	setup.GameObjects[key.ID] = key.Properties
+	res = actions.Object(box).Open(area)
+	assert.Equal(t, setup.Reactions["openBox"].Statement, res.Statement)
+	assert.True(t, res.OK)
+	assert.True(t, setup.Flags["BoxOpen"])
+
+	// reopen box
+	res = actions.Object(box).Open(area)
+	assert.Equal(t, setup.Reactions["alreadyOpen"].Statement, res.Statement)
+	assert.True(t, res.OK)
+
+	// open door
+	area = setup.GetAreaByID(25)
+	door := setup.GetObjectByID(40)
+	key.Properties.Area = 9
+	setup.GameObjects[key.ID] = key.Properties
+	res = actions.Object(door).Open(area)
+	assert.Equal(t, setup.Reactions["noKey"].Statement, res.Statement)
+	assert.False(t, res.OK)
+	assert.False(t, setup.Flags["DoorOpen"])
+
+	// key in inv
+	key.Properties.Area = setup.INVENTORY
+	setup.GameObjects[key.ID] = key.Properties
+	res = actions.Object(door).Open(area)
+	assert.Equal(t, setup.Reactions["ok"].Statement, res.Statement)
+	assert.True(t, res.OK)
+	assert.True(t, setup.Flags["DoorOpen"])
+
+	// reopen door (from the other side)
+	area = setup.GetAreaByID(30)
+	door = setup.GetObjectByID(45)
+	res = actions.Object(door).Open(area)
+	assert.Equal(t, setup.Reactions["alreadyOpen"].Statement, res.Statement)
 	assert.True(t, res.OK)
 }

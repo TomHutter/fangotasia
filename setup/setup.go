@@ -191,8 +191,9 @@ func Init() {
 	Overwrites = getMapOverwrites(pathname)
 	initBoxLen()
 	initMap()
-	Flags = make(map[string]bool, 2)
+	Flags = make(map[string]bool, 3)
 	Flags["DoorOpen"] = false
+	Flags["BoxOpen"] = false
 	Flags["MapMissed"] = false
 }
 
