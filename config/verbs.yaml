@@ -29,9 +29,6 @@ verbs:
   - name: wirf
     func: Throw
     single: false
-  - name: töte
-    func: Kill
-    single: false
   - name: lies
     func: Read
     single: false
@@ -53,7 +50,7 @@ verbs:
   - name: simsalabim
     func: Simsalabim
     single: true
-  - name: sage
+  - name: sag
     func: Say
     single: false
   - name: gieße

@@ -33,7 +33,7 @@ func TestTake(t *testing.T) {
 	obj := setup.GetObjectByID(18)
 	res := actions.Object(obj).Take(area)
 	// dwarf not in area
-	assert.Contains(t, res.Statement, setup.Reactions["dontSee"].Statement)
+	assert.Equal(t, setup.Reactions["dontSee"].Statement, res.Statement)
 	assert.False(t, res.OK)
 
 	// pick magic shoes
@@ -41,7 +41,7 @@ func TestTake(t *testing.T) {
 	res = actions.Object(obj).Take(area)
 	// reload obj to get new area => should be 1000 by taken into inv
 	obj = setup.GetObjectByID(31)
-	assert.Contains(t, res.Statement, setup.Reactions["ok"].Statement)
+	assert.Equal(t, setup.Reactions["ok"].Statement, res.Statement)
 	assert.True(t, res.OK)
 	// look up inventory
 	inv := setup.ObjectsInArea(setup.GetAreaByID(1000))
@@ -49,7 +49,7 @@ func TestTake(t *testing.T) {
 
 	// try to pick shoes again
 	res = actions.Object(obj).Take(area)
-	assert.Contains(t, res.Statement, setup.Reactions["haveAlready"].Statement)
+	assert.Equal(t, setup.Reactions["haveAlready"].Statement, res.Statement)
 	assert.True(t, res.OK)
 
 	// to to area 4
@@ -57,7 +57,7 @@ func TestTake(t *testing.T) {
 	// pick up gnome
 	obj = setup.GetObjectByID(36)
 	res = actions.Object(obj).Take(area)
-	assert.Contains(t, res.Statement, setup.Reactions["silly"].Statement)
+	assert.Equal(t, setup.Reactions["silly"].Statement, res.Statement)
 	assert.False(t, res.OK)
 }
 
@@ -67,7 +67,7 @@ func TestStab(t *testing.T) {
 	// stab gnome
 	gnome := setup.GetObjectByID(36)
 	res := actions.Object(gnome).Stab(area)
-	assert.Contains(t, res.Statement, setup.Reactions["noTool"].Statement)
+	assert.Equal(t, setup.Reactions["noTool"].Statement, res.Statement)
 	assert.False(t, res.OK)
 
 	// go to area 3
@@ -79,7 +79,7 @@ func TestStab(t *testing.T) {
 	area = setup.GetAreaByID(4)
 	// stab gnome
 	res = actions.Object(gnome).Stab(area)
-	assert.Contains(t, res.Statement, setup.Reactions["stabGnome"].Statement)
+	assert.Equal(t, setup.Reactions["stabGnome"].Statement, res.Statement)
 	assert.False(t, res.OK)
 	assert.True(t, res.KO)
 }
@@ -90,13 +90,13 @@ func TestMove(t *testing.T) {
 	obj := setup.Object{}
 	// move north
 	res, areaID := actions.Object(obj).Move(area, "n")
-	assert.Contains(t, res.Statement, setup.Reactions["noWay"].Statement)
+	assert.Equal(t, setup.Reactions["noWay"].Statement, res.Statement)
 	assert.False(t, res.OK)
 	assert.Equal(t, areaID, 1)
 
 	// move east
 	res, areaID = actions.Object(obj).Move(area, "o")
-	assert.Contains(t, res.Statement, setup.Reactions["noShoes"].Statement)
+	assert.Equal(t, setup.Reactions["noShoes"].Statement, res.Statement)
 	assert.False(t, res.OK)
 	assert.True(t, res.KO)
 	assert.Equal(t, areaID, 1)
@@ -122,7 +122,7 @@ func TestUse(t *testing.T) {
 	res := actions.Object(shoes).Use(area)
 	// reload obj to get new area => should be 2000 (inUse)
 	shoes = setup.GetObjectByID(31)
-	assert.Contains(t, res.Statement, setup.Reactions["useShoes"].Statement)
+	assert.Equal(t, setup.Reactions["useShoes"].Statement, res.Statement)
 	assert.True(t, res.OK)
 	// look up inUse
 	inUse := setup.ObjectsInArea(setup.GetAreaByID(2000))
@@ -138,7 +138,7 @@ func TestUse(t *testing.T) {
 	res = actions.Object(dagger).Use(area)
 	// reload obj to get new area => should be 2000 (inUse)
 	dagger = setup.GetObjectByID(33)
-	assert.Contains(t, res.Statement, setup.Reactions["dontKnowHow"].Statement)
+	assert.Equal(t, setup.Reactions["dontKnowHow"].Statement, res.Statement)
 	assert.False(t, res.OK)
 }
 
@@ -161,7 +161,57 @@ func TestClimb(t *testing.T) {
 	area = setup.GetAreaByID(1)
 	tree = setup.GetObjectByID(32)
 	res, areaID = actions.Object(tree).Climb(area)
-	assert.Contains(t, res.Statement, setup.Reactions["silly"].Statement)
+	assert.Equal(t, setup.Reactions["silly"].Statement, res.Statement)
 	assert.Equal(t, areaID, 1)
 	assert.False(t, res.OK)
+}
+
+func TestThrow(t *testing.T) {
+	setup.Init()
+	// not area 4 - sphere breaks
+	area := setup.GetAreaByID(1)
+	sphere := setup.GetObjectByID(34)
+	res := actions.Object(sphere).Throw(area)
+	assert.Equal(t, setup.Reactions["brokenSphere"].Statement, res.Statement)
+	assert.Equal(t, 0, setup.GetObjectByID(34).Properties.Area)
+	assert.False(t, res.OK)
+
+	// area 4 - gnome breaks
+	area = setup.GetAreaByID(4)
+	res = actions.Object(sphere).Throw(area)
+	assert.Equal(t, setup.Reactions["squashed"].Statement, res.Statement)
+	assert.Equal(t, 0, setup.GetObjectByID(36).Properties.Area)
+	assert.True(t, res.OK)
+
+	// golden sphere
+	area = setup.GetAreaByID(1)
+	sphere = setup.GetObjectByID(45)
+	res = actions.Object(sphere).Throw(area)
+	assert.Equal(t, setup.Reactions["throw"].Statement, res.Statement)
+	assert.True(t, res.OK)
+	assert.Equal(t, 1, setup.GetObjectByID(45).Properties.Area)
+
+	// stone
+	area = setup.GetAreaByID(9)
+	stone := setup.GetObjectByID(20)
+	res = actions.Object(stone).Throw(area)
+	assert.Equal(t, setup.Reactions["throw"].Statement, res.Statement)
+	assert.True(t, res.OK)
+	assert.Equal(t, 9, setup.GetObjectByID(20).Properties.Area)
+
+	// stone on tree - map present by setup
+	area = setup.GetAreaByID(31)
+	assert.False(t, setup.Flags["MapMissed"])
+	res = actions.Object(stone).Throw(area)
+	assert.Equal(t, setup.Reactions["missMap"].Statement, res.Statement)
+	assert.True(t, res.OK)
+	assert.True(t, setup.Flags["MapMissed"])
+	assert.Equal(t, 9, setup.GetObjectByID(20).Properties.Area)
+
+	// stone on tree - map present by setup, 2nd try
+	res = actions.Object(stone).Throw(area)
+	assert.Equal(t, setup.Reactions["hitMap"].Statement, res.Statement)
+	assert.True(t, res.OK)
+	assert.Equal(t, 9, setup.GetObjectByID(20).Properties.Area)
+	assert.Equal(t, 9, setup.GetObjectByID(46).Properties.Area)
 }

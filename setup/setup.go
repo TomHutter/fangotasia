@@ -116,7 +116,7 @@ var Reactions map[string]Reaction
 var Verbs []Verb
 
 var BoxLen int
-var DoorOpen = false
+var Flags map[string]bool
 
 var Map [12][10]int
 
@@ -186,6 +186,9 @@ func Init() {
 	Overwrites = getMapOverwrites(pathname)
 	initBoxLen()
 	initMap()
+	Flags = make(map[string]bool, 2)
+	Flags["DoorOpen"] = false
+	Flags["MapMissed"] = false
 }
 
 func ObjectsInArea(area Area) (objects []Object) {

@@ -36,7 +36,9 @@ reactions:
     color: RED
     sleep: 2
   invFull:
-    statement: "Ich habe zuviel zu tragen.\nIch müsste etwas weglegen."
+    statement: |
+      Ich habe zuviel zu tragen.
+      Ich müsste etwas weglegen.
     ok: false
     ko: false
     color: RED
@@ -162,13 +164,15 @@ reactions:
     color: GREEN
     sleep: 3
   unknownVerb:
-    statement: "'%s' kenne ich nicht.\nDas Kommando 'Verben' gibt eine Liste aller verfügbaren Verben aus.\n"
+    statement: |
+     '%s' kenne ich nicht.
+     Das Kommando 'Verben' gibt eine Liste aller verfügbaren Verben aus.
     ok: true
     ko: false
     color: RED
     sleep: 5
   unknownNoun:
-    statement: "'%s' kenne ich nicht.\n"
+    statement: "'%s' kenne ich nicht."
     ok: false
     ko: false
     color: RED
@@ -181,7 +185,7 @@ reactions:
     sleep: 2
   inTheMoor:
     statement: "Im Moor ist alles verschwunden, was ich bei mir hatte!"
-    ok: false
+    ok: true
     ko: false
     color: RED
     sleep: 6
@@ -191,3 +195,121 @@ reactions:
     ko: false
     color: GREEN
     sleep: 2
+  squashed:
+    statement: |
+      Die Kugel zerquetscht den Gnom und
+      verwandelt sich in eine goldene Kugel.
+    ok: true
+    ko: false
+    color: GREEN
+    sleep: 4
+  brokenSphere:
+    statement: "Die Kugel fällt auf den Boden und zerbricht."
+    ok: false
+    ko: false
+    color: RED
+    sleep: 4
+  throw:
+    statement: "Gut. Nichts passiert."
+    ok: true
+    ko: false
+    color: GREEN
+    sleep: 3
+  nothingWritten:
+    statement: "Da steht nichts geschrieben."
+    ok: false
+    ko: false
+    color: RED
+    sleep: 3
+  greenBook:
+    statement: |
+      Im Buch steht: 
+      Messer sind zum stechen da!
+    ok: true
+    ko: false
+    color: GREEN
+    sleep: 6
+  paper:
+    statement: |
+      Auf dem Zettel steht:
+      Drachen lassen sich nicht verjagen.
+      Sie sind unverwundbar und unsterblich!
+    ok: true
+    ko: false
+    color: GREEN
+    sleep: 6
+  shield:
+    statement: |
+      In den Schild ist eingaviert:
+      Dinge drehen sich um Ringe!
+    ok: true
+    ko: false
+    color: GREEN
+    sleep: 6
+  wallpainting:
+    statement: |
+      Die Hölenmalerei besagt: Ein Zauberer war hier.
+                     Simsalabim!
+    ok: true
+    ko: false
+    color: GREEN
+    sleep: 6
+  parchment:
+    statement: |
+      Auf dem Pergament steht:
+      Vögel wurden vor langer Zeit in Zwerge verwandelt.
+    ok: true
+    ko: false
+    color: GREEN
+    sleep: 6
+  panel:
+    statement: |
+       Auf dem Schrifttafel steht:
+       Fremdling, der du betrittst dies Land,
+       suche nach den verlorenen ::Schätzen::!
+       Bringe sie hierher und leg sie hin.
+       Sag 'Fantasia'!
+    ok: true
+    ko: false
+    color: GREEN
+    sleep: -1
+  letter:
+    statement: |
+      Im Brief steht:
+      Pflanzen brauchen Wasser!
+    ok: true
+    ko: false
+    color: GREEN
+    sleep: 6
+  rottenPanel:
+    statement: |
+      Auf der Tafel kann man fast nicht mehr lesen:
+      Hüte dich vor dem Drachen!
+    ok: true
+    ko: false
+    color: GREEN
+    sleep: 6
+  missMap:
+    statement: "Ups. Nicht getroffen"
+    ok: true
+    ko: false
+    color: RED
+    sleep: 3
+  hitMap:
+    statement: "Der Stein trifft die Landkarte und sie fällt zu Boden."
+    ok: true
+    ko: false
+    color: GREEN
+    sleep: 5
+  readMap:
+    statement: "Die Landkarte zeigt die Gebiete in denen ich schon war."
+    ok: true
+    ko: false
+    color: GREEN
+    sleep: 4
+  useMap:
+    statement: "Gut. Jetzt sehe ich endlich wo ich bin und wo ich schon war."
+    ok: true
+    ko: false
+    color: GREEN
+    sleep: 4

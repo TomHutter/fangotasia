@@ -167,7 +167,7 @@ func main() {
 	//text = append(text, surroundings...)
 	//view.PrintScreen(text)
 	//actions.Parse("inventar", area)
-	actions.Parse("load", area, text)
+	//actions.Parse("load", area, text)
 	//actions.Parse("nimm Zwergendolch", area, text)
 	//actions.Parse("Inventar", area, text)
 	//actions.Parse("n", area, text)
@@ -176,7 +176,7 @@ func main() {
 	//actions.Parse("stich Gnom", area, text)
 	//actions.Parse("Inventar", area, text)
 	//surroundings = movement.Surroundings(area)
-	actions.Parse("nimm zauberschuhe", area, text)
+	//actions.Parse("nimm zauberschuhe", area, text)
 	/*
 		actions.Parse("nimm zauberschuhe", area, text)
 		actions.Parse("trage zauberschuhe", area, text)
