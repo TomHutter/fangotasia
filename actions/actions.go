@@ -43,6 +43,11 @@ func (object Object) Take(area setup.Area) (r setup.Reaction) {
 	case 32, 43:
 		r = setup.Reactions["unreachable"]
 		return
+	case 46:
+		if area.ID == 31 {
+			r = setup.Reactions["unreachable"]
+			return
+		}
 	}
 	return object.snatchFrom(Object(setup.GetObjectByID(10)))
 }

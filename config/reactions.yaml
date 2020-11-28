@@ -195,6 +195,12 @@ reactions:
     ko: false
     color: GREEN
     sleep: 2
+  saved:
+    statement: "Spiel erfolgreich geschrieben."
+    ok: true
+    ko: false
+    color: GREEN
+    sleep: 2
   squashed:
     statement: |
       Die Kugel zerquetscht den Gnom und

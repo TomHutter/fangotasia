@@ -2,7 +2,6 @@ package actions
 
 import (
 	"fantasia/setup"
-	"fmt"
 	"io/ioutil"
 	"os"
 	"path"
@@ -14,22 +13,24 @@ import (
 func folderListing() (filename string) {
 	_, caller, _, _ := runtime.Caller(0)
 	pathname := path.Dir(caller) + "/../save/"
-	files, err := ioutil.ReadDir(pathname)
-	if err != nil {
-		fmt.Println(err)
-	}
+	/*
+		files, err := ioutil.ReadDir(pathname)
+		if err != nil {
+			fmt.Println(err)
+		}
 
-	fmt.Println("Files:")
+		fmt.Println("Files:")
 
-	for _, f := range files {
-		fmt.Println(f.Name())
-	}
-	//filename = pathname + view.Scanner("prompt: filename > ")
-	filename = pathname + "mrgl"
+		for _, f := range files {
+			fmt.Println(f.Name())
+		}
+		//filename = pathname + view.Scanner("prompt: filename > ")
+	*/
+	filename = pathname + "fantasia.sav"
 	return
 }
 
-func (obj Object) Save(area setup.Area) (ok bool, err error) {
+func (obj Object) Save(area setup.Area) (r setup.Reaction) {
 	m := make(map[interface{}]interface{})
 	m["area"] = area.ID
 	m["map"] = setup.Map
@@ -37,28 +38,29 @@ func (obj Object) Save(area setup.Area) (ok bool, err error) {
 
 	filename := folderListing()
 
+	r = setup.Reactions["saved"]
 	file, err := os.Create(filename)
 	if err != nil {
-		fmt.Println(err)
-		return false, err
+		r.Statement = err.Error()
+		r.OK = false
+		return
 	}
 
 	defer file.Close()
 
 	if err = yaml.NewEncoder(file).Encode(m); err != nil {
-		fmt.Println(err)
-		return false, err
+		r.Statement = err.Error()
+		r.OK = false
+		return
 	}
 
-	fmt.Printf("File %s written successfully\n", filename)
-	/*
-		err = file.Close()
-		if err != nil {
-			fmt.Println(err)
-			return false, err
-		}
-	*/
-	return true, nil
+	err = file.Close()
+	if err != nil {
+		r.Statement = err.Error()
+		r.OK = false
+		return
+	}
+	return
 }
 
 func (obj Object) Load(area setup.Area) (r setup.Reaction, areaID int) {
