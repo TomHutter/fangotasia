@@ -80,7 +80,7 @@ func (object Object) Take(area setup.Area) (r setup.Reaction) {
 	}
 
 	switch object.ID {
-	case 10, 16, 18, 21, 22, 27, 36, 40, 42:
+	case 10, 16, 18, 21, 22, 27, 36, 40, 42, 45:
 		r = setup.Reactions["silly"]
 		return
 	case 29, 14:
