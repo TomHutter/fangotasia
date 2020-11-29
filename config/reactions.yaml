@@ -413,3 +413,57 @@ reactions:
     ko: false
     color: GREEN
     sleep: 3
+  tryThrow:
+    statement: "Versuche 'wirf'."
+    ok: true
+    ko: false
+    color: GREEN
+    sleep: 2
+  eatCake:
+    statement: "Brrrrr! Schmeckt ja scheußlich!\nIch fühle mich jetzt besonders stark!"
+    ok: true
+    ko: false
+    color: GREEN
+    sleep: 4
+  drinkJar:
+    statement: "Aaaaaah gut!"
+    ok: true
+    ko: false
+    color: GREEN
+    sleep: 4
+  jarEmpty:
+    statement: "Der Krug ist leer."
+    ok: false
+    ko: false
+    color: RED
+    sleep: 3
+  cantEat:
+    statement: "Klar! Und was trinke ich dazu? Pangalatischen Donnergurgler?"
+    ok: false
+    ko: false
+    color: RED
+    sleep: 5
+  spin:
+    statement: "Gut.\n...\nNichts passiert."
+    ok: true
+    ko: false
+    color: GREEN
+    sleep: 5
+  spinRing:
+    statement: "Alles beginnt sich zu drehen!\n\nDer Ring fällt mir aus der Hand!"
+    ok: true
+    ko: false
+    color: RED
+    sleep: 5
+  noJar:
+    statement: "Ich habe nichts zum Gießen."
+    ok: false
+    ko: false
+    color: RED
+    sleep: 2
+  waterBush:
+    statement: "Der Strauch beginnt zu blühen und es\nwachsen rote beeren.\nDann verwandelt er sich."
+    ok: true
+    ko: false
+    color: GREEN
+    sleep: 6

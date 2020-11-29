@@ -12,10 +12,9 @@ func (obj Object) Move(area setup.Area, dir string) (r setup.Reaction, areaID in
 	//	return 0, "Ich brauche eine Richtung."
 	//}
 	// wearing the hood?
-	hood := setup.GetObjectByID(13)
+	hood := Object(setup.GetObjectByID(13))
 	if Object(hood).inUse() {
-		hood.Properties.Area = -1
-		setup.GameObjects[hood.ID] = hood.Properties
+		hood.NewAreaID(0)
 		r = setup.Reactions["hoodInUse"]
 	}
 
@@ -53,8 +52,8 @@ func (obj Object) Move(area setup.Area, dir string) (r setup.Reaction, areaID in
 	// Direction Moor?
 	if newArea == 5 {
 		for _, o := range setup.ObjectsInArea(setup.GetAreaByID(setup.INVENTORY)) {
-			o.Properties.Area = 29
-			setup.GameObjects[o.ID] = o.Properties
+			obj := Object(o)
+			obj.NewAreaID(29)
 		}
 		r = setup.Reactions["inTheMoor"]
 	}

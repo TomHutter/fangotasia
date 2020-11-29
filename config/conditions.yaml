@@ -1,6 +1,12 @@
 conditions:
-  doorSouth: eine Tür im Süden 
-  doorNorth: eine Tür im Norden
-  jarFull: einen vollen Wasserkrug 
-  jarEmpty: einen leeren Wasserkrug 
-  goldenRing: ein ring aus Goldfäden
+  door:
+    south: eine Tür im Süden
+    north: eine Tür im Norden
+  jar:
+    full: einen vollen Wasserkrug
+    empty: einen leeren Wasserkrug
+  ring:
+    golden: "::ein ring aus Goldfäden::"
+  bush:
+    ugly: einen hässlichen Strauch
+    watered: einen Strauch

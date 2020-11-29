@@ -48,7 +48,7 @@ verbs:
     func: Say
     single: false
   - name: gieße
-    func: Pour
+    func: Water
     single: false
   - name: füttere
     func: Feed
@@ -78,7 +78,7 @@ verbs:
     func: Put
     single: false
   - name: drehe
-    func: Turn
+    func: Spin
     single: false
   - name: spring
     func: Jump

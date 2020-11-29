@@ -1,6 +1,7 @@
 package movement_test
 
 import (
+	"fantasia/actions"
 	"fantasia/movement"
 	"fantasia/setup"
 	"strings"
@@ -23,9 +24,8 @@ func TestSurroundings(t *testing.T) {
 
 func TestDrawMap(t *testing.T) {
 	// put map in use
-	m := setup.GetObjectByID(47)
-	m.Properties.Area = setup.INUSE
-	setup.GameObjects[m.ID] = m.Properties
+	m := actions.Object(setup.GetObjectByID(47))
+	m.NewAreaID(setup.INUSE)
 	area := setup.GetAreaByID(1)
 	s := strings.Join(movement.DrawMap(area), "\n")
 	assert.Contains(t, s, area.Properties.Description.Short)

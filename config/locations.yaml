@@ -295,8 +295,8 @@ locations:
     visited: false
   23:
     description:
-      long: in einem Kräutergarten.
-      short: Kräutergarten
+      long: in einem verwilderten Park.
+      short: Park
     directions: 
       - 0
       - 0
@@ -347,8 +347,8 @@ locations:
     visited: false
   27:
     description:
-      long: in einem verwilderten Park.
-      short: Park
+      long: in einem Kräutergarten.
+      short: Kräutergarten
     directions: 
       - 0
       - 22

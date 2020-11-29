@@ -60,6 +60,7 @@ type conf struct {
 	Reactions  map[string]Reaction    `yaml:"reactions"`
 	Locations  map[int]AreaProperties `yaml:"locations"`
 	Overwrites []MapOverwrites        `yaml:"overwrites"`
+	Contitions map[string]Condition   `yaml:"conditions"`
 }
 
 // Long and short description and the article for the noun
@@ -115,10 +116,13 @@ type Reaction struct {
 	Sleep     int
 }
 
+type Condition map[string]string
+
 var GameObjects map[int]ObjectProperties
 var GameAreas map[int]AreaProperties
 var Overwrites []MapOverwrites
 var Reactions map[string]Reaction
+var Conditions map[string]Condition
 var Verbs []Verb
 
 var BoxLen int
@@ -189,6 +193,8 @@ func Init() {
 	Reactions = c.Reactions
 	c.getConf(pathname + "/../config/verbs.yaml")
 	Verbs = c.Verbs
+	c.getConf(pathname + "/../config/conditions.yaml")
+	Conditions = c.Contitions
 	Overwrites = getMapOverwrites(pathname)
 	initBoxLen()
 	initMap()

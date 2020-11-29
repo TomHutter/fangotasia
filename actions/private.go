@@ -45,8 +45,7 @@ func (obj Object) pick() (r setup.Reaction) {
 		return
 	}
 
-	obj.Properties.Area = setup.INVENTORY
-	setup.GameObjects[obj.ID] = obj.Properties
+	obj.NewAreaID(setup.INVENTORY)
 	r = setup.Reactions["ok"]
 	return
 }
@@ -56,8 +55,7 @@ func (obj Object) drop(area setup.Area) (r setup.Reaction) {
 		r = setup.Reactions["dontHave"]
 		return
 	}
-	obj.Properties.Area = area.ID
-	setup.GameObjects[obj.ID] = obj.Properties
+	obj.NewAreaID(area.ID)
 	r = setup.Reactions["ok"]
 	return
 }

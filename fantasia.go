@@ -13,6 +13,14 @@ import (
 	"unicode/utf8"
 )
 
+/*
+ToDos:
+- func Jump
+- func Help
+- func End
+- func Chase
+*/
+
 // Setup keyboard scanning
 func scanner() (r rune) {
 	var b []byte = make([]byte, 4)
@@ -176,21 +184,28 @@ func main() {
 	//actions.Parse("stich Gnom", area, text)
 	//actions.Parse("Inventar", area, text)
 	//surroundings = movement.Surroundings(area)
-	actions.Parse("nimm zauberschuhe", area, text)
-	actions.Parse("trage zauberschuhe", area, text)
-	area = actions.Parse("o", area, text)
-	area = actions.Parse("o", area, text)
-	actions.Parse("nimm zwergendolch", area, text)
-	actions.Parse("Inventar", area, text)
-	area = actions.Parse("w", area, text)
-	area = actions.Parse("w", area, text)
-	text = movement.DrawMap(area)
-	surroundings = movement.Surroundings(area)
-	text = append(text, surroundings...)
-	view.PrintScreen(text)
-	area = actions.Parse("sag simsalabim", area, text)
-	area = actions.Parse("benutze karte", area, text)
-	area = actions.Parse("füttere tafel", area, text)
+	/*
+		actions.Parse("nimm zauberschuhe", area, text)
+		actions.Parse("trage zauberschuhe", area, text)
+		area = actions.Parse("o", area, text)
+		area = actions.Parse("o", area, text)
+		actions.Parse("nimm zwergendolch", area, text)
+		actions.Parse("Inventar", area, text)
+		area = actions.Parse("w", area, text)
+		area = actions.Parse("w", area, text)
+		text = movement.DrawMap(area)
+		surroundings = movement.Surroundings(area)
+		text = append(text, surroundings...)
+		view.PrintScreen(text)
+		area = actions.Parse("sag simsalabim", area, text)
+		area = actions.Parse("benutze karte", area, text)
+		area = actions.Parse("füttere tafel", area, text)
+	*/
+	/*
+		area = actions.Parse("load", area, text)
+		area = actions.Parse("gieße strauch", area, text)
+		area = actions.Parse("gieße strauch", area, text)
+	*/
 
 	/*
 		actions.Parse("nimm zauberschuhe", area, text)

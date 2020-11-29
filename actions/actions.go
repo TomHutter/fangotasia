@@ -7,6 +7,16 @@ import (
 	"strings"
 )
 
+func (obj *Object) NewAreaID(areaID int) {
+	obj.Properties.Area = areaID
+	setup.GameObjects[obj.ID] = obj.Properties
+}
+
+func (obj *Object) NewCondition(condition string) {
+	obj.Properties.Description.Long = condition
+	setup.GameObjects[obj.ID] = obj.Properties
+}
+
 func (object Object) Open(area setup.Area) (r setup.Reaction) {
 	if !object.available(area) {
 		r = setup.Reactions["dontSee"]
@@ -34,12 +44,10 @@ func (object Object) Open(area setup.Area) (r setup.Reaction) {
 			return
 		}
 		r = setup.Reactions["openBox"]
-		letter := setup.GetObjectByID(38)
-		letter.Properties.Area = area.ID
-		setup.GameObjects[letter.ID] = letter.Properties
-		ruby := setup.GetObjectByID(39)
-		ruby.Properties.Area = area.ID
-		setup.GameObjects[ruby.ID] = ruby.Properties
+		letter := Object(setup.GetObjectByID(38))
+		letter.NewAreaID(area.ID)
+		ruby := Object(setup.GetObjectByID(39))
+		ruby.NewAreaID(area.ID)
 		setup.Flags["BoxOpen"] = true
 
 		// door
@@ -132,9 +140,8 @@ func (object Object) Stab(area setup.Area) (r setup.Reaction) {
 		return
 	case 18:
 		if Object(setup.GetObjectByID(13)).inUse() {
-			dwarf := setup.GetObjectByID(18)
-			dwarf.Properties.Area = -1
-			setup.GameObjects[dwarf.ID] = dwarf.Properties
+			dwarf := Object(setup.GetObjectByID(18))
+			dwarf.NewAreaID(0)
 			r = setup.Reactions["stabDwarfHooded"]
 		} else {
 			r = setup.Reactions["stabDwarf"]
@@ -142,9 +149,8 @@ func (object Object) Stab(area setup.Area) (r setup.Reaction) {
 		return
 	case 36:
 		if Object(setup.GetObjectByID(13)).inUse() {
-			gnome := setup.GetObjectByID(36)
-			gnome.Properties.Area = -1
-			setup.GameObjects[gnome.ID] = gnome.Properties
+			gnome := Object(setup.GetObjectByID(36))
+			gnome.NewAreaID(0)
 			r = setup.Reactions["stabGnomeHooded"]
 		} else {
 			r = setup.Reactions["stabGnome"]
@@ -183,8 +189,7 @@ func (obj Object) Use(area setup.Area) (r setup.Reaction) {
 		return
 	}
 
-	obj.Properties.Area = setup.INUSE
-	setup.GameObjects[obj.ID] = obj.Properties
+	obj.NewAreaID(setup.INUSE)
 
 	switch obj.ID {
 	case 13:
@@ -201,8 +206,7 @@ func (obj Object) Throw(area setup.Area) (r setup.Reaction) {
 	// sphere?
 	if obj.ID == 34 {
 		// throwing sphere will always lead to loss
-		obj.Properties.Area = 0
-		setup.GameObjects[obj.ID] = obj.Properties
+		obj.NewAreaID(0)
 		gnome := Object(setup.GetObjectByID(36))
 		// no gnome today?
 		if !gnome.inArea(area) {
@@ -211,12 +215,10 @@ func (obj Object) Throw(area setup.Area) (r setup.Reaction) {
 		}
 		r = setup.Reactions["squashed"]
 		// gnome vanished
-		gnome.Properties.Area = 0
-		setup.GameObjects[gnome.ID] = gnome.Properties
+		gnome.NewAreaID(0)
 		// golden sphere appears
 		goldenSphere := Object(setup.GetObjectByID(46))
-		goldenSphere.Properties.Area = area.ID
-		setup.GameObjects[goldenSphere.ID] = goldenSphere.Properties
+		goldenSphere.NewAreaID(area.ID)
 		return
 	}
 	// on the tree trhowing stone?
@@ -225,29 +227,24 @@ func (obj Object) Throw(area setup.Area) (r setup.Reaction) {
 		// Map here?
 		if !m.inArea(area) {
 			r = setup.Reactions["throw"]
-			obj.Properties.Area = 9
-			setup.GameObjects[obj.ID] = obj.Properties
+			obj.NewAreaID(9)
 		}
 		if !setup.Flags["MapMissed"] {
 			r = setup.Reactions["missMap"]
 			setup.Flags["MapMissed"] = true
 			// stone falls to ground
-			obj.Properties.Area = 9
-			setup.GameObjects[obj.ID] = obj.Properties
+			obj.NewAreaID(9)
 			return
 		}
 		r = setup.Reactions["hitMap"]
 		// stone and map fall to ground
-		obj.Properties.Area = 9
-		setup.GameObjects[obj.ID] = obj.Properties
-		m.Properties.Area = 9
-		setup.GameObjects[m.ID] = m.Properties
+		obj.NewAreaID(9)
+		m.NewAreaID(9)
 		return
 	}
 	if obj.ID == 46 || obj.ID == 20 {
 		r = setup.Reactions["throw"]
-		obj.Properties.Area = area.ID
-		setup.GameObjects[obj.ID] = obj.Properties
+		obj.NewAreaID(area.ID)
 	}
 	return
 }
@@ -288,8 +285,7 @@ func (obj Object) Say(area setup.Area, word string) (r setup.Reaction) {
 	case "simsalabim":
 		dwarf := Object(setup.GetObjectByID(18))
 		if dwarf.inArea(area) {
-			dwarf.Properties.Area = 0
-			setup.GameObjects[dwarf.ID] = dwarf.Properties
+			dwarf.NewAreaID(0)
 			r = setup.Reactions["simsalabim"]
 			return
 		}
@@ -314,8 +310,7 @@ func (obj Object) Put(area setup.Area) (r setup.Reaction) {
 		r = setup.Reactions["dontHave"]
 		return
 	}
-	obj.Properties.Area = area.ID
-	setup.GameObjects[obj.ID] = obj.Properties
+	obj.NewAreaID(area.ID)
 	r = setup.Reactions["ok"]
 	return
 }
@@ -345,8 +340,7 @@ func (obj Object) Fill(area setup.Area) (r setup.Reaction) {
 		r = setup.Reactions["waterUnreachable"]
 	case 17:
 		r = setup.Reactions["ok"]
-		obj.Properties.Description.Long = "einen vollen Wasserkrug"
-		setup.GameObjects[obj.ID] = obj.Properties
+		obj.NewCondition(setup.Conditions["jar"]["full"])
 	default:
 		r = setup.Reactions["noWater"]
 	}
@@ -390,7 +384,122 @@ func (obj Object) Cut(area setup.Area) (r setup.Reaction) {
 		return
 	}
 	r = setup.Reactions["cutFruit"]
-	ring.Properties.Area = area.ID
-	setup.GameObjects[ring.ID] = ring.Properties
+	ring.NewAreaID(area.ID)
+	return
+}
+
+func (obj Object) Catapult(area setup.Area) (r setup.Reaction) {
+	if !obj.inInventory() {
+		r = setup.Reactions["dontHave"]
+		return
+	}
+	switch obj.ID {
+	case 34:
+		r = setup.Reactions["tryThrow"]
+	case 20:
+		// Catapult around?
+		catapult := Object(setup.GetObjectByID(29))
+		if !catapult.inArea(area) {
+			r = setup.Reactions["noTool"]
+		} else {
+			obj.NewAreaID(29)
+			grub := Object(setup.GetObjectByID(10))
+			grub.NewAreaID(0)
+			r = setup.Reactions["ok"]
+		}
+	default:
+		r = setup.Reactions["dontKnowHow"]
+	}
+	return
+}
+
+func (obj Object) Eat(area setup.Area) (r setup.Reaction) {
+	if !obj.inInventory() {
+		r = setup.Reactions["dontHave"]
+		return
+	}
+	switch obj.ID {
+	case 9:
+		obj.NewAreaID(setup.INUSE)
+		r = setup.Reactions["eatCake"]
+	case 23:
+		obj.NewAreaID(0)
+		r = setup.Reactions["ok"]
+	default:
+		r = setup.Reactions["cantEat"]
+	}
+	return
+}
+
+func (jar Object) Drink() (r setup.Reaction) {
+	if !jar.inInventory() {
+		r = setup.Reactions["noTool"]
+		return
+	}
+	if jar.Properties.Description.Long == setup.Conditions["jar"]["empty"] {
+		r = setup.Reactions["jarEmpty"]
+	}
+	fmt.Println(setup.Conditions["jar"]["full"])
+	if jar.Properties.Description.Long == setup.Conditions["jar"]["full"] {
+		jar.NewCondition(setup.Conditions["jar"]["empty"])
+		r = setup.Reactions["drinkJar"]
+	}
+	return
+}
+
+func (obj Object) Spin(area setup.Area) (r setup.Reaction) {
+	if !obj.inInventory() {
+		r = setup.Reactions["dontHave"]
+		return
+	}
+	switch obj.ID {
+	case 37:
+		if obj.Properties.Description.Long == setup.Conditions["ring"]["golden"] {
+			r = setup.Reactions["spin"]
+		} else {
+			obj.NewCondition(setup.Conditions["ring"]["golden"])
+			obj.NewAreaID(area.ID)
+			r = setup.Reactions["spinRing"]
+		}
+	default:
+		r = setup.Reactions["spin"]
+	}
+	return
+}
+
+func (obj Object) Water(area setup.Area) (r setup.Reaction) {
+	switch obj.ID {
+	case 14, 22, 27:
+		jar := Object(setup.GetObjectByID(30))
+		if !jar.inInventory() {
+			r = setup.Reactions["noJar"]
+			return
+		}
+		if jar.Properties.Description.Long == setup.Conditions["jar"]["empty"] {
+			r = setup.Reactions["jarEmpty"]
+			return
+		}
+	default:
+		r = setup.Reactions["silly"]
+		return
+	}
+
+	switch obj.ID {
+	case 14, 27:
+		r = setup.Reactions["ok"]
+	case 22:
+		jar := Object(setup.GetObjectByID(30))
+		jar.NewCondition(setup.Conditions["jar"]["empty"])
+		if obj.Properties.Description.Long == setup.Conditions["bush"]["watered"] {
+			r = setup.Reactions["ok"]
+		} else {
+			r = setup.Reactions["waterBush"]
+			obj.NewCondition(setup.Conditions["bush"]["watered"])
+			berries := Object(setup.GetObjectByID(23))
+			berries.NewAreaID(area.ID)
+			leaves := Object(setup.GetObjectByID(24))
+			leaves.NewAreaID(area.ID)
+		}
+	}
 	return
 }
