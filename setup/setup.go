@@ -66,6 +66,7 @@ type conf struct {
 type description struct {
 	Long    string
 	Short   string
+	Alt     string
 	Article string
 }
 

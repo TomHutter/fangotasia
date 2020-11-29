@@ -3,6 +3,7 @@ objects:
     description:
       long: einen Zauberkuchen
       short: Zauberkuchen
+      alt: Kuchen
       article: der
     area: 28
     value: 0
@@ -31,6 +32,7 @@ objects:
     description:
       long: eine Tarnkappe
       short: Tarnkappe
+      alt: Kappe
       article: die
     area: 2
     value: 0
@@ -38,6 +40,7 @@ objects:
     description:
       long: eine Riesenfrucht 
       short: Riesenfrucht
+      alt: Frucht
       article: die
     area: 26
     value: 0
@@ -45,6 +48,7 @@ objects:
     description:
       long: "::ein Feuerschwert::"
       short: Feuerschwert
+      alt: Schwert
       article: das
     area: 20
     value: 10
@@ -73,6 +77,7 @@ objects:
     description:
       long: "::goldene Dracheneier::"
       short: Dracheneier
+      alt: Eier
       article: die
     area: 18
     value: 20
@@ -87,6 +92,7 @@ objects:
     description:
       long: eine Hölenmalerei 
       short: Hölenmalerei
+      alt: Malerei
       article: die
     area: 13
     value: 0
@@ -115,6 +121,7 @@ objects:
     description:
       long: "::ein Diamantmesser::"
       short: Diamantmesser
+      alt: Messer
       article: das
     area: 15
     value: 5
@@ -122,6 +129,7 @@ objects:
     description:
       long: "::einen Silberschlüssel::"
       short: Silberschlüssel
+      alt: Schlüssel
       article: der
     area: 8
     value: 5
@@ -143,6 +151,7 @@ objects:
     description:
       long: eine grosse Steinschleuder 
       short: Steinschleuder
+      alt: Schleuder
       article: die
     area: 12
     value: 0
@@ -150,6 +159,7 @@ objects:
     description:
       long: einen leeren Wasserkrug 
       short: Wasserkrug
+      alt: Krug
       article: der
     area: 1
     value: 0
@@ -157,6 +167,7 @@ objects:
     description:
       long: ein Paar Zauberschuhe 
       short: Zauberschuhe
+      alt: Schuhe
       article: die
     area: 1
     value: 0
@@ -164,6 +175,7 @@ objects:
     description:
       long: eine Schrifttafel 
       short: Schrifttafel
+      alt: Tafel
       article: die
     area: 1
     value: 0
@@ -171,6 +183,7 @@ objects:
     description:
       long: "::einen Zwergendolch::"
       short: Zwergendolch
+      alt: Dolch
       article: der
     area: 3
     value: 7
@@ -234,6 +247,7 @@ objects:
     description:
       long: "::goldenes Feenhaar::"
       short: Feenhaar
+      alt: Haar
       article: das
     area: 33
     value: 10
@@ -248,6 +262,7 @@ objects:
     description:
       long: eine verwitterte Holztafel 
       short: Holztafel
+      alt: Tafel
       article: die
     area: 40
     value: 0
@@ -269,6 +284,7 @@ objects:
     description:
       long: "eine verbleichte Landkarte" 
       short: Landkarte
+      alt: Karte
       article: die
     area: 31
     value: 0

@@ -66,7 +66,8 @@ func getObjectByName(name string, area setup.Area) (object Object) {
 	found := false
 	var obj Object
 	for id, prop := range setup.GameObjects {
-		if strings.ToLower(prop.Description.Short) == strings.ToLower(name) {
+		if strings.ToLower(prop.Description.Short) == strings.ToLower(name) ||
+			strings.ToLower(prop.Description.Alt) == strings.ToLower(name) {
 			found = true
 			obj = Object{id, prop}
 			if obj.available(area) {
