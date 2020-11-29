@@ -5,6 +5,7 @@ import (
 	"fantasia/setup"
 	"fantasia/view"
 	"fmt"
+	"strings"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -363,4 +364,56 @@ func TestSay(t *testing.T) {
 	res = actions.Object(obj).Say(area, "simsalabim")
 	assert.Equal(t, setup.Reactions["simsalabim"].Statement, res.Statement)
 	assert.True(t, res.OK)
+}
+
+func TestFill(t *testing.T) {
+	setup.Init()
+	area := setup.GetAreaByID(1)
+	sword := setup.GetObjectByID(15)
+
+	// put sword into inv
+	sword.Properties.Area = setup.INVENTORY
+	setup.GameObjects[sword.ID] = sword.Properties
+
+	res := actions.Object(sword).Fill(area)
+	s := view.Highlight(fmt.Sprintf(setup.Reactions["unusable"].Statement, sword.Properties.Description.Long), setup.RED)
+	assert.Equal(t, s, res.Statement)
+	assert.False(t, res.OK)
+
+	// fill jar
+	jar := setup.GetObjectByID(30)
+	res = actions.Object(jar).Fill(area)
+	assert.Equal(t, setup.Reactions["dontHave"].Statement, res.Statement)
+	assert.False(t, res.OK)
+
+	// put jar into inv
+	jar.Properties.Area = setup.INVENTORY
+	setup.GameObjects[jar.ID] = jar.Properties
+	res = actions.Object(jar).Fill(area)
+	assert.Equal(t, setup.Reactions["noWater"].Statement, res.Statement)
+	assert.False(t, res.OK)
+
+	// fill jar at pond
+	area = setup.GetAreaByID(3)
+	res = actions.Object(jar).Fill(area)
+	assert.Equal(t, setup.Reactions["waterUnreachable"].Statement, res.Statement)
+	assert.False(t, res.OK)
+
+	// fill jar at well
+	area = setup.GetAreaByID(17)
+	res = actions.Object(jar).Fill(area)
+	assert.Equal(t, setup.Reactions["ok"].Statement, res.Statement)
+	assert.True(t, res.OK)
+
+	// fill goblet at well
+	goblet := setup.GetObjectByID(44)
+	// put goblet into inv
+	goblet.Properties.Area = setup.INVENTORY
+	setup.GameObjects[goblet.ID] = goblet.Properties
+	res = actions.Object(goblet).Fill(area)
+	a := strings.Title(goblet.Properties.Description.Article)
+	desc := fmt.Sprintf("%s %s", a, goblet.Properties.Description.Short)
+	s = fmt.Sprintf(setup.Reactions["unsuitable"].Statement, desc)
+	assert.Equal(t, s, res.Statement)
+	assert.False(t, res.OK)
 }

@@ -4,6 +4,7 @@ import (
 	"fantasia/setup"
 	"fantasia/view"
 	"fmt"
+	"strings"
 )
 
 func (object Object) Open(area setup.Area) (r setup.Reaction) {
@@ -316,5 +317,38 @@ func (obj Object) Put(area setup.Area) (r setup.Reaction) {
 	obj.Properties.Area = area.ID
 	setup.GameObjects[obj.ID] = obj.Properties
 	r = setup.Reactions["ok"]
+	return
+}
+
+func (obj Object) Fill(area setup.Area) (r setup.Reaction) {
+	if !obj.inInventory() {
+		r = setup.Reactions["dontHave"]
+		return
+	}
+	switch obj.ID {
+	case 30:
+		r = setup.Reactions["ok"]
+	case 35, 44:
+		r = setup.Reactions["unsuitable"]
+		a := strings.Title(obj.Properties.Description.Article)
+		desc := fmt.Sprintf("%s %s", a, obj.Properties.Description.Short)
+		r.Statement = fmt.Sprintf(r.Statement, desc)
+		return
+	default:
+		r = setup.Reactions["unusable"]
+		r.Statement = fmt.Sprintf(r.Statement, view.Highlight(obj.Properties.Description.Long, setup.RED))
+		return
+	}
+
+	switch area.ID {
+	case 3, 35:
+		r = setup.Reactions["waterUnreachable"]
+	case 17:
+		r = setup.Reactions["ok"]
+		obj.Properties.Description.Long = "einen vollen Wasserkrug"
+		setup.GameObjects[obj.ID] = obj.Properties
+	default:
+		r = setup.Reactions["noWater"]
+	}
 	return
 }

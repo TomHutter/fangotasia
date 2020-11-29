@@ -359,3 +359,27 @@ reactions:
     ko: false
     color: GREEN
     sleep: -1
+  unusable:
+    statement: "Wirklich? Ich soll %s mit Wasser füllen? Wie soll das denn gehen?"
+    ok: false
+    ko: false
+    color: RED
+    sleep: 6
+  unsuitable:
+    statement: "%s eignet sich nicht dafür."
+    ok: false
+    ko: false
+    color: RED
+    sleep: 4
+  noWater:
+    statement: "Hier ist weit und breit kein Wasser zu sehen."
+    ok: false
+    ko: false
+    color: RED
+    sleep: 4
+  waterUnreachable:
+    statement: "Ich kann das Wasser nicht erreichen."
+    ok: false
+    ko: false
+    color: RED
+    sleep: 4

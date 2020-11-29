@@ -20,9 +20,6 @@ verbs:
   - name: load
     func: Load
     single: false
-  - name: fantasia
-    func: Fantasia
-    single: true
   - name: ende
     func: End
     single: true
@@ -47,9 +44,6 @@ verbs:
   - name: trage
     func: Use
     single: false
-  - name: simsalabim
-    func: Simsalabim
-    single: true
   - name: sag
     func: Say
     single: false
