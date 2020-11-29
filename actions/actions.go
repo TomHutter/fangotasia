@@ -352,3 +352,23 @@ func (obj Object) Fill(area setup.Area) (r setup.Reaction) {
 	}
 	return
 }
+
+func (obj Object) Feed(area setup.Area) (r setup.Reaction) {
+	switch obj.ID {
+	case 10, 18, 36, 24:
+		r = setup.Reactions["feed"]
+		a := strings.Title(obj.Properties.Description.Article)
+		desc := fmt.Sprintf("%s %s", a, obj.Properties.Description.Short)
+		r.Statement = fmt.Sprintf(setup.Reactions["feed"].Statement, desc)
+	case 16:
+		berries := Object(setup.GetObjectByID(23))
+		if berries.inInventory() {
+			r = setup.Reactions["feedBaerWithBerries"]
+		} else {
+			r = setup.Reactions["feedBaer"]
+		}
+	default:
+		r = setup.Reactions["dontKnowHow"]
+	}
+	return
+}

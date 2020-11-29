@@ -383,3 +383,21 @@ reactions:
     ko: false
     color: RED
     sleep: 4
+  feed:
+    statement: "%s hat keinen Hunger."
+    ok: false
+    ko: false
+    color: RED
+    sleep: 3
+  feedBaer:
+    statement: "Der Bär ist sehr hungrig und frisst\n... \nmich!"
+    ok: false
+    ko: true
+    color: RED
+    sleep: 6
+  feedBaerWithBerries:
+    statement: "Der Bär verschlingt die Beeren und läuft davon."
+    ok: true
+    ko: false
+    color: GREEN
+    sleep: 4

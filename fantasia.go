@@ -189,6 +189,9 @@ func main() {
 	text = append(text, surroundings...)
 	view.PrintScreen(text)
 	area = actions.Parse("sag simsalabim", area, text)
+	area = actions.Parse("benutze karte", area, text)
+	area = actions.Parse("füttere tafel", area, text)
+
 	/*
 		actions.Parse("nimm zauberschuhe", area, text)
 		actions.Parse("trage zauberschuhe", area, text)

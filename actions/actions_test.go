@@ -417,3 +417,39 @@ func TestFill(t *testing.T) {
 	assert.Equal(t, s, res.Statement)
 	assert.False(t, res.OK)
 }
+
+func TestFeed(t *testing.T) {
+	setup.Init()
+	area := setup.GetAreaByID(1)
+	panel := setup.GetObjectByID(32)
+
+	// feed panel
+	res := actions.Object(panel).Feed(area)
+	assert.Equal(t, setup.Reactions["dontKnowHow"].Statement, res.Statement)
+	assert.False(t, res.OK)
+
+	// feed panel
+	area = setup.GetAreaByID(18)
+	dwarf := setup.GetObjectByID(18)
+	res = actions.Object(dwarf).Feed(area)
+	a := strings.Title(dwarf.Properties.Description.Article)
+	desc := fmt.Sprintf("%s %s", a, dwarf.Properties.Description.Short)
+	assert.Equal(t, fmt.Sprintf(setup.Reactions["feed"].Statement, desc), res.Statement)
+	assert.False(t, res.OK)
+
+	// feed baer
+	area = setup.GetAreaByID(19)
+	baer := setup.GetObjectByID(16)
+	res = actions.Object(baer).Feed(area)
+	assert.Equal(t, setup.Reactions["feedBaer"].Statement, res.Statement)
+	assert.False(t, res.OK)
+
+	berries := setup.GetObjectByID(23)
+	// put berries into inv
+	berries.Properties.Area = setup.INVENTORY
+	setup.GameObjects[berries.ID] = berries.Properties
+	// feed baer
+	res = actions.Object(baer).Feed(area)
+	assert.Equal(t, setup.Reactions["feedBaerWithBerries"].Statement, res.Statement)
+	assert.True(t, res.OK)
+}
