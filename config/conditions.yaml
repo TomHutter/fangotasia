@@ -1,0 +1,6 @@
+conditions:
+  doorSouth: eine Tür im Süden 
+  doorNorth: eine Tür im Norden
+  jarFull: einen vollen Wasserkrug 
+  jarEmpty: einen leeren Wasserkrug 
+  goldenRing: ein ring aus Goldfäden

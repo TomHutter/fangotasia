@@ -372,3 +372,25 @@ func (obj Object) Feed(area setup.Area) (r setup.Reaction) {
 	}
 	return
 }
+
+func (obj Object) Cut(area setup.Area) (r setup.Reaction) {
+	if obj.ID != 14 {
+		r = setup.Reactions["dontKnowHow"]
+		return
+	}
+	ring := Object(setup.GetObjectByID(37))
+	// ring already present?
+	if ring.Properties.Area != 0 {
+		r = setup.Reactions["fruitAlreadyCut"]
+		return
+	}
+	dagger := Object(setup.GetObjectByID(33))
+	if !dagger.inInventory() {
+		r = setup.Reactions["noTool"]
+		return
+	}
+	r = setup.Reactions["cutFruit"]
+	ring.Properties.Area = area.ID
+	setup.GameObjects[ring.ID] = ring.Properties
+	return
+}

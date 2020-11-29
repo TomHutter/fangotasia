@@ -401,3 +401,15 @@ reactions:
     ko: false
     color: GREEN
     sleep: 4
+  cutFruit:
+    statement: "Ich habe die Frucht geteilt und etwas\nfällt heraus."
+    ok: true
+    ko: false
+    color: GREEN
+    sleep: 4
+  fruitAlreadyCut:
+    statement: "Die Frucht ist bereits zerteilt."
+    ok: true
+    ko: false
+    color: GREEN
+    sleep: 3

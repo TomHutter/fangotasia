@@ -453,3 +453,36 @@ func TestFeed(t *testing.T) {
 	assert.Equal(t, setup.Reactions["feedBaerWithBerries"].Statement, res.Statement)
 	assert.True(t, res.OK)
 }
+
+func TestCut(t *testing.T) {
+	setup.Init()
+	area := setup.GetAreaByID(1)
+	panel := setup.GetObjectByID(32)
+
+	// cut panel
+	res := actions.Object(panel).Cut(area)
+	assert.Equal(t, setup.Reactions["dontKnowHow"].Statement, res.Statement)
+	assert.False(t, res.OK)
+
+	// cut fruit
+	area = setup.GetAreaByID(26)
+	fruit := setup.GetObjectByID(14)
+	res = actions.Object(fruit).Cut(area)
+	assert.Equal(t, setup.Reactions["noTool"].Statement, res.Statement)
+	assert.False(t, res.OK)
+
+	// put dagger into inv
+	dagger := setup.GetObjectByID(33)
+	dagger.Properties.Area = setup.INVENTORY
+	setup.GameObjects[dagger.ID] = dagger.Properties
+	res = actions.Object(fruit).Cut(area)
+	assert.Equal(t, setup.Reactions["cutFruit"].Statement, res.Statement)
+	assert.True(t, res.OK)
+	// ring present?
+	ring := setup.GetObjectByID(37)
+	assert.Equal(t, area.ID, ring.Properties.Area)
+
+	res = actions.Object(fruit).Cut(area)
+	assert.Equal(t, setup.Reactions["fruitAlreadyCut"].Statement, res.Statement)
+	assert.True(t, res.OK)
+}
