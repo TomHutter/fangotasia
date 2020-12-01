@@ -249,6 +249,16 @@ func (obj Object) Throw(area setup.Area) (r setup.Reaction) {
 	return
 }
 
+func (obj Object) Look(area setup.Area) (r setup.Reaction) {
+	switch obj.ID {
+	case 21:
+		r = setup.Reactions["wallpainting"]
+	default:
+		r = setup.Reactions["looksGood"]
+	}
+	return
+}
+
 func (obj Object) Read(area setup.Area) (r setup.Reaction) {
 	var reaction = map[int]string{
 		11: "book",
@@ -269,7 +279,7 @@ func (obj Object) Read(area setup.Area) (r setup.Reaction) {
 		}
 	}
 	switch obj.ID {
-	case 11, 12, 17, 28, 38, 43, 47:
+	case 11, 12, 17, 21, 28, 38, 43, 47:
 		r = setup.Reactions[reaction[obj.ID]]
 	case 32:
 		r = setup.Reactions[reaction[obj.ID]]
@@ -431,7 +441,7 @@ func (obj Object) Eat(area setup.Area) (r setup.Reaction) {
 	return
 }
 
-func (jar Object) Drink() (r setup.Reaction) {
+func (jar Object) Drink(area setup.Area) (r setup.Reaction) {
 	if !jar.inInventory() {
 		r = setup.Reactions["noTool"]
 		return
@@ -439,7 +449,6 @@ func (jar Object) Drink() (r setup.Reaction) {
 	if jar.Properties.Description.Long == setup.Conditions["jar"]["empty"] {
 		r = setup.Reactions["jarEmpty"]
 	}
-	fmt.Println(setup.Conditions["jar"]["full"])
 	if jar.Properties.Description.Long == setup.Conditions["jar"]["full"] {
 		jar.NewCondition(setup.Conditions["jar"]["empty"])
 		r = setup.Reactions["drinkJar"]

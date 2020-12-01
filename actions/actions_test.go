@@ -520,25 +520,26 @@ func TestCatapult(t *testing.T) {
 
 func TestDrink(t *testing.T) {
 	setup.Setup()
+	area := setup.GetAreaByID(1)
 	jar := actions.Object(setup.GetObjectByID(30))
 
 	// drinking only from jar
-	res := jar.Drink()
+	res := jar.Drink(area)
 	assert.Equal(t, setup.Reactions["noTool"].Statement, res.Statement)
 	assert.False(t, res.OK)
 
 	// put jar into inv
 	jar.NewAreaID(setup.INVENTORY)
-	res = jar.Drink()
+	res = jar.Drink(area)
 	assert.Equal(t, setup.Reactions["jarEmpty"].Statement, res.Statement)
 	assert.False(t, res.OK)
 
 	// fill jar
-	area := setup.GetAreaByID(17)
+	area = setup.GetAreaByID(17)
 	jar.Fill(area)
 	// reload jar
 	jar = actions.Object(setup.GetObjectByID(30))
-	res = jar.Drink()
+	res = jar.Drink(area)
 	assert.Equal(t, setup.Reactions["drinkJar"].Statement, res.Statement)
 	jar = actions.Object(setup.GetObjectByID(30))
 	assert.True(t, res.OK)

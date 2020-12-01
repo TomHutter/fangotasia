@@ -73,21 +73,24 @@ func Parse(input string, area setup.Area, text []string) setup.Area {
 
 	argv := make([]reflect.Value, 0)
 
-	switch knownVerb.Name {
-	case "n", "s", "o", "w":
+	switch knownVerb.Func {
+	case "Move":
 		obj = Object{}
 		argv = append(argv, reflect.ValueOf(area))
 		argv = append(argv, reflect.ValueOf(knownVerb.Name))
-	case "load":
+	case "Load":
 		obj = Object{}
 		argv = append(argv, reflect.ValueOf(area))
-	case "save":
+	case "Save":
 		obj = Object{}
 		argv = append(argv, reflect.ValueOf(area))
-	case "sag":
+	case "Say":
 		obj = Object{}
 		argv = append(argv, reflect.ValueOf(area))
 		argv = append(argv, reflect.ValueOf(strings.ToLower(parts[0])))
+	case "Drink":
+		obj = Object(setup.GetObjectByID(30))
+		argv = append(argv, reflect.ValueOf(area))
 	default:
 		if len(parts) < 1 {
 			answer := setup.Reactions["needObject"]

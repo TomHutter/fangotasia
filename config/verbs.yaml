@@ -7,7 +7,10 @@ verbs:
     single: false
   - name: schau
     func: Look
-    single: true
+    single: false
+  - name: betrachte
+    func: Look
+    single: false
   - name: inventar
     func: Inventory
     single: true
@@ -83,7 +86,7 @@ verbs:
   - name: spring
     func: Jump
     single: true
-  - name: trinke
+  - name: trink
     func: Drink
     single: false
   - name: verben

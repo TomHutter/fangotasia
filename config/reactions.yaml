@@ -467,3 +467,9 @@ reactions:
     ko: false
     color: GREEN
     sleep: 6
+  looksGood:
+    statement: "Sieht verdammt gut aus!"
+    ok: true
+    ko: false
+    color: GREEN
+    sleep: 3
