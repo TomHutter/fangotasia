@@ -4,6 +4,7 @@ import (
 	"fantasia/actions"
 	"fantasia/movement"
 	"fantasia/setup"
+	"os"
 	"strings"
 	"testing"
 
@@ -11,7 +12,9 @@ import (
 )
 
 func TestInit(t *testing.T) {
-	setup.Init()
+	path, _ := os.Getwd()
+	setup.PathName = path + "/../"
+	setup.Setup()
 }
 
 func TestSurroundings(t *testing.T) {

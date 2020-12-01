@@ -3,8 +3,6 @@ package setup
 import (
 	"io/ioutil"
 	"log"
-	"path"
-	"runtime"
 	"strings"
 
 	"gopkg.in/yaml.v2"
@@ -118,6 +116,7 @@ type Reaction struct {
 
 type Condition map[string]string
 
+var PathName string
 var GameObjects map[int]ObjectProperties
 var GameAreas map[int]AreaProperties
 var Overwrites []MapOverwrites
@@ -151,9 +150,9 @@ func (c *conf) getConf(filename string) {
 	}
 }
 
-func getMapOverwrites(pathname string) (overwrites []MapOverwrites) {
+func getMapOverwrites() (overwrites []MapOverwrites) {
 	var c conf
-	c.getConf(pathname + "/../config/map_overwrites.yaml")
+	c.getConf(PathName + "/config/map_overwrites.yaml")
 	for _, v := range c.Overwrites {
 		var o MapOverwrites
 		o.Area = v.Area
@@ -181,21 +180,19 @@ func initBoxLen() {
 	BoxLen = BoxLen + 2 // one blank and border left and right
 }
 
-func Init() {
+func Setup() {
 	var c conf
-	_, filename, _, _ := runtime.Caller(0)
-	pathname := path.Dir(filename)
-	c.getConf(pathname + "/../config/objects.yaml")
+	c.getConf(PathName + "/config/objects.yaml")
 	GameObjects = c.Objects
-	c.getConf(pathname + "/../config/locations.yaml")
+	c.getConf(PathName + "/config/locations.yaml")
 	GameAreas = c.Locations
-	c.getConf(pathname + "/../config/reactions.yaml")
+	c.getConf(PathName + "/config/reactions.yaml")
 	Reactions = c.Reactions
-	c.getConf(pathname + "/../config/verbs.yaml")
+	c.getConf(PathName + "/config/verbs.yaml")
 	Verbs = c.Verbs
-	c.getConf(pathname + "/../config/conditions.yaml")
+	c.getConf(PathName + "/config/conditions.yaml")
 	Conditions = c.Contitions
-	Overwrites = getMapOverwrites(pathname)
+	Overwrites = getMapOverwrites()
 	initBoxLen()
 	initMap()
 	Flags = make(map[string]bool, 3)

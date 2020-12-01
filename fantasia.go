@@ -84,6 +84,11 @@ func setupCloseHandler() {
 	176 fori=1to51:forj=0to3:readr(i,j):next:next
 */
 //}
+func init() {
+	setup.PathName, _ = os.Getwd()
+	//_, filename, _, _ := runtime.Caller(0)
+	//setup.PathName = path.Dir(filename)
+}
 
 func main() {
 
@@ -104,7 +109,7 @@ func main() {
 	//verbs := c.Verbs
 	//c.getConf("nouns.yaml")
 	//nouns := c.Nouns
-	setup.Init()
+	setup.Setup()
 	/*
 		c.getConf("config/objects.yaml")
 		objects = c.Objects

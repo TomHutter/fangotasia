@@ -63,7 +63,7 @@ func GameOver() {
 	view.PrintScreen(board)
 	res := view.Scanner("once: true")
 	if strings.ToLower(res) == "j" {
-		setup.Init()
+		setup.Setup()
 	}
 	/*
 		621 poke214,9:poke211,13:sysvd:printb$"-rang ";

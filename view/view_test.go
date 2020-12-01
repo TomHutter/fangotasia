@@ -3,13 +3,16 @@ package view_test
 import (
 	"fantasia/setup"
 	"fantasia/view"
+	"os"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
 )
 
 func TestInit(t *testing.T) {
-	setup.Init()
+	path, _ := os.Getwd()
+	setup.PathName = path + "/../"
+	setup.Setup()
 }
 
 func TestFlashNotice(t *testing.T) {

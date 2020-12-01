@@ -5,18 +5,22 @@ import (
 	"fantasia/setup"
 	"fantasia/view"
 	"fmt"
+	"os"
 	"strings"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
 )
 
-func TestInit(t *testing.T) {
-	setup.Init()
+func TestSetup(t *testing.T) {
+	path, _ := os.Getwd()
+	setup.PathName = path + "/../"
+	fmt.Println(setup.PathName)
+	setup.Setup()
 }
 
 func TestParse(t *testing.T) {
-	setup.Init()
+	setup.Setup()
 	var text = []string{}
 	// go to area 1
 	area1 := setup.GetAreaByID(1)
@@ -29,7 +33,7 @@ func TestParse(t *testing.T) {
 	assert.Equal(t, area2, area)
 }
 func TestTake(t *testing.T) {
-	setup.Init()
+	setup.Setup()
 	// go to area 1
 	area := setup.GetAreaByID(1)
 	// pick up dwarf
@@ -114,7 +118,7 @@ func TestMove(t *testing.T) {
 }
 
 func TestUse(t *testing.T) {
-	setup.Init()
+	setup.Setup()
 	// go to area 1
 	area := setup.GetAreaByID(1)
 	// pick magic shoes
@@ -307,7 +311,7 @@ func TestOpen(t *testing.T) {
 }
 
 func TestPut(t *testing.T) {
-	setup.Init()
+	setup.Setup()
 	area := setup.GetAreaByID(1)
 	sword := actions.Object(setup.GetObjectByID(15))
 	dagger := actions.Object(setup.GetObjectByID(33))
@@ -328,7 +332,7 @@ func TestPut(t *testing.T) {
 }
 
 func TestSay(t *testing.T) {
-	setup.Init()
+	setup.Setup()
 	area := setup.GetAreaByID(1)
 	sword := actions.Object(setup.GetObjectByID(15))
 	dagger := actions.Object(setup.GetObjectByID(33))
@@ -360,7 +364,7 @@ func TestSay(t *testing.T) {
 }
 
 func TestFill(t *testing.T) {
-	setup.Init()
+	setup.Setup()
 	area := setup.GetAreaByID(1)
 	sword := actions.Object(setup.GetObjectByID(15))
 
@@ -409,7 +413,7 @@ func TestFill(t *testing.T) {
 }
 
 func TestFeed(t *testing.T) {
-	setup.Init()
+	setup.Setup()
 	area := setup.GetAreaByID(1)
 	panel := actions.Object(setup.GetObjectByID(32))
 
@@ -475,7 +479,7 @@ func TestCut(t *testing.T) {
 }
 
 func TestCatapult(t *testing.T) {
-	setup.Init()
+	setup.Setup()
 	area := setup.GetAreaByID(1)
 	stone := actions.Object(setup.GetObjectByID(20))
 	dagger := actions.Object(setup.GetObjectByID(33))
@@ -512,22 +516,10 @@ func TestCatapult(t *testing.T) {
 	assert.Equal(t, 29, actions.Object(setup.GetObjectByID(stone.ID)).Properties.Area)
 	grub := actions.Object(setup.GetObjectByID(10))
 	assert.Equal(t, 0, grub.Properties.Area)
-	/*
-		res = fruit.Cut(area)
-		assert.Equal(t, setup.Reactions["cutFruit"].Statement, res.Statement)
-		assert.True(t, res.OK)
-		// ring present?
-		ring := setup.GetObjectByID(37)
-		assert.Equal(t, area.ID, ring.Properties.Area)
-
-		res = fruit.Cut(area)
-		assert.Equal(t, setup.Reactions["fruitAlreadyCut"].Statement, res.Statement)
-		assert.True(t, res.OK)
-	*/
 }
 
 func TestDrink(t *testing.T) {
-	setup.Init()
+	setup.Setup()
 	jar := actions.Object(setup.GetObjectByID(30))
 
 	// drinking only from jar
@@ -554,7 +546,7 @@ func TestDrink(t *testing.T) {
 }
 
 func TestEat(t *testing.T) {
-	setup.Init()
+	setup.Setup()
 	area := setup.GetAreaByID(17)
 	jar := actions.Object(setup.GetObjectByID(30))
 	cake := actions.Object(setup.GetObjectByID(9))
@@ -587,7 +579,7 @@ func TestEat(t *testing.T) {
 }
 
 func TestSpin(t *testing.T) {
-	setup.Init()
+	setup.Setup()
 	area := setup.GetAreaByID(27)
 	jar := actions.Object(setup.GetObjectByID(30))
 	ring := actions.Object(setup.GetObjectByID(37))
@@ -620,7 +612,7 @@ func TestSpin(t *testing.T) {
 }
 
 func TestWater(t *testing.T) {
-	setup.Init()
+	setup.Setup()
 	area := setup.GetAreaByID(14)
 	jar := actions.Object(setup.GetObjectByID(30))
 	bush := actions.Object(setup.GetObjectByID(22))

@@ -2,13 +2,16 @@ package setup_test
 
 import (
 	"fantasia/setup"
+	"os"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
 )
 
 func TestInit(t *testing.T) {
-	setup.Init()
+	path, _ := os.Getwd()
+	setup.PathName = path + "/../"
+	setup.Setup()
 	assert.Greater(t, len(setup.GameObjects), 1)
 	assert.Greater(t, len(setup.GameAreas), 1)
 	assert.Greater(t, len(setup.Overwrites), 1)
