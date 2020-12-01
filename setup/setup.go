@@ -130,6 +130,11 @@ var Flags map[string]bool
 var Map [12][10]int
 
 func initMap() {
+	for y := 0; y < 12; y++ {
+		for x := 0; x < 10; x++ {
+			Map[y][x] = 0
+		}
+	}
 	Map[11][0] = 1
 }
 

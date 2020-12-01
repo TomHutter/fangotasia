@@ -62,9 +62,11 @@ func GameOver() {
 	board = append(board, fmt.Sprint("Noch ein Spiel (j/n)?"))
 	view.PrintScreen(board)
 	res := view.Scanner("once: true")
-	if strings.ToLower(res) == "j" {
-		setup.Setup()
+	if strings.ToLower(res) != "j" {
+		exec.Command("stty", "-F", "/dev/tty", "echo").Run()
+		os.Exit(0)
 	}
+	setup.Setup()
 	/*
 		621 poke214,9:poke211,13:sysvd:printb$"-rang ";
 		622 ifpu=0thenprint"10 -":goto632
@@ -79,8 +81,6 @@ func GameOver() {
 		631 ifpu=200thenprint"1 -"
 	*/
 	//return true
-	exec.Command("stty", "-F", "/dev/tty", "echo").Run()
-	os.Exit(0)
 }
 
 //func (obj object) hit(inv []string) {
