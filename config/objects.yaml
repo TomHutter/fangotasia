@@ -288,3 +288,11 @@ objects:
       article: die
     area: 31
     value: 0
+  48:
+    description:
+      long: "eine nutzloser Gegenstand" 
+      short: Gegenstand
+      alt: Gegenstand
+      article: der
+    area: 0
+    value: 0

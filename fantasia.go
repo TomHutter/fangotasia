@@ -17,7 +17,6 @@ import (
 ToDos:
 - func Jump
 - func Help
-- func End
 - func Chase
 */
 
@@ -189,12 +188,19 @@ func main() {
 	//actions.Parse("stich Gnom", area, text)
 	//actions.Parse("Inventar", area, text)
 	//surroundings = movement.Surroundings(area)
+	actions.Parse("nimm zauberschuhe", area, text)
+	actions.Parse("trage zauberschuhe", area, text)
+	area = actions.Parse("o", area, text)
+	area = actions.Parse("w", area, text)
+	area = actions.Parse("o", area, text)
+	area = actions.Parse("n", area, text)
+	area = actions.Parse("o", area, text)
+	area = actions.Parse("klettere baum", area, text)
+	area = actions.Parse("klettere baum", area, text)
+	area = actions.Parse("klettere baum", area, text)
+	area = actions.Parse("klettere baum", area, text)
+	area = actions.Parse("w", area, text)
 	/*
-		actions.Parse("nimm zauberschuhe", area, text)
-		actions.Parse("trage zauberschuhe", area, text)
-		area = actions.Parse("o", area, text)
-		area = actions.Parse("o", area, text)
-		actions.Parse("nimm zwergendolch", area, text)
 		actions.Parse("Inventar", area, text)
 		area = actions.Parse("w", area, text)
 		area = actions.Parse("w", area, text)

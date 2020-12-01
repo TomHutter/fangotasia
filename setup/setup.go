@@ -124,6 +124,7 @@ var Reactions map[string]Reaction
 var Conditions map[string]Condition
 var Verbs []Verb
 
+var Cycles int
 var BoxLen int
 var Flags map[string]bool
 

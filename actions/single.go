@@ -39,3 +39,11 @@ func (v *verb) Inventory() (inv []string, sleep int) {
 	sleep = -1
 	return
 }
+
+func (v *verb) End() (r []string, sleep int) {
+
+	r = append(r, "Yippeeee....")
+	sleep = 3
+	GameOver(false)
+	return
+}

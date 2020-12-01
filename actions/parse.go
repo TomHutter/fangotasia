@@ -87,7 +87,11 @@ func Parse(input string, area setup.Area, text []string) setup.Area {
 	case "Say":
 		obj = Object{}
 		argv = append(argv, reflect.ValueOf(area))
-		argv = append(argv, reflect.ValueOf(strings.ToLower(parts[0])))
+		if len(parts) > 0 {
+			argv = append(argv, reflect.ValueOf(strings.Join(parts, " ")))
+		} else {
+			argv = append(argv, reflect.ValueOf(""))
+		}
 	case "Drink":
 		obj = Object(setup.GetObjectByID(30))
 		argv = append(argv, reflect.ValueOf(area))
@@ -158,7 +162,7 @@ func Parse(input string, area setup.Area, text []string) setup.Area {
 	// KO
 	if val[0].Field(2).Bool() == true {
 		view.FlashNotice()
-		GameOver()
+		GameOver(true)
 	}
 	return area
 }

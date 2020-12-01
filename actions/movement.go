@@ -5,6 +5,22 @@ import (
 	"fantasia/setup"
 )
 
+func cycles(areaID int) {
+	if areaID == 1 {
+		setup.Cycles = 1
+	} else {
+		setup.Cycles += areaID
+	}
+
+	if setup.Cycles == 108 {
+		imke := Object(setup.GetObjectByID(48))
+		imke.Properties.Description.Long = "\033[01;95mIMKE\033[0m den pink Diamanten"
+		imke.Properties.Description.Short = "Imke"
+		imke.NewAreaID(areaID)
+		//setup.GameObjects[imke.ID] = imke.Properties
+	}
+}
+
 // As Move is called in context of object handling, Move reflects on Object even obj is not used.
 func (obj Object) Move(area setup.Area, dir string) (r setup.Reaction, areaID int) {
 	//func Move(area int, direction int, text []string) int {
@@ -28,6 +44,8 @@ func (obj Object) Move(area setup.Area, dir string) (r setup.Reaction, areaID in
 		//view.Flash(text, "In diese Richtung führt kein Weg.")
 		//return area
 	}
+
+	cycles(newArea)
 
 	// barefoot on unknown terrain?
 	if !Object(setup.GetObjectByID(31)).inUse() {
@@ -62,12 +80,14 @@ func (obj Object) Move(area setup.Area, dir string) (r setup.Reaction, areaID in
 
 func (object Object) Climb(area setup.Area) (r setup.Reaction, areaID int) {
 	if area.ID == 31 {
+		cycles(area.ID)
 		moves += 1
 		r.OK = true
 		areaID = 9
 		return
 	}
 	if area.ID == 9 && object.ID == 27 {
+		cycles(area.ID)
 		movement.RevealArea(31)
 		moves += 1
 		treetop := setup.GetAreaByID(31)

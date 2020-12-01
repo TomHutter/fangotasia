@@ -9,10 +9,12 @@ import (
 	"strings"
 )
 
-func GameOver() {
+func GameOver(KO bool) {
 	var board []string
 	sum := 0
-	board = append(board, fmt.Sprintln("G A M E    O V E R"))
+	if KO {
+		board = append(board, fmt.Sprintln("G A M E    O V E R"))
+	}
 	//board = append(board, fmt.Sprint(""))
 	inv := setup.ObjectsInArea(setup.GetAreaByID(setup.INVENTORY))
 	if len(inv) > 0 {
@@ -59,14 +61,22 @@ func GameOver() {
 	}
 	board = append(board, fmt.Sprint(""))
 	board = append(board, fmt.Sprintf("Du hast %d von 200 Punkten!", sum))
-	board = append(board, fmt.Sprint("Noch ein Spiel (j/n)?"))
+	if KO {
+		board = append(board, fmt.Sprint("Noch ein Spiel? (j/n)"))
+	} else {
+		board = append(board, fmt.Sprint("Ach komm, noch 5 Minuten? (j/n)"))
+	}
 	view.PrintScreen(board)
 	res := view.Scanner("once: true")
 	if strings.ToLower(res) != "j" {
 		exec.Command("stty", "-F", "/dev/tty", "echo").Run()
 		os.Exit(0)
 	}
-	setup.Setup()
+	//fmt.Println("\nYippeee ......")
+	//time.Sleep(time.Duration(3) * time.Second)
+	if KO {
+		setup.Setup()
+	}
 	/*
 		621 poke214,9:poke211,13:sysvd:printb$"-rang ";
 		622 ifpu=0thenprint"10 -":goto632
