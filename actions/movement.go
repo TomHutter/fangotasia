@@ -14,7 +14,7 @@ func cycles(areaID int) {
 
 	if setup.Cycles == 108 {
 		imke := Object(setup.GetObjectByID(48))
-		imke.Properties.Description.Long = "\033[01;95mIMKE\033[0m den pink Diamanten"
+		imke.Properties.Description.Long = "\033[01;95m<IMKE>\033[01;34m den pink Diamanten"
 		imke.Properties.Description.Short = "Imke"
 		imke.NewAreaID(areaID)
 		//setup.GameObjects[imke.ID] = imke.Properties

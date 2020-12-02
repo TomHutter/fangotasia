@@ -112,6 +112,10 @@ func (object Object) Take(area setup.Area) (r setup.Reaction) {
 	case 32, 43:
 		r = setup.Reactions["unreachable"]
 		return
+	case 48:
+		r = setup.Reactions["takeImke"]
+		r.Statement = fmt.Sprintf(r.Statement, "\033[01;95m<Imke>\033[01;32m")
+		return
 	case 47:
 		if area.ID == 31 {
 			r = setup.Reactions["unreachable"]

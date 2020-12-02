@@ -290,7 +290,7 @@ objects:
     value: 0
   48:
     description:
-      long: "eine nutzloser Gegenstand" 
+      long: "ein unbekannter Gegenstand"
       short: Gegenstand
       alt: Gegenstand
       article: der

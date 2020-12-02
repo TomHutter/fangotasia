@@ -137,7 +137,7 @@ reactions:
     statement: "Ich habe nichts dabei."
     ok: true
     ko: false
-    color: GREEN
+    color: RED
     sleep: 2
   inv:
     statement: "Ich habe:"
@@ -473,3 +473,9 @@ reactions:
     ko: false
     color: GREEN
     sleep: 3
+  takeImke:
+    statement: "Ich kann %s nicht einfach so nehmen.\n\nIch freue mich einfach, dass sie da ist."
+    ok: true
+    ko: false
+    color: GREEN
+    sleep: 6

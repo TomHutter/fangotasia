@@ -28,6 +28,7 @@ func (v *verb) Inventory() (inv []string, sleep int) {
 	if len(objects) == 0 {
 		//fmt.Println("Ich habe nichts dabei.")
 		inv = append(inv, setup.Reactions["invEmpty"].Statement)
+		sleep = 2
 		return
 	}
 
