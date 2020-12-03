@@ -75,7 +75,7 @@ verbs:
     func: Take
     single: false
   - name: verjage
-    func: Chase
+    func: Scare
     single: false
   - name: lege
     func: Put
@@ -85,7 +85,7 @@ verbs:
     single: false
   - name: spring
     func: Jump
-    single: true
+    single: false
   - name: trink
     func: Drink
     single: false

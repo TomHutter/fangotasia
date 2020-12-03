@@ -3,6 +3,8 @@ package actions
 import (
 	"fantasia/movement"
 	"fantasia/setup"
+	"math/rand"
+	"time"
 )
 
 func beads(areaID int) {
@@ -22,10 +24,6 @@ func beads(areaID int) {
 
 // As Move is called in context of object handling, Move reflects on Object even obj is not used.
 func (obj Object) Move(area setup.Area, dir string) (r setup.Reaction, areaID int) {
-	//func Move(area int, direction int, text []string) int {
-	//if direction == 0 {
-	//	return 0, "Ich brauche eine Richtung."
-	//}
 	// wearing the hood?
 	hood := Object(setup.GetObjectByID(13))
 	if Object(hood).inUse() {
@@ -40,8 +38,6 @@ func (obj Object) Move(area setup.Area, dir string) (r setup.Reaction, areaID in
 		r = setup.Reactions["noWay"]
 		areaID = area.ID
 		return
-		//view.Flash(text, "In diese Richtung führt kein Weg.")
-		//return area
 	}
 
 	beads(newArea)
@@ -58,8 +54,6 @@ func (obj Object) Move(area setup.Area, dir string) (r setup.Reaction, areaID in
 		r = setup.Reactions["locked"]
 		areaID = area.ID
 		return
-		//view.Flash(text, "Die Tür ist versperrt.")
-		//return area
 	}
 	movement.RevealArea(newArea)
 	moves += 1
@@ -106,5 +100,23 @@ func (object Object) Climb(area setup.Area) (r setup.Reaction, areaID int) {
 		areaID = area.ID
 		return
 	}
+	return
+}
+
+func (object Object) Jump(area setup.Area) (r setup.Reaction, areaID int) {
+	if area.ID == 31 {
+		rand.Seed(time.Now().UnixNano())
+		if rand.Intn(4) > 0 {
+			r = setup.Reactions["jumpTree"]
+			return
+		} else {
+			beads(area.ID)
+			moves += 1
+			r.OK = true
+			areaID = 9
+			return
+		}
+	}
+	r = setup.Reactions["jump"]
 	return
 }

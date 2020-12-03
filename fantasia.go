@@ -2,6 +2,7 @@ package main
 
 import (
 	"fantasia/actions"
+	"fantasia/intro"
 	"fantasia/movement"
 	"fantasia/setup"
 	"fantasia/view"
@@ -13,13 +14,6 @@ import (
 	"unicode/utf8"
 )
 
-/*
-ToDos:
-- func Jump
-- func Help
-- func Chase
-*/
-
 // Setup keyboard scanning
 func scanner() (r rune) {
 	var b []byte = make([]byte, 4)
@@ -28,42 +22,6 @@ func scanner() (r rune) {
 	//fmt.Println(b)
 	//fmt.Println(r)
 	return
-}
-
-func intro() {
-	var text = []string{
-		"\033[01;34mMach Dich auf den gefahrenreichen Weg in",
-		"das zauberhafte Land Fantasia und suche",
-		"nach märchenhaften Schätzen.",
-		"Führe mich mit einfachen Kommandos in",
-		"einem oder zwei Worten, z.B.:",
-		"",
-		"\033[01;33mNORDEN      BENUTZE TARNKAPPE      ENDE",
-		"",
-		"LEGE RUBIN     TÖTE DRACHE     INVENTAR",
-		"",
-		"\033[01;34mMit  \033[01;97mSAVE  \033[01;34mkannst Du den aktuellen Stand",
-		"des Spieles abspeichern,",
-		"mit  \033[01;97mLOAD  \033[01;34mwieder einlesen.",
-		"\033[0mWeiter \u23CE",
-	}
-	view.PrintScreen(text)
-	view.Scanner("once: true")
-}
-
-func prelude() {
-	var text = []string{
-		"\033[01;31mF A N T A S I A",
-		"",
-		"\033[01;34m- Ein Adventure von Klaus Hartmuth -",
-		"",
-		"\033[01;33m- GO Version von Tom Hutter -",
-		"",
-		"\033[0mWeiter \u23CE",
-	}
-	view.PrintScreen(text)
-	view.Scanner("once: true")
-	//scanner()
 }
 
 func setupCloseHandler() {
@@ -77,16 +35,8 @@ func setupCloseHandler() {
 	}()
 }
 
-//func directions() {
-/*
-	        175 rem ** richtungen *****************
-	176 fori=1to51:forj=0to3:readr(i,j):next:next
-*/
-//}
 func init() {
 	setup.PathName, _ = os.Getwd()
-	//_, filename, _, _ := runtime.Caller(0)
-	//setup.PathName = path.Dir(filename)
 }
 
 func main() {
@@ -151,8 +101,8 @@ func main() {
 
 	// Setup our Ctrl+C handler
 	setupCloseHandler()
-	prelude()
-	intro()
+	intro.Prelude()
+	intro.Intro()
 	area := setup.GetAreaByID(1)
 	//oldArea := area
 	movement.RevealArea(area.ID)
@@ -188,20 +138,23 @@ func main() {
 	//actions.Parse("stich Gnom", area, text)
 	//actions.Parse("Inventar", area, text)
 	//surroundings = movement.Surroundings(area)
-	actions.Parse("Inventar", area, text)
-	actions.Parse("nimm zauberschuhe", area, text)
-	actions.Parse("Inventar", area, text)
-	actions.Parse("trage zauberschuhe", area, text)
-	area = actions.Parse("o", area, text)
-	area = actions.Parse("w", area, text)
-	area = actions.Parse("o", area, text)
-	area = actions.Parse("n", area, text)
-	area = actions.Parse("o", area, text)
-	area = actions.Parse("klettere baum", area, text)
-	area = actions.Parse("klettere baum", area, text)
-	area = actions.Parse("klettere baum", area, text)
-	area = actions.Parse("klettere baum", area, text)
-	area = actions.Parse("w", area, text)
+	/*
+		actions.Parse("Inventar", area, text)
+		actions.Parse("nimm zauberschuhe", area, text)
+		actions.Parse("Inventar", area, text)
+		actions.Parse("trage zauberschuhe", area, text)
+		area = actions.Parse("o", area, text)
+		area = actions.Parse("w", area, text)
+		area = actions.Parse("o", area, text)
+		area = actions.Parse("n", area, text)
+		area = actions.Parse("o", area, text)
+		area = actions.Parse("klettere baum", area, text)
+		area = actions.Parse("klettere baum", area, text)
+		area = actions.Parse("klettere baum", area, text)
+	*/
+	//area = actions.Parse("spring", area, text)
+	//area = actions.Parse("klettere baum", area, text)
+	//area = actions.Parse("w", area, text)
 	/*
 		actions.Parse("Inventar", area, text)
 		area = actions.Parse("w", area, text)
@@ -269,45 +222,5 @@ func main() {
 		surroundings = movement.Surroundings(area)
 		text = append(text, surroundings...)
 		view.PrintScreen(text)
-		//actions.Parse("verben")
-		//fmt.Printf("\ninput: %s\n", string(input))
-		/*
-				switch int(dir) {
-				case 110: // N
-					direction = 0
-				case 115: // S
-					direction = 1
-				case 111: // O
-					direction = 2
-				case 119: // W
-					direction = 3
-				}
-				area = movement.Move(area, direction, text)
-				// are we lost? (show old area)
-				if !movement.AreaVisible(area) {
-					text = movement.DrawMap(oldArea)
-					//text = append(text, "\n", "\n", "\n")
-					text = append(text, movement.Surroundings(oldArea)...)
-					view.PrintScreen(text)
-				} else {
-					//text = drawMap(area)
-					//text = surroundings(area, locations, objects)
-					text = movement.DrawMap(area)
-					//text = append(text, "\n", "\n", "\n")
-					text = append(text, movement.Surroundings(area)...)
-					oldArea = area
-					view.PrintScreen(text)
-				}
-			//text = surroundings(area, locations, objects)
-		*/
 	}
-	//scanner()
-
-	//surroundings(8, locations, objects)
-	//scanner()
-
-	//fmt.Println(verbs)
-	//fmt.Println(nouns)
-	//fmt.Println(objects[0])
-	//fmt.Println(locations[0])
 }

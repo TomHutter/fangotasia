@@ -56,7 +56,7 @@ reactions:
     color: RED
     sleep: 2
   noShoes:
-    statement: "Hilfe !   Ich versinke im Boden."
+    statement: "Hilfe...\n\nIch versinke im Boden."
     ok: false
     ko: true
     color: RED
@@ -478,4 +478,22 @@ reactions:
     ok: true
     ko: false
     color: GREEN
+    sleep: 6
+  scare:
+    statement: "%s laesst sich nicht verjagen."
+    ok: false
+    ko: false
+    color: RED
+    sleep: 3
+  jump:
+    statement: "Hüpf....hüpf...hüpf."
+    ok: true
+    ko: false
+    color: GREEN
+    sleep: 6
+  jumpTree:
+    statement: "Plumps..aua!\n\nIch bin herunter gefallen."
+    ok: false
+    ko: true
+    color: RED
     sleep: 6

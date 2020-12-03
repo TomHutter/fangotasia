@@ -4,15 +4,11 @@ import (
 	"fantasia/setup"
 	"io/ioutil"
 	"os"
-	"path"
-	"runtime"
 
 	"gopkg.in/yaml.v2"
 )
 
 func folderListing() (filename string) {
-	_, caller, _, _ := runtime.Caller(0)
-	pathname := path.Dir(caller) + "/../save/"
 	/*
 		files, err := ioutil.ReadDir(pathname)
 		if err != nil {
@@ -26,7 +22,7 @@ func folderListing() (filename string) {
 		}
 		//filename = pathname + view.Scanner("prompt: filename > ")
 	*/
-	filename = pathname + "fantasia.sav"
+	filename = setup.PathName + "/save/fantasia.sav"
 	return
 }
 

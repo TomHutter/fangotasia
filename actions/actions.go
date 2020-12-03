@@ -372,6 +372,8 @@ func (obj Object) Feed(area setup.Area) (r setup.Reaction) {
 		berries := Object(setup.GetObjectByID(23))
 		if berries.inInventory() {
 			r = setup.Reactions["feedBaerWithBerries"]
+			obj.NewAreaID(0)
+			berries.NewAreaID(0)
 		} else {
 			r = setup.Reactions["feedBaer"]
 		}
@@ -513,6 +515,19 @@ func (obj Object) Water(area setup.Area) (r setup.Reaction) {
 			leaves := Object(setup.GetObjectByID(24))
 			leaves.NewAreaID(area.ID)
 		}
+	}
+	return
+}
+
+func (obj Object) Scare(area setup.Area) (r setup.Reaction) {
+	switch obj.ID {
+	case 10, 16, 18, 36, 42:
+		r = setup.Reactions["scare"]
+		a := strings.Title(obj.Properties.Description.Article)
+		desc := fmt.Sprintf("%s %s", a, obj.Properties.Description.Short)
+		r.Statement = fmt.Sprintf(setup.Reactions["scare"].Statement, desc)
+	default:
+		r = setup.Reactions["silly"]
 	}
 	return
 }

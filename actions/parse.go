@@ -1,6 +1,7 @@
 package actions
 
 import (
+	"fantasia/movement"
 	"fantasia/setup"
 	"fantasia/view"
 	"fmt"
@@ -78,10 +79,7 @@ func Parse(input string, area setup.Area, text []string) setup.Area {
 		obj = Object{}
 		argv = append(argv, reflect.ValueOf(area))
 		argv = append(argv, reflect.ValueOf(knownVerb.Name))
-	case "Load":
-		obj = Object{}
-		argv = append(argv, reflect.ValueOf(area))
-	case "Save":
+	case "Load", "Save", "Jump":
 		obj = Object{}
 		argv = append(argv, reflect.ValueOf(area))
 	case "Say":
@@ -135,7 +133,7 @@ func Parse(input string, area setup.Area, text []string) setup.Area {
 		color = setup.RED
 	}
 	switch knownVerb.Func {
-	case "Move", "Climb", "Load":
+	case "Move", "Climb", "Load", "Jump":
 		//color = setup.GREEN
 		// OK
 		if val[0].Field(1).Bool() == true {
@@ -163,6 +161,12 @@ func Parse(input string, area setup.Area, text []string) setup.Area {
 	if val[0].Field(2).Bool() == true {
 		view.FlashNotice()
 		GameOver(true)
+		area = setup.GetAreaByID(1)
+		movement.RevealArea(area.ID)
+		text := movement.DrawMap(area)
+		surroundings := movement.Surroundings(area)
+		text = append(text, surroundings...)
+		view.PrintScreen(text)
 	}
 	return area
 }

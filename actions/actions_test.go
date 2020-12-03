@@ -445,6 +445,10 @@ func TestFeed(t *testing.T) {
 	res = baer.Feed(area)
 	assert.Equal(t, setup.Reactions["feedBaerWithBerries"].Statement, res.Statement)
 	assert.True(t, res.OK)
+	baer = actions.Object(setup.GetObjectByID(16))
+	assert.Equal(t, 0, baer.Properties.Area)
+	berries = actions.Object(setup.GetObjectByID(23))
+	assert.Equal(t, 0, berries.Properties.Area)
 }
 
 func TestCut(t *testing.T) {
