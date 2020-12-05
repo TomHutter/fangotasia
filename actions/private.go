@@ -80,12 +80,12 @@ func getObjectByName(name string, area setup.Area) (object Object) {
 	// found an object but not in the current area?
 	if found {
 		r := setup.Reactions["dontSee"]
-		view.AddFlashNotice(r.Statement, r.Sleep, setup.RED)
+		view.AddFlashNotice(r.Statement, r.Sleep, "[red]")
 		return
 	}
 	// don't know what you are talking about
 	r := setup.Reactions["unknownNoun"]
 	statement := fmt.Sprintf(r.Statement, name)
-	view.AddFlashNotice(statement, r.Sleep, setup.RED)
+	view.AddFlashNotice(statement, r.Sleep, "[red]")
 	return
 }

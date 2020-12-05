@@ -5,7 +5,7 @@ import "fantasia/view"
 func Intro() {
 	var text = []string{
 		"\033[01;34mMach Dich auf den gefahrenreichen Weg in",
-		"das zauberhafte Land Fantasia und suche",
+		"das zauberhafte Land Fangotasia und suche",
 		"nach märchenhaften Schätzen.",
 		"Führe mich mit einfachen Kommandos in",
 		"einem oder zwei Worten, z.B.:",
@@ -25,7 +25,7 @@ func Intro() {
 
 func Prelude() {
 	var text = []string{
-		"\033[01;31mF A N T A S I A",
+		"\033[01;31mF A N G O T A S I A",
 		"",
 		"\033[01;34m- Ein Adventure von Klaus Hartmuth -",
 		"",

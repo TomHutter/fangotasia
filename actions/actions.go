@@ -114,7 +114,7 @@ func (object Object) Take(area setup.Area) (r setup.Reaction) {
 		return
 	case 48:
 		r = setup.Reactions["takeImke"]
-		r.Statement = fmt.Sprintf(r.Statement, "\033[01;95m<Imke>\033[01;32m")
+		r.Statement = fmt.Sprintf(r.Statement, "[#ff69b4::b]<Imke>[green:black:-]")
 		return
 	case 47:
 		if area.ID == 31 {
@@ -287,7 +287,7 @@ func (obj Object) Read(area setup.Area) (r setup.Reaction) {
 		r = setup.Reactions[reaction[obj.ID]]
 	case 32:
 		r = setup.Reactions[reaction[obj.ID]]
-		r.Statement = view.Highlight(r.Statement, setup.GREEN)
+		r.Statement = view.Highlight(r.Statement, "[green:black:-]")
 	default:
 		r = setup.Reactions["dontKnowHow"]
 	}
@@ -303,13 +303,13 @@ func (obj Object) Say(area setup.Area, word string) (r setup.Reaction) {
 			r = setup.Reactions["simsalabim"]
 			return
 		}
-	case "fantasia":
+	case "fangotasia":
 		if area.ID == 1 {
 			var points int
 			for _, o := range setup.ObjectsInArea(area) {
 				points = points + int(o.Properties.Value)
 			}
-			r = setup.Reactions["fantasia"]
+			r = setup.Reactions["fangotasia"]
 			r.Statement = fmt.Sprintf(r.Statement, points)
 			return
 		}
@@ -345,7 +345,7 @@ func (obj Object) Fill(area setup.Area) (r setup.Reaction) {
 		return
 	default:
 		r = setup.Reactions["unusable"]
-		r.Statement = fmt.Sprintf(r.Statement, view.Highlight(obj.Properties.Description.Long, setup.RED))
+		r.Statement = fmt.Sprintf(r.Statement, view.Highlight(obj.Properties.Description.Long, "[red]"))
 		return
 	}
 

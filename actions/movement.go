@@ -16,7 +16,8 @@ func beads(areaID int) {
 
 	if setup.Beads == 108 {
 		imke := Object(setup.GetObjectByID(48))
-		imke.Properties.Description.Long = "\033[01;95m<IMKE>\033[01;34m den pink Diamanten"
+		imke.Properties.Description.Long = "[#ff69b4::b]<IMKE>[blue:black:-] den pink Diamanten"
+		//SetFieldTextColor(tcell.ColorHotPink).
 		imke.Properties.Description.Short = "Imke"
 		imke.NewAreaID(areaID)
 	}

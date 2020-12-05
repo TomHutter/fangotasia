@@ -20,7 +20,7 @@ import (
 	"unicode/utf8"
 )
 
-var notice struct {
+var Notice struct {
 	Message string
 	Color   string
 	Sleep   int
@@ -29,30 +29,30 @@ var notice struct {
 func Highlight(s string, c string) (h string) {
 	re := regexp.MustCompile("::(.+)::")
 
-	h = string(re.ReplaceAll([]byte(s), []byte(setup.WHITE+"$1"+c)))
+	h = string(re.ReplaceAll([]byte(s), []byte("[white::b]"+"$1"+c)))
 	return
 }
 
 func AddFlashNotice(message string, sleep int, color string) {
-	notice.Message = message
-	notice.Color = color
-	notice.Sleep = sleep
+	Notice.Message = message
+	Notice.Color = color
+	Notice.Sleep = sleep
 }
 
 func FlashNotice() bool {
-	if len(notice.Message) == 0 {
+	if len(Notice.Message) == 0 {
 		return false
 	}
-	fmt.Printf("\n%s%s%s\n", notice.Color, notice.Message, setup.NEUTRAL)
-	if notice.Sleep < 0 {
+	fmt.Printf("\n%s%s%s\n", Notice.Color, Notice.Message, "[-:black:-]")
+	if Notice.Sleep < 0 {
 		fmt.Printf("\nWeiter \u23CE\n")
 		Scanner("once: true")
 	} else {
-		time.Sleep(time.Duration(notice.Sleep) * time.Second)
+		time.Sleep(time.Duration(Notice.Sleep) * time.Second)
 	}
-	notice.Message = ""
-	notice.Color = ""
-	notice.Sleep = 0
+	Notice.Message = ""
+	Notice.Color = ""
+	Notice.Sleep = 0
 	return true
 }
 
@@ -170,3 +170,47 @@ func exit() {
 	os.Exit(0)
 }
 */
+
+func Surroundings(area setup.Area) (text []string) {
+	desc := strings.Split(area.Properties.Description.Long, "\\n")
+	desc0, desc := desc[0], desc[1:]
+	text = append(text, fmt.Sprintf("%sIch bin %s", "[yellow]", desc0))
+	for _, v := range desc {
+		if strings.Contains(v, "++") {
+			v = strings.ReplaceAll(v, "++", "")
+			text = append(text, fmt.Sprintf("%s%s", "[cyan]", v))
+		} else {
+			text = append(text, fmt.Sprintf("%s%s", "[yellow]", v))
+		}
+	}
+	text = append(text, "[-:-:-]")
+	var items []string
+	for _, object := range setup.ObjectsInArea(area) {
+		item := Highlight(object.Properties.Description.Long, "[blue:black:-]")
+		items = append(items, fmt.Sprintf("%s  - %s", "[blue:black]", item))
+	}
+	if len(items) > 0 {
+		text = append(text, fmt.Sprintf("%sIch sehe:", "[blue:black]"))
+		for _, item := range items {
+			text = append(text, item)
+		}
+		text = append(text, "[-:-:-]")
+	}
+	var directions []string
+	for d := 0; d < 4; d++ {
+		if area.Properties.Directions[d] != 0 {
+			switch d {
+			case 0: // N
+				directions = append(directions, "Norden")
+			case 1: // S
+				directions = append(directions, "Süden")
+			case 2: // O
+				directions = append(directions, "Osten")
+			case 3: // W
+				directions = append(directions, "Westen")
+			}
+		}
+	}
+	text = append(text, fmt.Sprintf("%sGebiet: %d, Richtungen: %s", "[white:black:b]", area.ID, strings.Join(directions, ", ")))
+	return
+}

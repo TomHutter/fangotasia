@@ -17,6 +17,6 @@ func TestInit(t *testing.T) {
 
 func TestFlashNotice(t *testing.T) {
 	assert.False(t, view.FlashNotice())
-	view.AddFlashNotice("test", 3, setup.BLUE)
+	view.AddFlashNotice("test", 3, "[blue:black]")
 	assert.True(t, view.FlashNotice())
 }

@@ -22,7 +22,7 @@ func folderListing() (filename string) {
 		}
 		//filename = pathname + view.Scanner("prompt: filename > ")
 	*/
-	filename = setup.PathName + "/save/fantasia.sav"
+	filename = setup.PathName + "/save/fangotasia.sav"
 	return
 }
 

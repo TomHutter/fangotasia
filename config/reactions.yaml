@@ -274,7 +274,7 @@ reactions:
        Fremdling, der du betrittst dies Land,
        suche nach den verlorenen ::Schätzen::!
        Bringe sie hierher und leg sie hin.
-       Sag 'Fantasia'!
+       Sag 'Fangotasia'!
     ok: true
     ko: false
     color: GREEN
@@ -349,7 +349,7 @@ reactions:
     ko: false
     color: GREEN
     sleep: 4
-  fantasia:
+  fangotasia:
     statement: |
       Du hast %d von maximal 170 Punkten.
       Dazu gibt es einen Bonus von bis zu 30
@@ -474,7 +474,7 @@ reactions:
     color: GREEN
     sleep: 3
   takeImke:
-    statement: "Ich kann %s nicht einfach so nehmen.\n\nIch freue mich einfach, dass sie da ist."
+    statement: "Ich kann %s nicht einfach so nehmen.\n\nAber ich freue mich, dass sie da ist."
     ok: true
     ko: false
     color: GREEN

@@ -236,7 +236,7 @@ func TestRead(t *testing.T) {
 	area := setup.GetAreaByID(1)
 	panel := actions.Object(setup.GetObjectByID(32))
 	res := panel.Read(area)
-	assert.Equal(t, view.Highlight(setup.Reactions["panel"].Statement, setup.GREEN), res.Statement)
+	assert.Equal(t, view.Highlight(setup.Reactions["panel"].Statement, "[green]"), res.Statement)
 	assert.True(t, res.OK)
 
 	// read letter
@@ -350,9 +350,9 @@ func TestSay(t *testing.T) {
 	assert.Equal(t, s, res.Statement)
 	assert.True(t, res.OK)
 
-	// say "fantasia"
-	res = obj.Say(area, "fantasia")
-	s = fmt.Sprintf(setup.Reactions["fantasia"].Statement, sword.Properties.Value+dagger.Properties.Value)
+	// say "fangotasia"
+	res = obj.Say(area, "fangotasia")
+	s = fmt.Sprintf(setup.Reactions["fangotasia"].Statement, sword.Properties.Value+dagger.Properties.Value)
 	assert.Equal(t, s, res.Statement)
 	assert.True(t, res.OK)
 
@@ -372,7 +372,7 @@ func TestFill(t *testing.T) {
 	sword.NewAreaID(setup.INVENTORY)
 
 	res := sword.Fill(area)
-	s := view.Highlight(fmt.Sprintf(setup.Reactions["unusable"].Statement, sword.Properties.Description.Long), setup.RED)
+	s := view.Highlight(fmt.Sprintf(setup.Reactions["unusable"].Statement, sword.Properties.Description.Long), "[red]")
 	assert.Equal(t, s, res.Statement)
 	assert.False(t, res.OK)
 

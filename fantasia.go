@@ -10,9 +10,179 @@ import (
 	"os"
 	"os/exec"
 	"os/signal"
+	"strings"
 	"syscall"
 	"unicode/utf8"
+
+	"github.com/gdamore/tcell/v2"
+	"github.com/rivo/tview"
 )
+
+func SetupGrid(area setup.Area) {
+	app := tview.NewApplication()
+	//SetAcceptanceFunc(tview.InputFieldInteger).
+	//if err := app.SetRoot(inputField, true).SetFocus(inputField).Run(); err != nil {
+	//	panic(err)
+	//}
+	/*
+		newPrimitive := func(text string) *tview.TextView {
+			return tview.NewTextView().
+				SetTextAlign(tview.AlignCenter).
+				SetText(text)
+		}
+	*/
+	//menu := newPrimitive("Menu")
+	//main := newPrimitive("Main content")
+	//sideBar := newPrimitive("Side Bar")
+	inputField := tview.NewInputField()
+	areaField := tview.NewInputField()
+
+	surroundings := tview.NewTextView().
+		SetTextAlign(tview.AlignLeft).
+		SetDynamicColors(true).
+		SetText(strings.Join(view.Surroundings(area), "\n"))
+
+	areaMap := tview.NewTextView().
+		SetTextAlign(tview.AlignLeft).
+		SetDynamicColors(true)
+		//SetText(strings.Join(movement.DrawMap(area), "\n"))
+
+	response := tview.NewTextView().
+		SetDynamicColors(true).
+		SetTextAlign(tview.AlignLeft)
+
+	inputGrid := tview.NewGrid().
+		SetRows(0, 1, 0).
+		SetColumns(0).
+		SetBorders(false).
+		AddItem(surroundings, 0, 0, 15, 1, 0, 0, false).
+		AddItem(inputField, 15, 0, 1, 1, 0, 0, false).
+		AddItem(response, 16, 0, 15, 1, 0, 0, false)
+		//AddItem(areaMap, 0, 0, 1, 3, 0, 0, false).
+
+	areaGrid := tview.NewGrid().
+		SetRows(0, 1).
+		SetColumns(0).
+		SetBorders(false).
+		AddItem(areaMap, 0, 0, 1, 1, 0, 0, false).
+		AddItem(areaField, 1, 0, 1, 1, 0, 0, false)
+
+	grid := tview.NewGrid().
+		SetRows(0).
+		SetColumns(0).
+		SetBorders(true).
+		AddItem(inputGrid, 0, 0, 1, 1, 0, 0, false)
+
+	inputField.
+		SetLabel("und nun? > ").
+		SetLabelColor(tcell.ColorDarkCyan).
+		SetFieldWidth(80).
+		SetFieldBackgroundColor(tcell.ColorBlack).
+		SetFieldTextColor(tcell.ColorDarkCyan).
+		SetDoneFunc(func(key tcell.Key) {
+			//app.SetFocus(sourroundings)
+			//fmt.Println(inputField.GetText())
+			area = actions.Parse(inputField.GetText(), area, []string{})
+			inputField.SetText("")
+			//response.Clear()
+			//surroundings.Clear()
+			if area.ID == 0 {
+				areaMap.SetText(strings.Join(movement.DrawMap(area), "\n"))
+				grid.Clear()
+				grid.AddItem(areaGrid, 0, 0, 1, 1, 0, 0, false)
+				areaField.SetText("")
+				app.SetFocus(areaField)
+			} else {
+				surroundings.SetText(strings.Join(view.Surroundings(area), "\n"))
+				if len(view.Notice.Message) != 0 {
+					//var notice string
+					response.SetText(
+						fmt.Sprintf("\n%s%s%s\n",
+							view.Notice.Color,
+							view.Notice.Message, "[-:black:-]"))
+					//response.SetText("")
+					view.Notice.Message = ""
+					view.Notice.Color = ""
+					view.Notice.Sleep = 0
+				}
+			}
+			//areaMap.Clear()
+			//text := DrawMap(area)
+			//surroundings = view.Surroundings(area)
+			//areaMap.SetText(strings.Join(movement.DrawMap(area), "\n"))
+			//response.SetText(strings.Join(view.Surroundings(area), "\n"))
+			//app.SetFocus(inputField)
+		})
+
+		/*
+			areaField.
+				SetLabel("und nun? > ").
+				SetLabelColor(tcell.ColorDarkCyan).
+				SetFieldWidth(80).
+				SetFieldBackgroundColor(tcell.ColorBlack).
+				SetFieldTextColor(tcell.ColorDarkCyan).
+				SetDoneFunc(func(key tcell.Key) {
+					grid.RemoveItem(inputGrid)
+					grid.AddItem(areaGrid, 0, 0, 1, 1, 0, 0, false)
+					//app.SetFocus(sourroundings)
+					//fmt.Println(inputField.GetText())
+					area = actions.Parse(inputField.GetText(), area, []string{})
+					//text := DrawMap(area)
+					//surroundings = view.Surroundings(area)
+					areaMap.SetText(strings.Join(movement.DrawMap(area), "\n"))
+					response.SetText(strings.Join(view.Surroundings(area), "\n"))
+					inputField.SetText("")
+					//app.SetFocus(inputField)
+				})
+		*/
+
+	areaField.
+		SetLabel("Weiter \u23CE ").
+		SetLabelColor(tcell.ColorDarkCyan).
+		SetFieldWidth(20).
+		SetFieldBackgroundColor(tcell.ColorBlack).
+		SetFieldTextColor(tcell.ColorDarkCyan).
+		SetAcceptanceFunc(tview.InputFieldMaxLength(0)).
+		SetDoneFunc(func(key tcell.Key) {
+			//fmt.Println("blubb")
+			//areaMap.SetText("blubb")
+			areaMap.Clear()
+			grid.Clear()
+			//grid.RemoveItem(areaGrid)
+			grid.AddItem(inputGrid, 0, 0, 1, 1, 0, 0, false)
+			app.SetFocus(inputField)
+			//surroundings.Clear()
+			//response.Clear()
+			//areaMap.SetText(strings.Join(movement.DrawMap(area), "\n"))
+			surroundings.SetText(strings.Join(view.Surroundings(area), "\n"))
+			//response.SetText(strings.Join(view.Surroundings(area), "\n"))
+			inputField.SetText("")
+			//grid.AddItem(inputGrid, 0, 0, 1, 1, 0, 0, false)
+			//app.SetFocus(sourroundings)
+			//fmt.Println(inputField.GetText())
+			//area = actions.Parse(areaField.GetText(), area, []string{})
+			//text := DrawMap(area)
+			//surroundings = view.Surroundings(area)
+			//response.SetText(strings.Join(view.Surroundings(area), "\n"))
+			//inputField.SetText("")
+			//app.SetFocus(inputField)
+		})
+
+	// Layout for screens narrower than 100 cells (menu and side bar are hidden).
+	/*
+		grid.AddItem(menu, 0, 0, 0, 0, 0, 0, false).
+			AddItem(main, 1, 0, 1, 3, 0, 0, false).
+			AddItem(sideBar, 0, 0, 0, 0, 0, 0, false)
+
+		// Layout for screens wider than 100 cells.
+		grid.AddItem(menu, 1, 0, 1, 1, 0, 100, false).
+			AddItem(main, 1, 1, 1, 1, 0, 100, false).
+			AddItem(sideBar, 1, 2, 1, 1, 0, 100, false)
+	*/
+	if err := app.SetRoot(grid, true).SetFocus(inputField).Run(); err != nil {
+		panic(err)
+	}
+}
 
 // Setup keyboard scanning
 func scanner() (r rune) {
@@ -59,6 +229,8 @@ func main() {
 	//c.getConf("nouns.yaml")
 	//nouns := c.Nouns
 	setup.Setup()
+	setupCloseHandler()
+	SetupGrid(setup.GetAreaByID(1))
 	/*
 		c.getConf("config/objects.yaml")
 		objects = c.Objects
@@ -100,7 +272,6 @@ func main() {
 	defer exec.Command("stty", "-F", "/dev/tty", "echo").Run()
 
 	// Setup our Ctrl+C handler
-	setupCloseHandler()
 	intro.Prelude()
 	intro.Intro()
 	area := setup.GetAreaByID(1)
@@ -112,7 +283,7 @@ func main() {
 	//text = surroundings(area, locations, objects)
 	text := movement.DrawMap(area)
 	//text = append(text, "\n", "\n", "\n")
-	surroundings := movement.Surroundings(area)
+	surroundings := view.Surroundings(area)
 	text = append(text, surroundings...)
 	//view.Input()
 	view.PrintScreen(text)
@@ -219,7 +390,7 @@ func main() {
 	for {
 		area = actions.Parse(view.Scanner("prompt: und nun? > "), area, text)
 		text = movement.DrawMap(area)
-		surroundings = movement.Surroundings(area)
+		surroundings = view.Surroundings(area)
 		text = append(text, surroundings...)
 		view.PrintScreen(text)
 	}

@@ -76,9 +76,11 @@ func drawBox(a int, boxLen int) (box [3]string) {
 
 func DrawMap(area setup.Area) (text []string) {
 	// no map today? ... my love is gone away
-	if !(setup.GetObjectByID(47).Properties.Area == setup.INUSE) {
-		return
-	}
+	/*
+		if !(setup.GetObjectByID(47).Properties.Area == setup.INUSE) {
+			return
+		}
+	*/
 	x := area.Properties.Coordinates.X
 	y := area.Properties.Coordinates.Y
 	// max x = 9, don't go further east than 8
@@ -109,11 +111,11 @@ func DrawMap(area setup.Area) (text []string) {
 		}
 		for l := 0; l < 3; l++ {
 			if iy == y {
-				text = append(text, fmt.Sprintf("%s%s%s%s%s%s%s%s", setup.NEUTRAL, boxes[0][l], boxes[1][l],
-					setup.YELLOW, boxes[2][l],
-					setup.NEUTRAL, boxes[3][l], boxes[4][l]))
+				text = append(text, fmt.Sprintf("%s%s%s%s%s%s%s%s", "[-:-:-]", boxes[0][l], boxes[1][l],
+					"[yellow:-]", boxes[2][l],
+					"[-:-:-]", boxes[3][l], boxes[4][l]))
 			} else {
-				text = append(text, fmt.Sprintf("%s%s%s%s%s%s", setup.NEUTRAL, boxes[0][l],
+				text = append(text, fmt.Sprintf("%s%s%s%s%s%s", "[-:-:-]", boxes[0][l],
 					boxes[1][l], boxes[2][l],
 					boxes[3][l], boxes[4][l]))
 			}

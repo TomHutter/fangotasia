@@ -35,7 +35,7 @@ func (v *verb) Inventory() (inv []string, sleep int) {
 
 	inv = append(inv, setup.Reactions["inv"].Statement)
 	for _, o := range objects {
-		obj := view.Highlight(o.Properties.Description.Long, setup.GREEN)
+		obj := view.Highlight(o.Properties.Description.Long, "[green:black:-]")
 		inv = append(inv, fmt.Sprintf("- %s", obj))
 	}
 	sleep = -1

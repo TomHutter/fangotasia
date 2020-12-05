@@ -50,7 +50,7 @@ func Parse(input string, area setup.Area, text []string) setup.Area {
 		if len(command) > 0 {
 			answer := setup.Reactions["unknownVerb"]
 			notice := fmt.Sprintf(answer.Statement, command)
-			view.AddFlashNotice(notice, answer.Sleep, setup.RED)
+			view.AddFlashNotice(notice, answer.Sleep, "[red]")
 		}
 		return area
 	}
@@ -58,7 +58,7 @@ func Parse(input string, area setup.Area, text []string) setup.Area {
 	if knownVerb.Single {
 		call := reflect.ValueOf(&order).MethodByName(knownVerb.Func)
 		if !call.IsValid() {
-			view.AddFlashNotice(fmt.Sprintf("Func '%s' not yet implemented\n", knownVerb.Func), 2, setup.RED)
+			view.AddFlashNotice(fmt.Sprintf("Func '%s' not yet implemented\n", knownVerb.Func), 2, "[red]")
 			return area
 		}
 		val := call.Call([]reflect.Value{})
@@ -68,7 +68,7 @@ func Parse(input string, area setup.Area, text []string) setup.Area {
 		}
 		sleep := int(val[1].Int())
 		// ToDo: get rid of knownVerb.Sleep
-		view.AddFlashNotice(strings.Join(notice, "\n"), sleep, setup.GREEN)
+		view.AddFlashNotice(strings.Join(notice, "\n"), sleep, "[green]")
 		return area
 	}
 
@@ -97,7 +97,7 @@ func Parse(input string, area setup.Area, text []string) setup.Area {
 		if len(parts) < 1 {
 			answer := setup.Reactions["needObject"]
 			notice := fmt.Sprintln(answer.Statement)
-			view.AddFlashNotice(notice, answer.Sleep, setup.RED)
+			view.AddFlashNotice(notice, answer.Sleep, "[red]")
 			return area
 		}
 		for _, p := range parts {
@@ -116,7 +116,7 @@ func Parse(input string, area setup.Area, text []string) setup.Area {
 	// now method and all args should be known
 	call := reflect.ValueOf(obj).MethodByName(knownVerb.Func)
 	if !call.IsValid() {
-		view.AddFlashNotice(fmt.Sprintf("Func '%s' not yet implemented\n", knownVerb.Func), 2, setup.RED)
+		view.AddFlashNotice(fmt.Sprintf("Func '%s' not yet implemented\n", knownVerb.Func), 2, "[red]")
 		return area
 	}
 	val := call.Call(argv)
@@ -128,9 +128,9 @@ func Parse(input string, area setup.Area, text []string) setup.Area {
 	sleep := int(val[0].Field(4).Int())
 	switch val[0].Field(3).String() {
 	case "GREEN":
-		color = setup.GREEN
+		color = "[green]"
 	default:
-		color = setup.RED
+		color = "[red]"
 	}
 	switch knownVerb.Func {
 	case "Move", "Climb", "Load", "Jump":
@@ -155,7 +155,7 @@ func Parse(input string, area setup.Area, text []string) setup.Area {
 		*/
 		// add notice and give feedback in this screen.
 		view.AddFlashNotice(notice, sleep, color)
-		view.FlashNotice()
+		//view.FlashNotice()
 	}
 	// KO
 	if val[0].Field(2).Bool() == true {
@@ -164,7 +164,7 @@ func Parse(input string, area setup.Area, text []string) setup.Area {
 		area = setup.GetAreaByID(1)
 		movement.RevealArea(area.ID)
 		text := movement.DrawMap(area)
-		surroundings := movement.Surroundings(area)
+		surroundings := view.Surroundings(area)
 		text = append(text, surroundings...)
 		view.PrintScreen(text)
 	}
