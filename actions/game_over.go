@@ -1,12 +1,13 @@
 package actions
 
 import (
+	"fantasia/grid"
 	"fantasia/setup"
-	"fantasia/view"
 	"fmt"
-	"os"
-	"os/exec"
 	"strings"
+
+	"github.com/gdamore/tcell/v2"
+	"github.com/rivo/tview"
 )
 
 func GameOver(KO bool) {
@@ -66,12 +67,28 @@ func GameOver(KO bool) {
 	} else {
 		board = append(board, fmt.Sprint("Ach komm, noch 5 Minuten? (j/n)"))
 	}
-	view.PrintScreen(board)
-	res := view.Scanner("once: true")
-	if strings.ToLower(res) != "j" {
-		exec.Command("stty", "-F", "/dev/tty", "echo").Run()
-		os.Exit(0)
-	}
+	grid.Grid.Clear()
+	grid.Grid.AddItem(grid.AreaGrid, 0, 0, 1, 1, 0, 0, false)
+	grid.AreaMap.SetTextAlign(tview.AlignCenter).SetText(strings.Join(board, "\n"))
+	grid.AreaField.SetText("")
+	grid.App.SetFocus(grid.AreaField)
+	grid.AreaField.SetLabel("Weiter (j/n) \u23CE ").
+		SetAcceptanceFunc(tview.InputFieldMaxLength(1)).
+		SetDoneFunc(func(key tcell.Key) {
+			//view.PrintScreen(board)
+			//res := view.Scanner("once: true")
+			if strings.ToLower(grid.AreaField.GetText()) != "j" {
+				//grid.AreaMap.SetText("")
+				//grid.Grid.Clear()
+				grid.App.Stop()
+				//exec.Command("stty", "-F", "/dev/tty", "echo").Run()
+				//os.Exit(0)
+			}
+			grid.Grid.Clear()
+			grid.Grid.AddItem(grid.InputGrid, 0, 0, 1, 1, 0, 0, false)
+			grid.App.SetFocus(grid.InputField)
+			grid.Response.SetText("")
+		})
 	//fmt.Println("\nYippeee ......")
 	//time.Sleep(time.Duration(3) * time.Second)
 	if KO {

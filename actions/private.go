@@ -1,8 +1,8 @@
 package actions
 
 import (
+	"fantasia/grid"
 	"fantasia/setup"
-	"fantasia/view"
 	"fmt"
 	"strings"
 )
@@ -80,12 +80,24 @@ func getObjectByName(name string, area setup.Area) (object Object) {
 	// found an object but not in the current area?
 	if found {
 		r := setup.Reactions["dontSee"]
-		view.AddFlashNotice(r.Statement, r.Sleep, "[red]")
+		//view.AddFlashNotice(r.Statement, r.Sleep, "[red]")
+		grid.InputField.SetText("")
+		grid.Response.SetText(
+			fmt.Sprintf("\n%s%s%s\n",
+				"[red]",
+				r.Statement,
+				"[-:black:-]"))
 		return
 	}
 	// don't know what you are talking about
 	r := setup.Reactions["unknownNoun"]
 	statement := fmt.Sprintf(r.Statement, name)
-	view.AddFlashNotice(statement, r.Sleep, "[red]")
+	//view.AddFlashNotice(statement, r.Sleep, "[red]")
+	grid.InputField.SetText("")
+	grid.Response.SetText(
+		fmt.Sprintf("\n%s%s%s\n",
+			"[red]",
+			statement,
+			"[-:black:-]"))
 	return
 }

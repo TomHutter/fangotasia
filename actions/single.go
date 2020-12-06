@@ -1,7 +1,6 @@
 package actions
 
 import (
-	"fantasia/intro"
 	"fantasia/setup"
 	"fantasia/view"
 	"fmt"
@@ -53,7 +52,8 @@ func (v *verb) Help() (r []string, sleep int) {
 	fmt.Print("\n\n")
 	res := view.Scanner("once: true", "prompt: Ich kann nur die Anleitung wiederholen. (j/n)")
 	if strings.ToLower(res) == "j" {
-		intro.Intro()
+		//intro.Intro()
+		fmt.Println(res)
 	}
 	return
 }

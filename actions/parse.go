@@ -1,13 +1,14 @@
 package actions
 
 import (
-	"fantasia/movement"
+	"fantasia/grid"
 	"fantasia/setup"
 	"fantasia/view"
 	"fmt"
 	"reflect"
 	"regexp"
 	"strings"
+	"time"
 )
 
 type verb setup.Verb
@@ -24,7 +25,7 @@ type reaction struct {
 var object string
 var moves int
 
-func Parse(input string, area setup.Area, text []string) setup.Area {
+func Parse(input string, area setup.Area) setup.Area {
 
 	var command string
 	var order verb
@@ -50,7 +51,12 @@ func Parse(input string, area setup.Area, text []string) setup.Area {
 		if len(command) > 0 {
 			answer := setup.Reactions["unknownVerb"]
 			notice := fmt.Sprintf(answer.Statement, command)
-			view.AddFlashNotice(notice, answer.Sleep, "[red]")
+			//view.AddFlashNotice(notice, answer.Sleep, "[red]")
+			grid.InputField.SetText("")
+			grid.Response.SetText(
+				fmt.Sprintf("\n%s%s%s\n",
+					"[red]",
+					notice, "[-:black:-]"))
 		}
 		return area
 	}
@@ -58,7 +64,9 @@ func Parse(input string, area setup.Area, text []string) setup.Area {
 	if knownVerb.Single {
 		call := reflect.ValueOf(&order).MethodByName(knownVerb.Func)
 		if !call.IsValid() {
-			view.AddFlashNotice(fmt.Sprintf("Func '%s' not yet implemented\n", knownVerb.Func), 2, "[red]")
+			grid.InputField.SetText("")
+			grid.Response.SetText(
+				fmt.Sprintf(fmt.Sprintf("Func '%s' not yet implemented\n", knownVerb.Func), 2, "[red]"))
 			return area
 		}
 		val := call.Call([]reflect.Value{})
@@ -66,9 +74,14 @@ func Parse(input string, area setup.Area, text []string) setup.Area {
 		for i := 0; i < val[0].Len(); i++ {
 			notice = append(notice, val[0].Index(i).String())
 		}
-		sleep := int(val[1].Int())
+		//sleep := int(val[1].Int())
 		// ToDo: get rid of knownVerb.Sleep
-		view.AddFlashNotice(strings.Join(notice, "\n"), sleep, "[green]")
+		grid.InputField.SetText("")
+		grid.Response.SetText(
+			fmt.Sprintf("\n%s%s%s\n",
+				"[green:black:-]",
+				strings.Join(notice, "\n"),
+				"[-:black:-]"))
 		return area
 	}
 
@@ -97,7 +110,13 @@ func Parse(input string, area setup.Area, text []string) setup.Area {
 		if len(parts) < 1 {
 			answer := setup.Reactions["needObject"]
 			notice := fmt.Sprintln(answer.Statement)
-			view.AddFlashNotice(notice, answer.Sleep, "[red]")
+			//view.AddFlashNotice(notice, answer.Sleep, "[red]")
+			grid.InputField.SetText("")
+			grid.Response.SetText(
+				fmt.Sprintf("\n%s%s%s\n",
+					"[red]",
+					notice,
+					"[-:black:-]"))
 			return area
 		}
 		for _, p := range parts {
@@ -116,7 +135,10 @@ func Parse(input string, area setup.Area, text []string) setup.Area {
 	// now method and all args should be known
 	call := reflect.ValueOf(obj).MethodByName(knownVerb.Func)
 	if !call.IsValid() {
-		view.AddFlashNotice(fmt.Sprintf("Func '%s' not yet implemented\n", knownVerb.Func), 2, "[red]")
+		//view.AddFlashNotice(fmt.Sprintf("Func '%s' not yet implemented\n", knownVerb.Func), 2, "[red]")
+		grid.InputField.SetText("")
+		grid.Response.SetText(
+			fmt.Sprintf(fmt.Sprintf("Func '%s' not yet implemented\n", knownVerb.Func), 2, "[red]"))
 		return area
 	}
 	val := call.Call(argv)
@@ -125,7 +147,7 @@ func Parse(input string, area setup.Area, text []string) setup.Area {
 	// Reaction
 	notice := val[0].Field(0).String()
 	// Sleep
-	sleep := int(val[0].Field(4).Int())
+	//sleep := int(val[0].Field(4).Int())
 	switch val[0].Field(3).String() {
 	case "GREEN":
 		color = "[green]"
@@ -143,7 +165,14 @@ func Parse(input string, area setup.Area, text []string) setup.Area {
 			setup.GameAreas[area.ID] = area.Properties
 		}
 		// add notice. Give feedback in the next screen.
-		view.AddFlashNotice(notice, sleep, color)
+		fallthrough
+		/*
+			grid.InputField.SetText("")
+			grid.Response.SetText(
+				fmt.Sprintf("\n%s%s%s\n",
+					color,
+					notice, "[-:black:-]"))
+		*/
 	default:
 		// OK
 		/*
@@ -154,19 +183,122 @@ func Parse(input string, area setup.Area, text []string) setup.Area {
 			}
 		*/
 		// add notice and give feedback in this screen.
-		view.AddFlashNotice(notice, sleep, color)
+		//view.AddFlashNotice(notice, sleep, color)
 		//view.FlashNotice()
+		grid.InputField.SetText("")
+		/*
+			if area.ID == 0 {
+				grid.AreaMap.SetText(strings.Join(movement.DrawMap(area), "\n"))
+				grid.Grid.Clear()
+				grid.Grid.AddItem(grid.AreaGrid, 0, 0, 1, 1, 0, 0, false)
+				grid.AreaField.SetText("")
+				grid.App.SetFocus(grid.AreaField)
+			} else {
+		*/
+		grid.Response.SetText(
+			fmt.Sprintf("\n%s%s%s\n",
+				color,
+				notice, "[-:black:-]"))
 	}
 	// KO
 	if val[0].Field(2).Bool() == true {
-		view.FlashNotice()
+		//view.AddFlashNotice(notice, 6, "[red:black:-]")
+		//return setup.GetAreaByID(0)
+		/*
+			go func() {
+				grid.App.QueueUpdateDraw(func() {
+					grid.Response.SetText(
+						fmt.Sprintf("\n%s%s%s\n",
+							color,
+							notice, "[-:black:-]"))
+				})
+			}()
+		*/
+		time.Sleep(time.Duration(6) * time.Second)
+		//view.FlashNotice()
 		GameOver(true)
-		area = setup.GetAreaByID(1)
-		movement.RevealArea(area.ID)
-		text := movement.DrawMap(area)
-		surroundings := view.Surroundings(area)
-		text = append(text, surroundings...)
-		view.PrintScreen(text)
+		//area = setup.GetAreaByID(1)
+		//movement.RevealArea(area.ID)
+		//text := movement.DrawMap(area)
+		//surroundings := view.Surroundings(area)
+		//text = append(text, surroundings...)
+		//view.PrintScreen(text)
 	}
 	return area
 }
+
+func REPL(area setup.Area) {
+	for {
+		command := <-grid.Input
+		area = Parse(command, area)
+		grid.Surroundings.SetText(strings.Join(view.Surroundings(area), "\n"))
+	}
+}
+
+/*
+	grid.Grid.Clear()
+	grid.Grid.AddItem(grid.InputGrid, 0, 0, 1, 1, 0, 0, false)
+	grid.Surroundings.SetText(strings.Join(view.Surroundings(area), "\n"))
+	grid.App.SetFocus(grid.InputField)
+*/
+//grid.InputField.SetDoneFunc(func(key tcell.Key) {
+//	area = Parse(grid.InputField.GetText(), area, []string{})
+/*
+	grid.Response.SetText(
+		fmt.Sprintf("\n%s%s%s\n",
+			"[red]",
+			"blubb", "[-:black:-]"))
+*/
+//if ko == true {
+//grid.Response.Write([]byte("blah fahsel"))
+//return
+//grid.App.QueueUpdateDraw()
+//time.Sleep(time.Duration(6) * time.Second)
+//GameOver(true)
+//area = setup.GetAreaByID(1)
+//}
+//	grid.Surroundings.SetText(strings.Join(view.Surroundings(area), "\n"))
+//	if area == setup.GetAreaByID(0) {
+//		return
+//	}
+//time.Sleep(time.Duration(3) * time.Second)
+//GameOver(true)
+/*
+	grid.InputField.SetText("")
+	if area.ID == 0 {
+		grid.AreaMap.SetText(strings.Join(movement.DrawMap(area), "\n"))
+		grid.Grid.Clear()
+		grid.Grid.AddItem(grid.AreaGrid, 0, 0, 1, 1, 0, 0, false)
+		grid.AreaField.SetText("")
+		grid.App.SetFocus(grid.AreaField)
+	} else {
+		grid.Surroundings.SetText(strings.Join(view.Surroundings(area), "\n"))
+		if len(view.Notice.Message) != 0 {
+			grid.Response.SetText(
+				fmt.Sprintf("\n%s%s%s\n",
+					view.Notice.Color,
+					view.Notice.Message, "[-:black:-]"))
+			view.Notice.Message = ""
+			view.Notice.Color = ""
+			view.Notice.Sleep = 0
+		}
+	}*/
+//})
+//time.Sleep(time.Duration(3) * time.Second)
+//GameOver(true)
+/*
+
+	grid.AreaField.SetDoneFunc(func(key tcell.Key) {
+		grid.AreaMap.Clear()
+		grid.Grid.Clear()
+		grid.Grid.AddItem(grid.InputGrid, 0, 0, 1, 1, 0, 0, false)
+		grid.App.SetFocus(grid.InputField)
+		grid.Surroundings.SetText(strings.Join(view.Surroundings(area), "\n"))
+		grid.InputField.SetText("")
+	})
+
+	if err := grid.App.SetRoot(grid.Grid, true).SetFocus(grid.InputField).Run(); err != nil {
+		panic(err)
+	}
+*/
+//}

@@ -1,38 +1,58 @@
 package intro
 
-import "fantasia/view"
+import (
+	"fantasia/grid"
+	"strings"
 
-func Intro() {
+	"github.com/gdamore/tcell/v2"
+)
+
+func Intro(repl func()) {
 	var text = []string{
-		"\033[01;34mMach Dich auf den gefahrenreichen Weg in",
+		"[blue:black:-]Mach Dich auf den gefahrenreichen Weg in",
 		"das zauberhafte Land Fangotasia und suche",
 		"nach märchenhaften Schätzen.",
 		"Führe mich mit einfachen Kommandos in",
 		"einem oder zwei Worten, z.B.:",
 		"",
-		"\033[01;33mNORDEN      BENUTZE TARNKAPPE      ENDE",
+		"[yellow:black:b]NORDEN      BENUTZE TARNKAPPE      ENDE",
 		"",
-		"LEGE RUBIN     TÖTE DRACHE     INVENTAR",
+		"LEGE RUBIN     FÜTTERE DRACHE     INVENTAR",
 		"",
-		"\033[01;34mMit  \033[01;97mSAVE  \033[01;34mkannst Du den aktuellen Stand",
+		"[blue:black:-]Mit  [white:black:b]SAVE  [blue:black:-]kannst Du den aktuellen Stand",
 		"des Spieles abspeichern,",
-		"mit  \033[01;97mLOAD  \033[01;34mwieder einlesen.",
-		"\033[0mWeiter \u23CE",
+		"mit  [white:black:b]LOAD  [blue:black:-]wieder einlesen.",
 	}
-	view.PrintScreen(text)
-	view.Scanner("once: true")
+	//grid.Grid.Clear()
+	//grid.Grid.AddItem(grid.AreaGrid, 0, 0, 1, 1, 0, 0, false)
+	grid.AreaMap.SetText(strings.Join(text, "\n"))
+	//grid.AreaField.SetText("")
+	//grid.App.SetFocus(grid.AreaField)
+	grid.AreaField.SetDoneFunc(func(key tcell.Key) {
+		grid.Grid.Clear()
+		grid.Grid.AddItem(grid.InputGrid, 0, 0, 1, 1, 0, 0, false)
+		grid.App.SetFocus(grid.InputField)
+	})
+	//view.PrintScreen(text)
+	//view.Scanner("once: true")
 }
 
-func Prelude() {
+func Prelude(repl func()) {
 	var text = []string{
-		"\033[01;31mF A N G O T A S I A",
+		"[red:black:b]F A N G O T A S I A",
 		"",
-		"\033[01;34m- Ein Adventure von Klaus Hartmuth -",
+		"[blue:black:b]- Ein Adventure von Klaus Hartmuth -",
 		"",
-		"\033[01;33m- GO Version von Tom Hutter -",
-		"",
-		"\033[0mWeiter \u23CE",
+		"[yellow:black:b]- GO Version von Tom Hutter -",
 	}
-	view.PrintScreen(text)
-	view.Scanner("once: true")
+	grid.Grid.Clear()
+	grid.Grid.AddItem(grid.AreaGrid, 0, 0, 1, 1, 0, 0, false)
+	grid.AreaMap.SetText(strings.Join(text, "\n"))
+	grid.AreaField.SetText("")
+	grid.App.SetFocus(grid.AreaField)
+	grid.AreaField.SetDoneFunc(func(key tcell.Key) { Intro(repl) })
+	//grid.Pages.SwitchToPage("map")
+
+	//view.PrintScreen(text)
+	//view.Scanner("once: true")
 }
