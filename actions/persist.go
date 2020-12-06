@@ -83,6 +83,9 @@ func (obj Object) Load(area setup.Area) (r setup.Reaction, areaID int) {
 
 	setup.GameObjects = content.Objects
 	setup.Map = content.AreaMap
+	if setup.GetObjectByID(47).Properties.Area == setup.INUSE {
+		setup.Verbs = setup.AddMapVerb(setup.Verbs)
+	}
 
 	r = setup.Reactions["loaded"]
 	areaID = content.AreaID

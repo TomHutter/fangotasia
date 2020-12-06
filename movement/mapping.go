@@ -111,11 +111,11 @@ func DrawMap(area setup.Area) (text []string) {
 		}
 		for l := 0; l < 3; l++ {
 			if iy == y {
-				text = append(text, fmt.Sprintf("%s%s%s%s%s%s%s%s", "[-:-:-]", boxes[0][l], boxes[1][l],
-					"[yellow:-]", boxes[2][l],
-					"[-:-:-]", boxes[3][l], boxes[4][l]))
+				text = append(text, fmt.Sprintf("%s%s%s%s%s%s%s%s", "[white:black:-]", boxes[0][l], boxes[1][l],
+					"[yellow:black:b]", boxes[2][l],
+					"[white:black:-]", boxes[3][l], boxes[4][l]))
 			} else {
-				text = append(text, fmt.Sprintf("%s%s%s%s%s%s", "[-:-:-]", boxes[0][l],
+				text = append(text, fmt.Sprintf("%s%s%s%s%s%s", "[white:black:-]", boxes[0][l],
 					boxes[1][l], boxes[2][l],
 					boxes[3][l], boxes[4][l]))
 			}

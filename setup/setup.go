@@ -172,6 +172,26 @@ func getMapOverwrites() (overwrites []MapOverwrites) {
 	return
 }
 
+func removeMapVerb(verbs []Verb) []Verb {
+	for i, v := range verbs {
+		if v.Func == "Map" {
+			return append(verbs[:i], verbs[i+1:]...)
+		}
+	}
+	return verbs
+}
+
+func AddMapVerb(verbs []Verb) []Verb {
+	var c conf
+	c.getConf(PathName + "/config/verbs.yaml")
+	for _, v := range c.Verbs {
+		if v.Func == "Map" {
+			return append(verbs, v)
+		}
+	}
+	return verbs
+}
+
 // InitBoxLen : Get min length for boxes to fit all short descriptions of locations
 func initBoxLen() {
 	BoxLen = 0
@@ -197,7 +217,7 @@ func Setup() {
 	c.getConf(PathName + "/config/reactions.yaml")
 	Reactions = c.Reactions
 	c.getConf(PathName + "/config/verbs.yaml")
-	Verbs = c.Verbs
+	Verbs = removeMapVerb(c.Verbs)
 	c.getConf(PathName + "/config/conditions.yaml")
 	Conditions = c.Contitions
 	Overwrites = getMapOverwrites()

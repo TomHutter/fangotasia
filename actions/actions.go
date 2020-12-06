@@ -1,6 +1,8 @@
 package actions
 
 import (
+	"fantasia/grid"
+	"fantasia/movement"
 	"fantasia/setup"
 	"fantasia/view"
 	"fmt"
@@ -202,6 +204,7 @@ func (obj Object) Use(area setup.Area) (r setup.Reaction) {
 		r = setup.Reactions["useShoes"]
 	case 47:
 		r = setup.Reactions["useMap"]
+		setup.Verbs = setup.AddMapVerb(setup.Verbs)
 	}
 	return
 }
@@ -529,5 +532,15 @@ func (obj Object) Scare(area setup.Area) (r setup.Reaction) {
 	default:
 		r = setup.Reactions["silly"]
 	}
+	return
+}
+
+func (obj Object) Map(area setup.Area) (r setup.Reaction) {
+	grid.InputField.SetText("")
+	grid.AreaMap.SetText(strings.Join(movement.DrawMap(area), "\n"))
+	grid.Grid.Clear()
+	grid.Grid.AddItem(grid.AreaGrid, 0, 0, 1, 1, 0, 0, false)
+	grid.AreaField.SetText("")
+	grid.App.SetFocus(grid.AreaField)
 	return
 }

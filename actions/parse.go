@@ -92,7 +92,7 @@ func Parse(input string, area setup.Area) setup.Area {
 		obj = Object{}
 		argv = append(argv, reflect.ValueOf(area))
 		argv = append(argv, reflect.ValueOf(knownVerb.Name))
-	case "Load", "Save", "Jump":
+	case "Load", "Save", "Jump", "Map":
 		obj = Object{}
 		argv = append(argv, reflect.ValueOf(area))
 	case "Say":
@@ -202,27 +202,8 @@ func Parse(input string, area setup.Area) setup.Area {
 	}
 	// KO
 	if val[0].Field(2).Bool() == true {
-		//view.AddFlashNotice(notice, 6, "[red:black:-]")
-		//return setup.GetAreaByID(0)
-		/*
-			go func() {
-				grid.App.QueueUpdateDraw(func() {
-					grid.Response.SetText(
-						fmt.Sprintf("\n%s%s%s\n",
-							color,
-							notice, "[-:black:-]"))
-				})
-			}()
-		*/
 		time.Sleep(time.Duration(6) * time.Second)
-		//view.FlashNotice()
 		GameOver(true)
-		//area = setup.GetAreaByID(1)
-		//movement.RevealArea(area.ID)
-		//text := movement.DrawMap(area)
-		//surroundings := view.Surroundings(area)
-		//text = append(text, surroundings...)
-		//view.PrintScreen(text)
 	}
 	return area
 }
@@ -234,71 +215,3 @@ func REPL(area setup.Area) {
 		grid.Surroundings.SetText(strings.Join(view.Surroundings(area), "\n"))
 	}
 }
-
-/*
-	grid.Grid.Clear()
-	grid.Grid.AddItem(grid.InputGrid, 0, 0, 1, 1, 0, 0, false)
-	grid.Surroundings.SetText(strings.Join(view.Surroundings(area), "\n"))
-	grid.App.SetFocus(grid.InputField)
-*/
-//grid.InputField.SetDoneFunc(func(key tcell.Key) {
-//	area = Parse(grid.InputField.GetText(), area, []string{})
-/*
-	grid.Response.SetText(
-		fmt.Sprintf("\n%s%s%s\n",
-			"[red]",
-			"blubb", "[-:black:-]"))
-*/
-//if ko == true {
-//grid.Response.Write([]byte("blah fahsel"))
-//return
-//grid.App.QueueUpdateDraw()
-//time.Sleep(time.Duration(6) * time.Second)
-//GameOver(true)
-//area = setup.GetAreaByID(1)
-//}
-//	grid.Surroundings.SetText(strings.Join(view.Surroundings(area), "\n"))
-//	if area == setup.GetAreaByID(0) {
-//		return
-//	}
-//time.Sleep(time.Duration(3) * time.Second)
-//GameOver(true)
-/*
-	grid.InputField.SetText("")
-	if area.ID == 0 {
-		grid.AreaMap.SetText(strings.Join(movement.DrawMap(area), "\n"))
-		grid.Grid.Clear()
-		grid.Grid.AddItem(grid.AreaGrid, 0, 0, 1, 1, 0, 0, false)
-		grid.AreaField.SetText("")
-		grid.App.SetFocus(grid.AreaField)
-	} else {
-		grid.Surroundings.SetText(strings.Join(view.Surroundings(area), "\n"))
-		if len(view.Notice.Message) != 0 {
-			grid.Response.SetText(
-				fmt.Sprintf("\n%s%s%s\n",
-					view.Notice.Color,
-					view.Notice.Message, "[-:black:-]"))
-			view.Notice.Message = ""
-			view.Notice.Color = ""
-			view.Notice.Sleep = 0
-		}
-	}*/
-//})
-//time.Sleep(time.Duration(3) * time.Second)
-//GameOver(true)
-/*
-
-	grid.AreaField.SetDoneFunc(func(key tcell.Key) {
-		grid.AreaMap.Clear()
-		grid.Grid.Clear()
-		grid.Grid.AddItem(grid.InputGrid, 0, 0, 1, 1, 0, 0, false)
-		grid.App.SetFocus(grid.InputField)
-		grid.Surroundings.SetText(strings.Join(view.Surroundings(area), "\n"))
-		grid.InputField.SetText("")
-	})
-
-	if err := grid.App.SetRoot(grid.Grid, true).SetFocus(grid.InputField).Run(); err != nil {
-		panic(err)
-	}
-*/
-//}

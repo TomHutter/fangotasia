@@ -314,7 +314,11 @@ reactions:
     color: GREEN
     sleep: 4
   useMap:
-    statement: "Gut. Jetzt sehe ich endlich wo ich bin und wo ich schon war."
+    statement: |
+      Gut.
+      Jetzt sehe ich endlich wo ich bin und wo ich schon war.
+      Ich kenne jetzt das Wort 'Karte'.
+      Sag 'Karte'.
     ok: true
     ko: false
     color: GREEN
@@ -474,7 +478,7 @@ reactions:
     color: GREEN
     sleep: 3
   takeImke:
-    statement: "Ich kann %s nicht einfach so nehmen.\n\nAber ich freue mich, dass sie da ist."
+    statement: "Ich kann %s nicht einfach so nehmen.\n\nSie ist da und daran kann ich mich erfeuen."
     ok: true
     ko: false
     color: GREEN

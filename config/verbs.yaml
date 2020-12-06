@@ -104,3 +104,6 @@ verbs:
   - name: w
     func: Move
     single: false
+  - name: karte
+    func: Map
+    single: false
