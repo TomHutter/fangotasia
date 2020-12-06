@@ -228,7 +228,7 @@ func (obj Object) Throw(area setup.Area) (r setup.Reaction) {
 		goldenSphere.NewAreaID(area.ID)
 		return
 	}
-	// on the tree trhowing stone?
+	// on the tree throwing stone?
 	if obj.ID == 20 && area.ID == 31 {
 		m := Object(setup.GetObjectByID(47))
 		// Map here?
@@ -252,6 +252,22 @@ func (obj Object) Throw(area setup.Area) (r setup.Reaction) {
 	if obj.ID == 46 || obj.ID == 20 {
 		r = setup.Reactions["throw"]
 		obj.NewAreaID(area.ID)
+	}
+	if obj.ID == 49 {
+		for _, i := range []int{10, 14, 16, 18, 21, 29, 32, 36, 40, 42, 43, 45} {
+			object := Object(setup.GetObjectByID(i))
+			if object.inArea(area) {
+				article := object.Properties.Description.Article
+				parts := strings.Split(object.Properties.Description.Long, " ")[1:]
+				long := strings.Join(parts, " ")
+				newLong := fmt.Sprintf(setup.Conditions["fango"][article], long)
+				object.NewCondition(newLong)
+				r = setup.Reactions["hitWithFango"]
+				return
+			}
+		}
+		obj.NewAreaID(0)
+		r = setup.Reactions["throwFango"]
 	}
 	return
 }

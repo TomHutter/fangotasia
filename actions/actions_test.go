@@ -19,19 +19,21 @@ func TestSetup(t *testing.T) {
 	setup.Setup()
 }
 
+/*
 func TestParse(t *testing.T) {
 	setup.Setup()
-	var text = []string{}
 	// go to area 1
 	area1 := setup.GetAreaByID(1)
-	area := actions.Parse("nimm zauberschuhe", area1, text)
+	area := actions.Parse("nimm zauberschuhe", area1)
 	assert.Equal(t, area1, area)
-	area = actions.Parse("trage zauberschuhe", area1, text)
+	area = actions.Parse("trage zauberschuhe", area1)
 	assert.Equal(t, area1, area)
-	area = actions.Parse("o", area1, text)
+	area = actions.Parse("o", area1)
 	area2 := setup.GetAreaByID(2)
 	assert.Equal(t, area2, area)
 }
+*/
+
 func TestTake(t *testing.T) {
 	setup.Setup()
 	// go to area 1
@@ -183,6 +185,7 @@ func TestClimb(t *testing.T) {
 }
 
 func TestThrow(t *testing.T) {
+	setup.Setup()
 	// not area 4 - sphere breaks
 	area := setup.GetAreaByID(1)
 	sphere := actions.Object(setup.GetObjectByID(34))
@@ -229,6 +232,23 @@ func TestThrow(t *testing.T) {
 	assert.True(t, res.OK)
 	assert.Equal(t, 9, setup.GetObjectByID(20).Properties.Area)
 	assert.Equal(t, 9, setup.GetObjectByID(47).Properties.Area)
+
+	// fango
+	area = setup.GetAreaByID(9)
+	fango := actions.Object(setup.GetObjectByID(49))
+	res = fango.Throw(area)
+	assert.Equal(t, setup.Reactions["throwFango"].Statement, res.Statement)
+	assert.True(t, res.OK)
+	assert.Equal(t, 0, setup.GetObjectByID(49).Properties.Area)
+
+	// fango at dwarf
+	area = setup.GetAreaByID(18)
+	//fango := actions.Object(setup.GetObjectByID(49))
+	res = fango.Throw(area)
+	assert.Equal(t, setup.Reactions["hitWithFango"].Statement, res.Statement)
+	assert.True(t, res.OK)
+	assert.Equal(t, 0, setup.GetObjectByID(49).Properties.Area)
+
 }
 
 func TestRead(t *testing.T) {
@@ -236,7 +256,7 @@ func TestRead(t *testing.T) {
 	area := setup.GetAreaByID(1)
 	panel := actions.Object(setup.GetObjectByID(32))
 	res := panel.Read(area)
-	assert.Equal(t, view.Highlight(setup.Reactions["panel"].Statement, "[green]"), res.Statement)
+	assert.Equal(t, view.Highlight(setup.Reactions["panel"].Statement, "[green:black:-]"), res.Statement)
 	assert.True(t, res.OK)
 
 	// read letter

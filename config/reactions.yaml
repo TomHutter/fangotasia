@@ -501,3 +501,15 @@ reactions:
     ko: true
     color: RED
     sleep: 6
+  throwFango:
+    statement: "Klatsch .... ein Fango-Fladen!"
+    ok: true
+    ko: false
+    color: GREEN
+    sleep: 3
+  hitWithFango:
+    statement: "Klatsch .... getroffen!"
+    ok: true
+    ko: false
+    color: GREEN
+    sleep: 3
