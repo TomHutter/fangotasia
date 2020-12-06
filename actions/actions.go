@@ -1,10 +1,10 @@
 package actions
 
 import (
-	"fantasia/grid"
-	"fantasia/movement"
-	"fantasia/setup"
-	"fantasia/view"
+	"fangotasia/grid"
+	"fangotasia/movement"
+	"fangotasia/setup"
+	"fangotasia/view"
 	"fmt"
 	"strings"
 )

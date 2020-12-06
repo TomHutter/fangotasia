@@ -1,8 +1,8 @@
 package actions
 
 import (
-	"fantasia/movement"
-	"fantasia/setup"
+	"fangotasia/movement"
+	"fangotasia/setup"
 	"math/rand"
 	"time"
 )

@@ -1,9 +1,9 @@
 package actions
 
 import (
-	"fantasia/grid"
-	"fantasia/setup"
-	"fantasia/view"
+	"fangotasia/grid"
+	"fangotasia/setup"
+	"fangotasia/view"
 	"fmt"
 	"reflect"
 	"regexp"

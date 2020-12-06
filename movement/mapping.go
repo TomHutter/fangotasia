@@ -1,7 +1,7 @@
 package movement
 
 import (
-	"fantasia/setup"
+	"fangotasia/setup"
 	"fmt"
 	"strings"
 )

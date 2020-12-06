@@ -1,10 +1,10 @@
 package movement_test
 
 import (
-	"fantasia/actions"
-	"fantasia/movement"
-	"fantasia/setup"
-	"fantasia/view"
+	"fangotasia/actions"
+	"fangotasia/movement"
+	"fangotasia/setup"
+	"fangotasia/view"
 	"os"
 	"strings"
 	"testing"

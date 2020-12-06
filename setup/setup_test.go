@@ -1,7 +1,7 @@
 package setup_test
 
 import (
-	"fantasia/setup"
+	"fangotasia/setup"
 	"os"
 	"testing"
 

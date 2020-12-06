@@ -8,7 +8,7 @@ extern void enableRawMode();
 //import "C"
 
 import (
-	"fantasia/setup"
+	"fangotasia/setup"
 	"fmt"
 	"os"
 	"os/exec"

@@ -1,8 +1,8 @@
 package actions
 
 import (
-	"fantasia/setup"
-	"fantasia/view"
+	"fangotasia/setup"
+	"fangotasia/view"
 	"fmt"
 	"strings"
 )

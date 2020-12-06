@@ -1,9 +1,9 @@
 package actions_test
 
 import (
-	"fantasia/actions"
-	"fantasia/setup"
-	"fantasia/view"
+	"fangotasia/actions"
+	"fangotasia/setup"
+	"fangotasia/view"
 	"fmt"
 	"os"
 	"strings"

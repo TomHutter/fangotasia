@@ -1,7 +1,7 @@
 package intro
 
 import (
-	"fantasia/grid"
+	"fangotasia/grid"
 	"strings"
 
 	"github.com/gdamore/tcell/v2"

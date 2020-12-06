@@ -1,7 +1,7 @@
 package actions
 
 import (
-	"fantasia/setup"
+	"fangotasia/setup"
 	"io/ioutil"
 	"os"
 

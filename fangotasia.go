@@ -1,12 +1,12 @@
 package main
 
 import (
-	"fantasia/actions"
-	"fantasia/grid"
-	"fantasia/intro"
-	"fantasia/movement"
-	"fantasia/setup"
-	"fantasia/view"
+	"fangotasia/actions"
+	"fangotasia/grid"
+	"fangotasia/intro"
+	"fangotasia/movement"
+	"fangotasia/setup"
+	"fangotasia/view"
 	"fmt"
 	"os"
 	"os/exec"

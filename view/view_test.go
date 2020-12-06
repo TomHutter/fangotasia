@@ -1,8 +1,8 @@
 package view_test
 
 import (
-	"fantasia/setup"
-	"fantasia/view"
+	"fangotasia/setup"
+	"fangotasia/view"
 	"os"
 	"testing"
 

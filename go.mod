@@ -1,4 +1,4 @@
-module fantasia
+module fangotasia
 
 go 1.15
 
