@@ -7,6 +7,9 @@ import (
 	"fangotasia/view"
 	"fmt"
 	"strings"
+
+	"github.com/gdamore/tcell/v2"
+	"github.com/rivo/tview"
 )
 
 func (obj *Object) NewAreaID(areaID int) {
@@ -197,6 +200,10 @@ func (obj Object) Use(area setup.Area) (r setup.Reaction) {
 }
 
 func (obj Object) Throw(area setup.Area) (r setup.Reaction) {
+	if !obj.inInventory() {
+		r = setup.Reactions["dontHave"]
+		return
+	}
 	// sphere?
 	if obj.ID == 34 {
 		// throwing sphere will always lead to loss
@@ -543,7 +550,14 @@ func (obj Object) Map(area setup.Area) (r setup.Reaction) {
 	grid.AreaMap.SetText(strings.Join(movement.DrawMap(area), "\n"))
 	grid.Grid.Clear()
 	grid.Grid.AddItem(grid.AreaGrid, 0, 0, 1, 1, 0, 0, false)
-	grid.AreaField.SetText("")
+	grid.AreaField.SetText("").
+		SetLabel("Weiter \u23CE ").
+		SetAcceptanceFunc(tview.InputFieldMaxLength(0)).
+		SetDoneFunc(func(key tcell.Key) {
+			grid.Grid.Clear()
+			grid.Grid.AddItem(grid.InputGrid, 0, 0, 1, 1, 0, 0, false)
+			grid.App.SetFocus(grid.InputField)
+		})
 	grid.App.SetFocus(grid.AreaField)
 	return
 }

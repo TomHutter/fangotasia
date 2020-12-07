@@ -18,9 +18,6 @@ import (
 
 /*
 ToDos
-- wirf stein geht auch, wenn stein nicht in inventar
-- Sehe ich hier nicht, als []string
-- karte bricht spiel ab, wenn man vorher schon mal Ende gesagt hat und dann weiter macht
 */
 
 // Setup keyboard scanning

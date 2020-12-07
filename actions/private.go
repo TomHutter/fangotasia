@@ -85,7 +85,7 @@ func getObjectByName(name string, area setup.Area) (object Object) {
 		grid.Response.SetText(
 			fmt.Sprintf("\n%s%s%s\n",
 				"[red]",
-				r.Statement,
+				r.Statement[0],
 				"[-:black:-]"))
 		return
 	}
