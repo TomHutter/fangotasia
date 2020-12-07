@@ -94,21 +94,4 @@ func GameOver(KO bool) {
 	if KO {
 		setup.Setup()
 	}
-	/*
-		621 poke214,9:poke211,13:sysvd:printb$"-rang ";
-		622 ifpu=0thenprint"10 -":goto632
-		623 ifpu<25thenprint"9 -":goto632
-		624 ifpu<50thenprint"8 -":goto632
-		625 ifpu<75thenprint"7 -":goto632
-		626 ifpu<100thenprint"6 -":goto632
-		627 ifpu<125thenprint"5 -":goto632
-		628 ifpu<150thenprint"4 -":goto632
-		629 ifpu<175thenprint"3 -":goto632
-		630 ifpu<200thenprint"2 -"goto632
-		631 ifpu=200thenprint"1 -"
-	*/
-	//return true
 }
-
-//func (obj object) hit(inv []string) {
-//}

@@ -5,6 +5,7 @@ import (
 	"fangotasia/setup"
 	"fangotasia/view"
 	"fmt"
+	"math/rand"
 	"reflect"
 	"regexp"
 	"strings"
@@ -49,8 +50,8 @@ func Parse(input string, area setup.Area) setup.Area {
 	if knownVerb == (setup.Verb{}) {
 		// do we have input?
 		if len(command) > 0 {
-			answer := setup.Reactions["unknownVerb"]
-			notice := fmt.Sprintf(answer.Statement, command)
+			answer := setup.GetReactionByName("unknownVerb")
+			notice := fmt.Sprintf(answer.Statement[0], command)
 			//view.AddFlashNotice(notice, answer.Sleep, "[red]")
 			grid.InputField.SetText("")
 			grid.Response.SetText(
@@ -108,9 +109,8 @@ func Parse(input string, area setup.Area) setup.Area {
 		argv = append(argv, reflect.ValueOf(area))
 	default:
 		if len(parts) < 1 {
-			answer := setup.Reactions["needObject"]
-			notice := fmt.Sprintln(answer.Statement)
-			//view.AddFlashNotice(notice, answer.Sleep, "[red]")
+			answer := setup.GetReactionByName("needObject")
+			notice := fmt.Sprintln(answer.Statement[0])
 			grid.InputField.SetText("")
 			grid.Response.SetText(
 				fmt.Sprintf("\n%s%s%s\n",
@@ -135,7 +135,6 @@ func Parse(input string, area setup.Area) setup.Area {
 	// now method and all args should be known
 	call := reflect.ValueOf(obj).MethodByName(knownVerb.Func)
 	if !call.IsValid() {
-		//view.AddFlashNotice(fmt.Sprintf("Func '%s' not yet implemented\n", knownVerb.Func), 2, "[red]")
 		grid.InputField.SetText("")
 		grid.Response.SetText(
 			fmt.Sprintf(fmt.Sprintf("Func '%s' not yet implemented\n", knownVerb.Func), 2, "[red]"))
@@ -144,10 +143,15 @@ func Parse(input string, area setup.Area) setup.Area {
 	val := call.Call(argv)
 
 	var color string
+	var notice string
 	// Reaction
-	notice := val[0].Field(0).String()
-	// Sleep
-	//sleep := int(val[0].Field(4).Int())
+	resp := val[0].Field(0)
+	respLen := resp.Len()
+	if respLen > 0 {
+		// get random choice of possible reactions
+		rand.Seed(time.Now().UnixNano())
+		notice = resp.Index(rand.Intn(respLen)).String()
+	}
 	switch val[0].Field(3).String() {
 	case "GREEN":
 		color = "[green]"
@@ -156,7 +160,6 @@ func Parse(input string, area setup.Area) setup.Area {
 	}
 	switch knownVerb.Func {
 	case "Move", "Climb", "Load", "Jump":
-		//color = setup.GREEN
 		// OK
 		if val[0].Field(1).Bool() == true {
 			// Area
@@ -164,43 +167,15 @@ func Parse(input string, area setup.Area) setup.Area {
 			area.Properties.Visited = true
 			setup.GameAreas[area.ID] = area.Properties
 		}
-		// add notice. Give feedback in the next screen.
 		fallthrough
-		/*
-			grid.InputField.SetText("")
-			grid.Response.SetText(
-				fmt.Sprintf("\n%s%s%s\n",
-					color,
-					notice, "[-:black:-]"))
-		*/
 	default:
-		// OK
-		/*
-			if val[0].Field(1).Bool() == true {
-				color = setup.GREEN
-			} else {
-				color = setup.RED
-			}
-		*/
-		// add notice and give feedback in this screen.
-		//view.AddFlashNotice(notice, sleep, color)
-		//view.FlashNotice()
 		grid.InputField.SetText("")
-		/*
-			if area.ID == 0 {
-				grid.AreaMap.SetText(strings.Join(movement.DrawMap(area), "\n"))
-				grid.Grid.Clear()
-				grid.Grid.AddItem(grid.AreaGrid, 0, 0, 1, 1, 0, 0, false)
-				grid.AreaField.SetText("")
-				grid.App.SetFocus(grid.AreaField)
-			} else {
-		*/
 		grid.Response.SetText(
 			fmt.Sprintf("\n%s%s%s\n",
 				color,
 				notice, "[-:black:-]"))
 	}
-	// KO
+	// KO ?
 	if val[0].Field(2).Bool() == true {
 		time.Sleep(time.Duration(6) * time.Second)
 		GameOver(true)

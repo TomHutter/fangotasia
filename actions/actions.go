@@ -115,8 +115,8 @@ func (object Object) Take(area setup.Area) (r setup.Reaction) {
 		r = setup.Reactions["unreachable"]
 		return
 	case 48:
-		r = setup.Reactions["takeImke"]
-		r.Statement = fmt.Sprintf(r.Statement, "[#ff69b4::b]<Imke>[green:black:-]")
+		r = setup.GetReactionByName("takeImke")
+		r.Statement[0] = fmt.Sprintf(r.Statement[0], "[#ff69b4::b]<IMKE>[green:black:-]")
 		return
 	case 47:
 		if area.ID == 31 {
@@ -170,19 +170,6 @@ func (object Object) Stab(area setup.Area) (r setup.Reaction) {
 	return
 }
 
-func useDoor() {
-	/*
-		495 rem ** sperre *********************
-		496 f=0:gosub605:iffl=1thenfl=0:goto280
-		497 ifno<>40andno<>35thenprinta$(2):goto280
-		498 ifno=35thenprint"versuche 'oeffne'.":goto280
-		499 iftu=1thenprint"ist schon offen !":goto280
-		500 ifge(26)<>-1thenprint"ich habe keinen schluessel.":goto280
-		501 print"gut.":tu=1:goto281
-		502 :
-	*/
-}
-
 func (obj Object) Use(area setup.Area) (r setup.Reaction) {
 	switch obj.ID {
 	case 13, 31, 47:
@@ -233,7 +220,7 @@ func (obj Object) Throw(area setup.Area) (r setup.Reaction) {
 		m := Object(setup.GetObjectByID(47))
 		// Map here?
 		if !m.inArea(area) {
-			r = setup.Reactions["throw"]
+			r = setup.Reactions["throwStone"]
 			obj.NewAreaID(9)
 		}
 		if !setup.Flags["MapMissed"] {
@@ -250,7 +237,7 @@ func (obj Object) Throw(area setup.Area) (r setup.Reaction) {
 		return
 	}
 	if obj.ID == 46 || obj.ID == 20 {
-		r = setup.Reactions["throw"]
+		r = setup.Reactions["throwStone"]
 		obj.NewAreaID(area.ID)
 	}
 	if obj.ID == 49 {
@@ -305,8 +292,8 @@ func (obj Object) Read(area setup.Area) (r setup.Reaction) {
 	case 11, 12, 17, 21, 28, 38, 43, 47:
 		r = setup.Reactions[reaction[obj.ID]]
 	case 32:
-		r = setup.Reactions[reaction[obj.ID]]
-		r.Statement = view.Highlight(r.Statement, "[green:black:-]")
+		r = setup.GetReactionByName(reaction[obj.ID])
+		r.Statement[0] = view.Highlight(r.Statement[0], "[green:black:-]")
 	default:
 		r = setup.Reactions["dontKnowHow"]
 	}
@@ -328,13 +315,13 @@ func (obj Object) Say(area setup.Area, word string) (r setup.Reaction) {
 			for _, o := range setup.ObjectsInArea(area) {
 				points = points + int(o.Properties.Value)
 			}
-			r = setup.Reactions["fangotasia"]
-			r.Statement = fmt.Sprintf(r.Statement, points)
+			r = setup.GetReactionByName("fangotasia")
+			r.Statement[0] = fmt.Sprintf(r.Statement[0], points)
 			return
 		}
 	}
-	r = setup.Reactions["say"]
-	r.Statement = fmt.Sprintf(r.Statement, word)
+	r = setup.GetReactionByName("say")
+	r.Statement[0] = fmt.Sprintf(r.Statement[0], word)
 	return
 }
 
@@ -357,14 +344,14 @@ func (obj Object) Fill(area setup.Area) (r setup.Reaction) {
 	case 30:
 		r = setup.Reactions["ok"]
 	case 35, 44:
-		r = setup.Reactions["unsuitable"]
+		r = setup.GetReactionByName("unsuitable")
 		a := strings.Title(obj.Properties.Description.Article)
 		desc := fmt.Sprintf("%s %s", a, obj.Properties.Description.Short)
-		r.Statement = fmt.Sprintf(r.Statement, desc)
+		r.Statement[0] = fmt.Sprintf(r.Statement[0], desc)
 		return
 	default:
-		r = setup.Reactions["unusable"]
-		r.Statement = fmt.Sprintf(r.Statement, view.Highlight(obj.Properties.Description.Long, "[red]"))
+		r = setup.GetReactionByName("unusable")
+		r.Statement[0] = fmt.Sprintf(r.Statement[0], view.Highlight(obj.Properties.Description.Long, "[red]"))
 		return
 	}
 
@@ -383,10 +370,10 @@ func (obj Object) Fill(area setup.Area) (r setup.Reaction) {
 func (obj Object) Feed(area setup.Area) (r setup.Reaction) {
 	switch obj.ID {
 	case 10, 18, 36, 24:
-		r = setup.Reactions["feed"]
+		r = setup.GetReactionByName("feed")
 		a := strings.Title(obj.Properties.Description.Article)
 		desc := fmt.Sprintf("%s %s", a, obj.Properties.Description.Short)
-		r.Statement = fmt.Sprintf(setup.Reactions["feed"].Statement, desc)
+		r.Statement[0] = fmt.Sprintf(setup.Reactions["feed"].Statement[0], desc)
 	case 16:
 		berries := Object(setup.GetObjectByID(23))
 		if berries.inInventory() {
@@ -541,10 +528,10 @@ func (obj Object) Water(area setup.Area) (r setup.Reaction) {
 func (obj Object) Scare(area setup.Area) (r setup.Reaction) {
 	switch obj.ID {
 	case 10, 16, 18, 36, 42:
-		r = setup.Reactions["scare"]
+		r = setup.GetReactionByName("scare")
 		a := strings.Title(obj.Properties.Description.Article)
 		desc := fmt.Sprintf("%s %s", a, obj.Properties.Description.Short)
-		r.Statement = fmt.Sprintf(setup.Reactions["scare"].Statement, desc)
+		r.Statement[0] = fmt.Sprintf(setup.Reactions["scare"].Statement[0], desc)
 	default:
 		r = setup.Reactions["silly"]
 	}

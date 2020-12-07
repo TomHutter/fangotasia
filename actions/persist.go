@@ -37,7 +37,7 @@ func (obj Object) Save(area setup.Area) (r setup.Reaction) {
 	r = setup.Reactions["saved"]
 	file, err := os.Create(filename)
 	if err != nil {
-		r.Statement = err.Error()
+		r.Statement[0] = err.Error()
 		r.OK = false
 		return
 	}
@@ -45,14 +45,14 @@ func (obj Object) Save(area setup.Area) (r setup.Reaction) {
 	defer file.Close()
 
 	if err = yaml.NewEncoder(file).Encode(m); err != nil {
-		r.Statement = err.Error()
+		r.Statement[0] = err.Error()
 		r.OK = false
 		return
 	}
 
 	err = file.Close()
 	if err != nil {
-		r.Statement = err.Error()
+		r.Statement[0] = err.Error()
 		r.OK = false
 		return
 	}
@@ -70,13 +70,13 @@ func (obj Object) Load(area setup.Area) (r setup.Reaction, areaID int) {
 
 	yamlFile, err := ioutil.ReadFile(filename)
 	if err != nil {
-		r.Statement = err.Error()
+		r.Statement[0] = err.Error()
 		r.OK = false
 		return
 	}
 	err = yaml.Unmarshal(yamlFile, &content)
 	if err != nil {
-		r.Statement = err.Error()
+		r.Statement[0] = err.Error()
 		r.OK = false
 		return
 	}

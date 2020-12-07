@@ -2,6 +2,7 @@ package actions_test
 
 import (
 	"fangotasia/actions"
+	"fangotasia/grid"
 	"fangotasia/setup"
 	"fangotasia/view"
 	"fmt"
@@ -19,9 +20,9 @@ func TestSetup(t *testing.T) {
 	setup.Setup()
 }
 
-/*
 func TestParse(t *testing.T) {
 	setup.Setup()
+	grid.SetupGrid()
 	// go to area 1
 	area1 := setup.GetAreaByID(1)
 	area := actions.Parse("nimm zauberschuhe", area1)
@@ -32,7 +33,6 @@ func TestParse(t *testing.T) {
 	area2 := setup.GetAreaByID(2)
 	assert.Equal(t, area2, area)
 }
-*/
 
 func TestTake(t *testing.T) {
 	setup.Setup()
@@ -205,7 +205,7 @@ func TestThrow(t *testing.T) {
 	area = setup.GetAreaByID(1)
 	sphere = actions.Object(setup.GetObjectByID(46))
 	res = sphere.Throw(area)
-	assert.Equal(t, setup.Reactions["throw"].Statement, res.Statement)
+	assert.Equal(t, setup.Reactions["throwStone"].Statement, res.Statement)
 	assert.True(t, res.OK)
 	assert.Equal(t, 1, setup.GetObjectByID(46).Properties.Area)
 
@@ -213,7 +213,7 @@ func TestThrow(t *testing.T) {
 	area = setup.GetAreaByID(9)
 	stone := actions.Object(setup.GetObjectByID(20))
 	res = stone.Throw(area)
-	assert.Equal(t, setup.Reactions["throw"].Statement, res.Statement)
+	assert.Equal(t, setup.Reactions["throwStone"].Statement, res.Statement)
 	assert.True(t, res.OK)
 	assert.Equal(t, 9, setup.GetObjectByID(20).Properties.Area)
 
@@ -256,7 +256,7 @@ func TestRead(t *testing.T) {
 	area := setup.GetAreaByID(1)
 	panel := actions.Object(setup.GetObjectByID(32))
 	res := panel.Read(area)
-	assert.Equal(t, view.Highlight(setup.Reactions["panel"].Statement, "[green:black:-]"), res.Statement)
+	assert.Equal(t, view.Highlight(setup.Reactions["panel"].Statement[0], "[green:black:-]"), res.Statement[0])
 	assert.True(t, res.OK)
 
 	// read letter
@@ -366,14 +366,16 @@ func TestSay(t *testing.T) {
 
 	// say "blubb"
 	res := obj.Say(area, "blubb")
-	s := fmt.Sprintf(setup.Reactions["say"].Statement, "blubb")
-	assert.Equal(t, s, res.Statement)
+	say := setup.GetReactionByName("say")
+	s := fmt.Sprintf(say.Statement[0], "blubb")
+	assert.Equal(t, s, res.Statement[0])
 	assert.True(t, res.OK)
 
 	// say "fangotasia"
 	res = obj.Say(area, "fangotasia")
-	s = fmt.Sprintf(setup.Reactions["fangotasia"].Statement, sword.Properties.Value+dagger.Properties.Value)
-	assert.Equal(t, s, res.Statement)
+	fangotasia := setup.GetReactionByName("fangotasia")
+	s = fmt.Sprintf(fangotasia.Statement[0], sword.Properties.Value+dagger.Properties.Value)
+	assert.Equal(t, s, res.Statement[0])
 	assert.True(t, res.OK)
 
 	// say "simsalabim"
@@ -392,8 +394,9 @@ func TestFill(t *testing.T) {
 	sword.NewAreaID(setup.INVENTORY)
 
 	res := sword.Fill(area)
-	s := view.Highlight(fmt.Sprintf(setup.Reactions["unusable"].Statement, sword.Properties.Description.Long), "[red]")
-	assert.Equal(t, s, res.Statement)
+	unusable := setup.GetReactionByName("unusable")
+	s := view.Highlight(fmt.Sprintf(unusable.Statement[0], sword.Properties.Description.Long), "[red]")
+	assert.Equal(t, s, res.Statement[0])
 	assert.False(t, res.OK)
 
 	// fill jar
@@ -427,8 +430,9 @@ func TestFill(t *testing.T) {
 	res = goblet.Fill(area)
 	a := strings.Title(goblet.Properties.Description.Article)
 	desc := fmt.Sprintf("%s %s", a, goblet.Properties.Description.Short)
-	s = fmt.Sprintf(setup.Reactions["unsuitable"].Statement, desc)
-	assert.Equal(t, s, res.Statement)
+	unsuitable := setup.GetReactionByName("unsuitable")
+	s = fmt.Sprintf(unsuitable.Statement[0], desc)
+	assert.Equal(t, s, res.Statement[0])
 	assert.False(t, res.OK)
 }
 
@@ -448,7 +452,8 @@ func TestFeed(t *testing.T) {
 	res = dwarf.Feed(area)
 	a := strings.Title(dwarf.Properties.Description.Article)
 	desc := fmt.Sprintf("%s %s", a, dwarf.Properties.Description.Short)
-	assert.Equal(t, fmt.Sprintf(setup.Reactions["feed"].Statement, desc), res.Statement)
+	feed := setup.GetReactionByName("feed")
+	assert.Equal(t, fmt.Sprintf(feed.Statement[0], desc), res.Statement[0])
 	assert.False(t, res.OK)
 
 	// feed baer

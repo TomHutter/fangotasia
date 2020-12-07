@@ -27,12 +27,12 @@ func (v *verb) Inventory() (inv []string, sleep int) {
 	objects := setup.ObjectsInArea(setup.GetAreaByID(setup.INVENTORY))
 	if len(objects) == 0 {
 		//fmt.Println("Ich habe nichts dabei.")
-		inv = append(inv, setup.Reactions["invEmpty"].Statement)
+		inv = append(inv, setup.Reactions["invEmpty"].Statement[0])
 		sleep = 2
 		return
 	}
 
-	inv = append(inv, setup.Reactions["inv"].Statement)
+	inv = append(inv, setup.Reactions["inv"].Statement[0])
 	for _, o := range objects {
 		obj := view.Highlight(o.Properties.Description.Long, "[green:black:-]")
 		inv = append(inv, fmt.Sprintf("- %s", obj))

@@ -109,7 +109,7 @@ type MapOverwrites struct {
 }
 
 type Reaction struct {
-	Statement string
+	Statement []string
 	OK        bool
 	KO        bool
 	Color     string
@@ -252,5 +252,12 @@ func GetOverwriteByArea(area int) (o MapOverwrites) {
 			return o
 		}
 	}
+	return
+}
+
+func GetReactionByName(name string) (r Reaction) {
+	r = Reactions[name]
+	r.Statement = make([]string, len(Reactions[name].Statement))
+	copy(r.Statement, Reactions[name].Statement)
 	return
 }

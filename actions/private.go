@@ -27,11 +27,11 @@ func (object Object) snatchFrom(opponent Object) (r setup.Reaction) {
 	hood := Object(setup.GetObjectByID(13))
 	area := setup.GetAreaByID(object.Properties.Area)
 	if opponent.inArea(area) && !hood.inUse() {
-		r = setup.Reactions["wontLet"]
-		r.Statement = fmt.Sprintf("%s %s %s",
+		r = setup.GetReactionByName("wontLet")
+		r.Statement[0] = fmt.Sprintf("%s %s %s",
 			strings.Title(opponent.Properties.Description.Article),
 			opponent.Properties.Description.Short,
-			r.Statement)
+			r.Statement[0])
 		return
 	}
 	return object.pick()
@@ -90,8 +90,8 @@ func getObjectByName(name string, area setup.Area) (object Object) {
 		return
 	}
 	// don't know what you are talking about
-	r := setup.Reactions["unknownNoun"]
-	statement := fmt.Sprintf(r.Statement, name)
+	r := setup.GetReactionByName("unknownNoun")
+	statement := fmt.Sprintf(r.Statement[0], name)
 	//view.AddFlashNotice(statement, r.Sleep, "[red]")
 	grid.InputField.SetText("")
 	grid.Response.SetText(

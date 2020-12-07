@@ -211,6 +211,6 @@ func Surroundings(area setup.Area) (text []string) {
 			}
 		}
 	}
-	text = append(text, fmt.Sprintf("%sGebiet: %d, Richtungen: %s", "[white:black:b]", area.ID, strings.Join(directions, ", ")))
+	text = append(text, fmt.Sprintf("%sRichtungen: %s", "[white:black:b]", strings.Join(directions, ", ")))
 	return
 }
