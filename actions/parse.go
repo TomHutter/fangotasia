@@ -93,7 +93,7 @@ func Parse(input string, area setup.Area) setup.Area {
 		obj = Object{}
 		argv = append(argv, reflect.ValueOf(area))
 		argv = append(argv, reflect.ValueOf(knownVerb.Name))
-	case "Load", "Save", "Jump", "Map":
+	case "Load", "Save", "Jump", "Map", "Help":
 		obj = Object{}
 		argv = append(argv, reflect.ValueOf(area))
 	case "Say":
@@ -148,9 +148,12 @@ func Parse(input string, area setup.Area) setup.Area {
 	resp := val[0].Field(0)
 	respLen := resp.Len()
 	if respLen > 0 {
-		// get random choice of possible reactions
 		rand.Seed(time.Now().UnixNano())
 		notice = resp.Index(rand.Intn(respLen)).String()
+		for notice == grid.Response.GetText(true) {
+			// get random choice of possible reactions
+			notice = resp.Index(rand.Intn(respLen)).String()
+		}
 	}
 	switch val[0].Field(3).String() {
 	case "GREEN":
@@ -178,6 +181,10 @@ func Parse(input string, area setup.Area) setup.Area {
 	// KO ?
 	if val[0].Field(2).Bool() == true {
 		time.Sleep(time.Duration(6) * time.Second)
+		area = setup.GetAreaByID(1)
+		grid.InputField.SetText("")
+		grid.Response.SetText("")
+		grid.Surroundings.SetText("")
 		GameOver(true)
 	}
 	return area

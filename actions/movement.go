@@ -119,5 +119,6 @@ func (object Object) Jump(area setup.Area) (r setup.Reaction, areaID int) {
 		}
 	}
 	r = setup.Reactions["jump"]
+	areaID = area.ID
 	return
 }

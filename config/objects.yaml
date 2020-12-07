@@ -61,7 +61,7 @@ objects:
     value: 0
   17:
     description:
-      long: "::einen Schild aus bronze::"
+      long: "::einen Schild aus Bronze::"
       short: Schild
       article: der
     area: 19
@@ -282,7 +282,7 @@ objects:
     value: 11
   47:
     description:
-      long: "eine verbleichte Landkarte" 
+      long: "eine ausgeblichene Landkarte" 
       short: Landkarte
       alt: Karte
       article: die

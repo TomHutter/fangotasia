@@ -2,6 +2,7 @@ package actions
 
 import (
 	"fangotasia/grid"
+	"fangotasia/intro"
 	"fangotasia/movement"
 	"fangotasia/setup"
 	"fangotasia/view"
@@ -251,16 +252,20 @@ func (obj Object) Throw(area setup.Area) (r setup.Reaction) {
 		for _, i := range []int{10, 14, 16, 18, 21, 29, 32, 36, 40, 42, 43, 45} {
 			object := Object(setup.GetObjectByID(i))
 			if object.inArea(area) {
-				article := object.Properties.Description.Article
-				parts := strings.Split(object.Properties.Description.Long, " ")[1:]
-				long := strings.Join(parts, " ")
-				newLong := fmt.Sprintf(setup.Conditions["fango"][article], long)
-				object.NewCondition(newLong)
-				r = setup.Reactions["hitWithFango"]
-				return
+				if strings.Contains(object.Properties.Description.Long, "::") {
+					r = setup.Reactions["alreadyFangoed"]
+					return
+				} else {
+					article := object.Properties.Description.Article
+					parts := strings.Split(object.Properties.Description.Long, " ")[1:]
+					long := strings.Join(parts, " ")
+					newLong := fmt.Sprintf(setup.Conditions["fango"][article], long)
+					object.NewCondition(newLong)
+					r = setup.Reactions["hitWithFango"]
+					return
+				}
 			}
 		}
-		obj.NewAreaID(0)
 		r = setup.Reactions["throwFango"]
 	}
 	return
@@ -443,15 +448,19 @@ func (obj Object) Catapult(area setup.Area) (r setup.Reaction) {
 }
 
 func (obj Object) Eat(area setup.Area) (r setup.Reaction) {
-	if !obj.inInventory() {
-		r = setup.Reactions["dontHave"]
-		return
-	}
 	switch obj.ID {
 	case 9:
+		if !obj.inInventory() {
+			r = setup.Reactions["dontHave"]
+			return
+		}
 		obj.NewAreaID(setup.INUSE)
 		r = setup.Reactions["eatCake"]
 	case 23:
+		if !obj.inInventory() {
+			r = setup.Reactions["dontHave"]
+			return
+		}
 		obj.NewAreaID(0)
 		r = setup.Reactions["ok"]
 	default:
@@ -476,12 +485,14 @@ func (jar Object) Drink(area setup.Area) (r setup.Reaction) {
 }
 
 func (obj Object) Spin(area setup.Area) (r setup.Reaction) {
-	if !obj.inInventory() {
-		r = setup.Reactions["dontHave"]
-		return
-	}
 	switch obj.ID {
+	case 10, 14, 16, 18, 21, 22, 27, 29, 32, 36, 40, 45, 42, 43:
+		r = setup.Reactions["dontSpin"]
 	case 37:
+		if !obj.inInventory() {
+			r = setup.Reactions["dontHave"]
+			return
+		}
 		if obj.Properties.Description.Long == setup.Conditions["ring"]["golden"] {
 			r = setup.Reactions["spin"]
 		} else {
@@ -490,6 +501,10 @@ func (obj Object) Spin(area setup.Area) (r setup.Reaction) {
 			r = setup.Reactions["spinRing"]
 		}
 	default:
+		if !obj.inInventory() {
+			r = setup.Reactions["dontHave"]
+			return
+		}
 		r = setup.Reactions["spin"]
 	}
 	return
@@ -559,5 +574,15 @@ func (obj Object) Map(area setup.Area) (r setup.Reaction) {
 			grid.App.SetFocus(grid.InputField)
 		})
 	grid.App.SetFocus(grid.AreaField)
+	return
+}
+
+func (obj Object) Help(area setup.Area) (r setup.Reaction) {
+	grid.Grid.Clear()
+	grid.Grid.AddItem(grid.AreaGrid, 0, 0, 1, 1, 0, 0, false)
+	grid.AreaMap.SetText("")
+	grid.AreaField.SetText("")
+	grid.App.SetFocus(grid.AreaField)
+	intro.Intro()
 	return
 }

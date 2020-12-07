@@ -354,7 +354,7 @@ reactions:
     sleep: 6
   missMap:
     statement:
-      - "Ups. Nicht getroffen"
+      - "Ups. Diesmal nicht getroffen"
     ok: true
     ko: false
     color: RED
@@ -535,6 +535,13 @@ reactions:
     ko: false
     color: GREEN
     sleep: 5
+  dontSpin:
+    statement:
+      - "Lässt sich nicht drehen."
+    ok: false
+    ko: false
+    color: RED
+    sleep: 5
   spinRing:
     statement:
       - "Alles beginnt sich zu drehen!\n\nDer Ring fällt mir aus der Hand!"
@@ -559,6 +566,8 @@ reactions:
   looksGood:
     statement:
       - "Sieht verdammt gut aus!"
+      - "beeindruckend"
+      - "Da ist doch ....\n... nee, wohl doch nicht."
     ok: true
     ko: false
     color: GREEN
@@ -594,6 +603,8 @@ reactions:
   throwFango:
     statement:
       - "Klatsch .... ein Fango-Fladen!"
+      - "Kein passendes Ziel."
+      - "Mehr Glück beim nächsten Mal."
     ok: true
     ko: false
     color: GREEN
@@ -601,6 +612,19 @@ reactions:
   hitWithFango:
     statement:
       - "Klatsch .... getroffen!"
+      - "veni, vidi, vici"
+      - "Sei albern!!"
+      - "Wer hat noch nicht, wer will noch mal?"
+      - "Fango Tango."
+    ok: true
+    ko: false
+    color: GREEN
+    sleep: 3
+  alreadyFangoed:
+    statement:
+      - "Fango auf Fango"
+      - "Mehr geht nicht."
+      - "Hat schon genug."
     ok: true
     ko: false
     color: GREEN

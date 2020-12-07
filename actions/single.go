@@ -47,13 +47,3 @@ func (v *verb) End() (r []string, sleep int) {
 	GameOver(false)
 	return
 }
-
-func (v *verb) Help() (r []string, sleep int) {
-	fmt.Print("\n\n")
-	res := view.Scanner("once: true", "prompt: Ich kann nur die Anleitung wiederholen. (j/n)")
-	if strings.ToLower(res) == "j" {
-		//intro.Intro()
-		fmt.Println(res)
-	}
-	return
-}

@@ -1,7 +1,4 @@
 verbs:
-  - name: gehe
-    func: Go
-    single: false
   - name: stich
     func: Stab
     single: false
@@ -61,7 +58,7 @@ verbs:
     single: false
   - name: hilfe
     func: Help
-    single: true
+    single: false
   - name: klettere
     func: Climb
     single: false

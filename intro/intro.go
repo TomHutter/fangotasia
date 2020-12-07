@@ -7,7 +7,7 @@ import (
 	"github.com/gdamore/tcell/v2"
 )
 
-func Intro(repl func()) {
+func Intro() {
 	var text = []string{
 		"[blue:black:-]Mach Dich auf den gefahrenreichen Weg in",
 		"das zauberhafte Land Fangotasia und suche",
@@ -15,7 +15,7 @@ func Intro(repl func()) {
 		"Führe mich mit einfachen Kommandos in",
 		"einem oder zwei Worten, z.B.:",
 		"",
-		"[yellow:black:b]NORDEN      BENUTZE TARNKAPPE      ENDE",
+		"[yellow:black:b]SPRING      BENUTZE TARNKAPPE      ENDE",
 		"",
 		"LEGE RUBIN     FÜTTERE DRACHE     INVENTAR",
 		"",
@@ -37,7 +37,7 @@ func Intro(repl func()) {
 	//view.Scanner("once: true")
 }
 
-func Prelude(repl func()) {
+func Prelude() {
 	var text = []string{
 		"[red:black:b]F A N G O T A S I A",
 		"",
@@ -50,7 +50,7 @@ func Prelude(repl func()) {
 	grid.AreaMap.SetText(strings.Join(text, "\n"))
 	grid.AreaField.SetText("")
 	grid.App.SetFocus(grid.AreaField)
-	grid.AreaField.SetDoneFunc(func(key tcell.Key) { Intro(repl) })
+	grid.AreaField.SetDoneFunc(func(key tcell.Key) { Intro() })
 	//grid.Pages.SwitchToPage("map")
 
 	//view.PrintScreen(text)

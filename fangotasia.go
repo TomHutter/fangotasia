@@ -17,7 +17,7 @@ import (
 )
 
 /*
-ToDos
+ToDos:
 */
 
 // Setup keyboard scanning
@@ -115,7 +115,7 @@ func main() {
 	movement.RevealArea(area.ID)
 	go actions.REPL(area)
 	grid.Surroundings.SetText(strings.Join(view.Surroundings(area), "\n"))
-	intro.Prelude(func() { actions.REPL(area) })
+	intro.Prelude()
 	//for {
 	//actions.REPL(area)
 	//}
