@@ -23,7 +23,7 @@ func Highlight(s string, c string) (h string) {
 func Surroundings(area setup.Area) (text []string) {
 	desc := strings.Split(area.Properties.Description.Long, "\\n")
 	desc0, desc := desc[0], desc[1:]
-	text = append(text, fmt.Sprintf("%sIch bin %s", "[yellow]", desc0))
+	text = append(text, fmt.Sprintf("%s%s %s", "[yellow]", setup.TextElements["iAm"], desc0))
 	for _, v := range desc {
 		if strings.Contains(v, "++") {
 			v = strings.ReplaceAll(v, "++", "")
@@ -39,7 +39,7 @@ func Surroundings(area setup.Area) (text []string) {
 		items = append(items, fmt.Sprintf("%s  - %s", "[blue:black]", item))
 	}
 	if len(items) > 0 {
-		text = append(text, fmt.Sprintf("%sIch sehe:", "[blue:black]"))
+		text = append(text, fmt.Sprintf("%s%s:", "[blue:black]", setup.TextElements["iSee"]))
 		for _, item := range items {
 			text = append(text, item)
 		}
@@ -50,16 +50,18 @@ func Surroundings(area setup.Area) (text []string) {
 		if area.Properties.Directions[d] != 0 {
 			switch d {
 			case 0: // N
-				directions = append(directions, "Norden")
+				directions = append(directions, setup.TextElements["north"])
 			case 1: // S
-				directions = append(directions, "Süden")
+				directions = append(directions, setup.TextElements["south"])
 			case 2: // O
-				directions = append(directions, "Osten")
+				directions = append(directions, setup.TextElements["east"])
 			case 3: // W
-				directions = append(directions, "Westen")
+				directions = append(directions, setup.TextElements["west"])
 			}
 		}
 	}
-	text = append(text, fmt.Sprintf("%sRichtungen: %s", "[white:black:b]", strings.Join(directions, ", ")))
+	text = append(text, fmt.Sprintf("%s%s: %s", "[white:black:b]",
+		setup.TextElements["directions"],
+		strings.Join(directions, ", ")))
 	return
 }

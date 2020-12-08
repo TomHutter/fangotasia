@@ -32,7 +32,6 @@ func TestGetAreaByID(t *testing.T) {
 	assert.IsType(t, [4]int{}, area.Properties.Directions, "Area directions have to be type [4]int.")
 	assert.IsType(t, 0, area.Properties.Coordinates.X, "Area x coordinates shoud by type int.")
 	assert.IsType(t, 0, area.Properties.Coordinates.Y, "Area y coordinates should be type int.")
-	assert.False(t, area.Properties.Visited, "Area should not be visited.")
 }
 
 func TestGetObjectByID(t *testing.T) {

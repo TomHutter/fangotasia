@@ -18,7 +18,6 @@ type reaction struct {
 	OK       bool
 	KO       bool
 	Reaction []string
-	Sleep    int
 	AreaID   int
 	Color    string
 }
@@ -164,7 +163,6 @@ func Parse(input string, area setup.Area) setup.Area {
 		if val[0].Field(1).Bool() == true {
 			// Area
 			area = setup.GetAreaByID(int(val[1].Int()))
-			area.Properties.Visited = true
 			setup.GameAreas[area.ID] = area.Properties
 		}
 		fallthrough
@@ -182,7 +180,7 @@ func Parse(input string, area setup.Area) setup.Area {
 		grid.InputField.SetText("")
 		grid.Response.SetText("")
 		grid.Surroundings.SetText("")
-		GameOver(true)
+		scoreBoard(true, true)
 	}
 	return area
 }

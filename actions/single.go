@@ -7,8 +7,8 @@ import (
 	"strings"
 )
 
-func (v *verb) Verbs() (verbs []string, sleep int) {
-	verbs = append(verbs, "Verben, die ich kenne: ")
+func (v *verb) Verbs() (verbs []string) {
+	verbs = append(verbs, fmt.Sprintf("%s: ", setup.TextElements["verbsKnown"]))
 	var line []string
 	for i, val := range setup.Verbs {
 		if i > 1 && i%10 == 0 {
@@ -18,15 +18,13 @@ func (v *verb) Verbs() (verbs []string, sleep int) {
 		line = append(line, string(val.Name))
 	}
 	verbs = append(verbs, strings.Join(line, ", "))
-	sleep = -1
 	return
 }
 
-func (v *verb) Inventory() (inv []string, sleep int) {
+func (v *verb) Inventory() (inv []string) {
 	objects := setup.ObjectsInArea(setup.GetAreaByID(setup.INVENTORY))
 	if len(objects) == 0 {
 		inv = append(inv, setup.Reactions["invEmpty"].Statement[0])
-		sleep = 2
 		return
 	}
 
@@ -35,13 +33,10 @@ func (v *verb) Inventory() (inv []string, sleep int) {
 		obj := view.Highlight(o.Properties.Description.Long, "[green:black:-]")
 		inv = append(inv, fmt.Sprintf("- %s", obj))
 	}
-	sleep = -1
 	return
 }
 
-func (v *verb) End() (r []string, sleep int) {
-	r = append(r, "Yippeeee....")
-	sleep = 3
-	GameOver(false)
+func (v *verb) End() (r []string) {
+	scoreBoard(true, false)
 	return
 }

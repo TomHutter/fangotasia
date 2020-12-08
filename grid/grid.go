@@ -1,6 +1,9 @@
 package grid
 
 import (
+	"fangotasia/setup"
+	"fmt"
+
 	"github.com/gdamore/tcell/v2"
 	"github.com/rivo/tview"
 )
@@ -23,7 +26,7 @@ func SetupGrid() {
 	App = tview.NewApplication()
 
 	InputField = tview.NewInputField().
-		SetLabel("und nun? > ").
+		SetLabel(fmt.Sprintf("%s? > ", setup.TextElements["andNow"])).
 		SetLabelColor(tcell.ColorDarkCyan).
 		SetFieldWidth(80).
 		SetFieldBackgroundColor(tcell.ColorBlack).
@@ -33,7 +36,7 @@ func SetupGrid() {
 		})
 
 	AreaField = tview.NewInputField().
-		SetLabel("Weiter \u23CE ").
+		SetLabel(fmt.Sprintf("%s \u23CE ", setup.TextElements["next"])).
 		SetLabelColor(tcell.ColorDarkCyan).
 		SetFieldWidth(20).
 		SetFieldBackgroundColor(tcell.ColorBlack).

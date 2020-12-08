@@ -3,6 +3,7 @@ package actions
 import (
 	"fangotasia/movement"
 	"fangotasia/setup"
+	"fmt"
 	"math/rand"
 	"time"
 )
@@ -16,7 +17,8 @@ func beads(areaID int) {
 
 	if setup.Beads == 108 {
 		imke := Object(setup.GetObjectByID(48))
-		imke.Properties.Description.Long = "[#ff69b4::b]<IMKE>[blue:black:-] den pink Diamanten"
+		imke.Properties.Description.Long = fmt.Sprintf("[#ff69b4::b]<IMKE>[blue:black:-] %s",
+			setup.TextElements["imke"])
 		imke.Properties.Description.Short = "Imke"
 		imke.NewAreaID(areaID)
 	}
@@ -49,6 +51,9 @@ func (obj Object) Move(area setup.Area, dir string) (r setup.Reaction, areaID in
 		return
 	}
 
+	if area.ID == 29 {
+		setup.Flags["Castle"] = true
+	}
 	// Area 30 and 25 are connected by a door. Is it open?
 	if (area.ID == 30 || area.ID == 25 && direction[dir] == 0) && !setup.Flags["DoorOpen"] {
 		r = setup.Reactions["locked"]
@@ -62,6 +67,7 @@ func (obj Object) Move(area setup.Area, dir string) (r setup.Reaction, areaID in
 	areaID = newArea
 	// Direction Moor?
 	if newArea == 5 {
+		setup.Flags["Moore"] = true
 		for _, o := range setup.ObjectsInArea(setup.GetAreaByID(setup.INVENTORY)) {
 			obj := Object(o)
 			obj.NewAreaID(29)
@@ -83,9 +89,7 @@ func (object Object) Climb(area setup.Area) (r setup.Reaction, areaID int) {
 		beads(area.ID)
 		movement.RevealArea(31)
 		moves += 1
-		treetop := setup.GetAreaByID(31)
-		treetop.Properties.Visited = true
-		setup.GameAreas[treetop.ID] = treetop.Properties
+		setup.Flags["Tree"] = true
 		r.OK = true
 		areaID = 31
 		return

@@ -306,12 +306,7 @@ func (obj Object) Say(area setup.Area, word string) (r setup.Reaction) {
 		}
 	case "fangotasia":
 		if area.ID == 1 {
-			var points int
-			for _, o := range setup.ObjectsInArea(area) {
-				points = points + int(o.Properties.Value)
-			}
-			r = setup.GetReactionByName("fangotasia")
-			r.Statement[0] = fmt.Sprintf(r.Statement[0], points)
+			scoreBoard(false, false)
 			return
 		}
 	}

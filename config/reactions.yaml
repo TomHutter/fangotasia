@@ -8,14 +8,12 @@ reactions:
     ok: false
     ko: false
     color: RED
-    sleep: 3
   noTool:
     statement:
       - "Ich habe nicht das richtige Werkzeug."
     ok: false
     ko: false
     color: RED
-    sleep: 3
   dontKnowHow:
     statement:
       - "Ich weis nicht wie das geht."
@@ -23,21 +21,18 @@ reactions:
     ok: false
     ko: false
     color: RED
-    sleep: 2
   wontLet:
     statement:
       - "lässt mich nicht."
     ok: false
     ko: false
     color: RED
-    sleep: 4
   tooHeavy:
     statement:
       - "Zu schwer."
     ok: false
     ko: false
     color: RED
-    sleep: 2
   unreachable:
     statement:
       - "Kann ich nicht erreichen."
@@ -45,7 +40,6 @@ reactions:
     ok: false
     ko: false
     color: RED
-    sleep: 2
   invFull:
     statement: 
       - |
@@ -54,7 +48,6 @@ reactions:
     ok: false
     ko: false
     color: RED
-    sleep: 4
   ok:
     statement:
       - "Gut."
@@ -64,7 +57,6 @@ reactions:
     ok: true
     ko: false
     color: GREEN
-    sleep: 1
   noWay:
     statement:
       - "In diese Richtung führt kein Weg."
@@ -73,133 +65,114 @@ reactions:
     ok: false
     ko: false
     color: RED
-    sleep: 2
   noShoes:
     statement:
       - "Hilfe...\n\nIch versinke im Boden."
     ok: false
     ko: true
     color: RED
-    sleep: 6
   locked:
     statement:
       - "Die Tür ist versperrt."
     ok: false
     ko: false
     color: RED
-    sleep: 2
   tryCut:
     statement:
       - "Versuche schneide."
     ok: true
     ko: false
     color: GREEN
-    sleep: 2
   stabGrub:
     statement:
       - "Die Raupe ist kitzelig und lacht laut!"
     ok: true
     ko: false
     color: GREEN
-    sleep: 4
   stabBear:
     statement:
       - "Der Bär brummt unwillig."
     ok: true
     ko: false
     color: GREEN
-    sleep: 4
   stabDwarf:
     statement:
       - "Der Zwerg wird böse und tötet mich!"
     ok: false
     ko: true
     color: RED
-    sleep: 6
   stabDwarfHooded:
     statement:
       - "Der Zwerg erschrickt und rennt weg."
     ok: true
     ko: false
     color: GREEN
-    sleep: 4
   stabGnome:
     statement:
       - "Der Gnom verzaubert mich!"
     ok: false
     ko: true
     color: RED
-    sleep: 6
   stabGnomeHooded:
     statement:
       - "Der Gnom erschrickt und rennt weg"
     ok: true
     ko: false
     color: GREEN
-    sleep: 4
   stabDragon:
     statement:
       - "Der Drache verbrennt mich!"
     ok: false
     ko: true
     color: RED
-    sleep: 6
   dontSee:
     statement:
       - "Sehe ich hier nicht."
     ok: false
     ko: false
     color: RED
-    sleep: 2
   haveAlready:
     statement:
       - "Hab ich schon."
     ok: true
     ko: false
     color: GREEN
-    sleep: 2
   dontHave:
     statement:
       - "Hab ich nicht dabei."
     ok: false
     ko: false
     color: RED
-    sleep: 2
   invEmpty:
     statement:
       - "Ich habe nichts dabei."
     ok: true
     ko: false
     color: RED
-    sleep: 2
   inv:
     statement:
       - "Ich habe:"
     ok: true
     ko: false
     color: GREEN
-    sleep: 3
   useHood:
     statement:
       - "Gut. Ich setze die Tarnkappe auf."
     ok: true
     ko: false
     color: GREEN
-    sleep: 3
   hoodInUse:
     statement:
       - "Die Tarnkappe hat sich in Luft aufgelöst!"
     ok: false
     ko: false
     color: RED
-    sleep: 3
   useShoes:
     statement:
       - "Gut. Ich zog die Zauberschuhe an."
     ok: true
     ko: false
     color: GREEN
-    sleep: 3
   unknownVerb:
     statement:
       - |
@@ -208,7 +181,6 @@ reactions:
     ok: true
     ko: false
     color: RED
-    sleep: 5
   unknownNoun:
     statement:
       - "'%s' kenne ich nicht."
@@ -217,35 +189,30 @@ reactions:
     ok: false
     ko: false
     color: RED
-    sleep: 2
   needObject:
     statement:
       - "Bitte gib ein Objekt an."
     ok: false
     ko: false
     color: RED
-    sleep: 2
   inTheMoor:
     statement:
       - "Im Moor ist alles verschwunden, was ich bei mir hatte!"
     ok: true
     ko: false
     color: RED
-    sleep: 6
   loaded:
     statement:
       - "Spiel erfolgreich geladen."
     ok: true
     ko: false
     color: GREEN
-    sleep: 2
   saved:
     statement:
       - "Spiel erfolgreich geschrieben."
     ok: true
     ko: false
     color: GREEN
-    sleep: 2
   squashed:
     statement:
       - |
@@ -254,28 +221,24 @@ reactions:
     ok: true
     ko: false
     color: GREEN
-    sleep: 4
   brokenSphere:
     statement:
       - "Die Kugel fällt auf den Boden und zerbricht."
     ok: false
     ko: false
     color: RED
-    sleep: 4
   throwStone:
     statement:
       - "Gut. Nichts passiert."
     ok: true
     ko: false
     color: GREEN
-    sleep: 3
   nothingWritten:
     statement:
       - "Da steht nichts geschrieben."
     ok: false
     ko: false
     color: RED
-    sleep: 3
   book:
     statement:
       - |
@@ -284,7 +247,6 @@ reactions:
     ok: true
     ko: false
     color: GREEN
-    sleep: 6
   paper:
     statement:
       - |
@@ -294,7 +256,6 @@ reactions:
     ok: true
     ko: false
     color: GREEN
-    sleep: 6
   shield:
     statement:
       - |
@@ -303,7 +264,6 @@ reactions:
     ok: true
     ko: false
     color: GREEN
-    sleep: 6
   wallpainting:
     statement:
       - |
@@ -312,7 +272,6 @@ reactions:
     ok: true
     ko: false
     color: GREEN
-    sleep: 6
   parchment:
     statement:
       - |
@@ -321,7 +280,6 @@ reactions:
     ok: true
     ko: false
     color: GREEN
-    sleep: 6
   panel:
     statement:
       - |
@@ -333,7 +291,6 @@ reactions:
     ok: true
     ko: false
     color: GREEN
-    sleep: -1
   letter:
     statement:
       - |
@@ -342,7 +299,6 @@ reactions:
     ok: true
     ko: false
     color: GREEN
-    sleep: 6
   rottenPanel:
     statement:
       - |
@@ -351,28 +307,24 @@ reactions:
     ok: true
     ko: false
     color: GREEN
-    sleep: 6
   missMap:
     statement:
       - "Ups. Diesmal nicht getroffen"
     ok: true
     ko: false
     color: RED
-    sleep: 3
   hitMap:
     statement:
       - "Der Stein trifft die Landkarte und sie fällt zu Boden."
     ok: true
     ko: false
     color: GREEN
-    sleep: 5
   readMap:
     statement:
       - "Die Landkarte zeigt die Gebiete in denen ich schon war."
     ok: true
     ko: false
     color: GREEN
-    sleep: 4
   useMap:
     statement:
       - |
@@ -383,42 +335,36 @@ reactions:
     ok: true
     ko: false
     color: GREEN
-    sleep: 4
   noKey:
     statement:
       - "Ich habe keinen Schlüssel."
     ok: false
     ko: false
     color: RED
-    sleep: 3
   openBox:
     statement:
       - "Zwei Dinge fallen heraus."
     ok: true
     ko: false
     color: GREEN
-    sleep: 3
   alreadyOpen:
     statement:
       - "Ist schon offen."
     ok: true
     ko: false
     color: GREEN
-    sleep: 2
   say:
     statement:
       - "'%s'\n...\n...\nNichts passiert."
     ok: true
     ko: false
     color: GREEN
-    sleep: 4
   simsalabim:
     statement:
       - "Der Zwerg verwandelt sich in einen bunten Vogel\nund fliegt davon!"
     ok: true
     ko: false
     color: GREEN
-    sleep: 4
   fangotasia:
     statement:
       - |
@@ -429,140 +375,120 @@ reactions:
     ok: true
     ko: false
     color: GREEN
-    sleep: -1
   unusable:
     statement:
       - "Wirklich? Ich soll %s mit Wasser füllen? Wie soll das denn gehen?"
     ok: false
     ko: false
     color: RED
-    sleep: 6
   unsuitable:
     statement:
       - "%s eignet sich nicht dafür."
     ok: false
     ko: false
     color: RED
-    sleep: 4
   noWater:
     statement:
       - "Hier ist weit und breit kein Wasser zu sehen."
     ok: false
     ko: false
     color: RED
-    sleep: 4
   waterUnreachable:
     statement:
       - "Ich kann das Wasser nicht erreichen."
     ok: false
     ko: false
     color: RED
-    sleep: 4
   feed:
     statement:
       - "%s hat keinen Hunger."
     ok: false
     ko: false
     color: RED
-    sleep: 3
   feedBaer:
     statement:
       - "Der Bär ist sehr hungrig und frisst\n... \nmich!"
     ok: false
     ko: true
     color: RED
-    sleep: 6
   feedBaerWithBerries:
     statement:
       - "Der Bär verschlingt die Beeren und läuft davon."
     ok: true
     ko: false
     color: GREEN
-    sleep: 4
   cutFruit:
     statement:
       - "Ich habe die Frucht geteilt und etwas\nfällt heraus."
     ok: true
     ko: false
     color: GREEN
-    sleep: 4
   fruitAlreadyCut:
     statement:
       - "Die Frucht ist bereits zerteilt."
     ok: true
     ko: false
     color: GREEN
-    sleep: 3
   tryThrow:
     statement:
       - "Versuche 'wirf'."
     ok: true
     ko: false
     color: GREEN
-    sleep: 2
   eatCake:
     statement:
       - "Brrrrr! Schmeckt ja scheußlich!\nIch fühle mich jetzt besonders stark!"
     ok: true
     ko: false
     color: GREEN
-    sleep: 4
   drinkJar:
     statement:
       - "Aaaaaah gut!"
     ok: true
     ko: false
     color: GREEN
-    sleep: 4
   jarEmpty:
     statement:
       - "Der Krug ist leer."
     ok: false
     ko: false
     color: RED
-    sleep: 3
   cantEat:
     statement:
       - "Klar! Und was trinke ich dazu? Pangalatischen Donnergurgler?"
     ok: false
     ko: false
     color: RED
-    sleep: 5
   spin:
     statement:
       - "Gut.\n...\nNichts passiert."
     ok: true
     ko: false
     color: GREEN
-    sleep: 5
   dontSpin:
     statement:
       - "Lässt sich nicht drehen."
     ok: false
     ko: false
     color: RED
-    sleep: 5
   spinRing:
     statement:
       - "Alles beginnt sich zu drehen!\n\nDer Ring fällt mir aus der Hand!"
     ok: true
     ko: false
     color: RED
-    sleep: 5
   noJar:
     statement:
       - "Ich habe nichts zum Gießen."
     ok: false
     ko: false
     color: RED
-    sleep: 2
   waterBush:
     statement:
       - "Der Strauch beginnt zu blühen und es\nwachsen rote beeren.\nDann verwandelt er sich."
     ok: true
     ko: false
     color: GREEN
-    sleep: 6
   looksGood:
     statement:
       - "Sieht verdammt gut aus!"
@@ -571,35 +497,30 @@ reactions:
     ok: true
     ko: false
     color: GREEN
-    sleep: 3
   takeImke:
     statement:
       - "Ich kann %s nicht einfach so nehmen.\n\nSie ist da und daran kann ich mich erfeuen."
     ok: true
     ko: false
     color: GREEN
-    sleep: 6
   scare:
     statement:
       - "%s lässt sich nicht verjagen."
     ok: false
     ko: false
     color: RED
-    sleep: 3
   jump:
     statement:
       - "Hüpf....hüpf...hüpf."
     ok: true
     ko: false
     color: GREEN
-    sleep: 6
   jumpTree:
     statement:
       - "Plumps..aua!\n\nIch bin herunter gefallen."
     ok: false
     ko: true
     color: RED
-    sleep: 6
   throwFango:
     statement:
       - "Klatsch .... ein Fango-Fladen!"
@@ -608,7 +529,6 @@ reactions:
     ok: true
     ko: false
     color: GREEN
-    sleep: 3
   hitWithFango:
     statement:
       - "Klatsch .... getroffen!"
@@ -619,7 +539,6 @@ reactions:
     ok: true
     ko: false
     color: GREEN
-    sleep: 3
   alreadyFangoed:
     statement:
       - "Fango auf Fango"
@@ -628,4 +547,3 @@ reactions:
     ok: true
     ko: false
     color: GREEN
-    sleep: 3

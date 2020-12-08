@@ -39,14 +39,15 @@ type Verb struct {
 
 // Conf : Struct to read from yaml config files
 type conf struct {
-	Verbs      []Verb                   `yaml:"verbs"`
-	Nouns      []string                 `yaml:"nouns"`
-	Objects    map[int]ObjectProperties `yaml:"objects"`
-	ID         int
-	Reactions  map[string]Reaction    `yaml:"reactions"`
-	Locations  map[int]AreaProperties `yaml:"locations"`
-	Overwrites []MapOverwrites        `yaml:"overwrites"`
-	Contitions map[string]Condition   `yaml:"conditions"`
+	Verbs        []Verb                   `yaml:"verbs"`
+	Nouns        []string                 `yaml:"nouns"`
+	Objects      map[int]ObjectProperties `yaml:"objects"`
+	ID           int
+	Reactions    map[string]Reaction    `yaml:"reactions"`
+	Locations    map[int]AreaProperties `yaml:"locations"`
+	Overwrites   []MapOverwrites        `yaml:"overwrites"`
+	Contitions   map[string]Condition   `yaml:"conditions"`
+	TextElements map[string]string      `yaml:"elements"`
 }
 
 // Long and short description and the article for the noun
@@ -81,7 +82,6 @@ type AreaProperties struct {
 	Description description
 	Directions  [4]int
 	Coordinates Coordinates
-	Visited     bool
 }
 
 type Coordinates struct {
@@ -99,12 +99,12 @@ type Reaction struct {
 	OK        bool
 	KO        bool
 	Color     string
-	Sleep     int
 }
 
 type Condition map[string]string
 
 var PathName string
+var TextElements map[string]string
 var GameObjects map[int]ObjectProperties
 var GameAreas map[int]AreaProperties
 var Overwrites []MapOverwrites
@@ -196,6 +196,8 @@ func initBoxLen() {
 
 func Setup() {
 	var c conf
+	c.getConf(PathName + "/config/text_elements.yaml")
+	TextElements = c.TextElements
 	c.getConf(PathName + "/config/objects.yaml")
 	GameObjects = c.Objects
 	c.getConf(PathName + "/config/locations.yaml")
@@ -209,10 +211,13 @@ func Setup() {
 	Overwrites = getMapOverwrites()
 	initBoxLen()
 	initMap()
-	Flags = make(map[string]bool, 3)
+	Flags = make(map[string]bool, 6)
 	Flags["DoorOpen"] = false
 	Flags["BoxOpen"] = false
 	Flags["MapMissed"] = false
+	Flags["Moore"] = false
+	Flags["Castle"] = false
+	Flags["Tree"] = false
 }
 
 func ObjectsInArea(area Area) (objects []Object) {

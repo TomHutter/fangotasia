@@ -19,7 +19,6 @@ locations:
     coordinates:
       y: 11
       x: 0
-    visited: true
   2:
     description:
       long: auf einer Blumenwiese.
@@ -32,7 +31,6 @@ locations:
     coordinates:
       y: 11
       x: 1
-    visited: false
   3:
     description:
       long: an einem Seerosenteich.
@@ -45,7 +43,6 @@ locations:
     coordinates:
       y: 11
       x: 2
-    visited: false
   4:
     description:
       long: in einer trostlosen Einöde.
@@ -58,7 +55,6 @@ locations:
     coordinates:
       y: 11
       x: 3
-    visited: false
   5:
     description:
       long: in einem nebligem Moor.
@@ -71,7 +67,6 @@ locations:
     coordinates:
       y: 11
       x: 4
-    visited: false
   6:
     description:
       long: in einer feenhaften Grotte.
@@ -84,7 +79,6 @@ locations:
     coordinates:
       y: 9
       x: 0
-    visited: false
   7:
     description:
       long: an einer zerklüfteten Felswand.
@@ -97,7 +91,6 @@ locations:
     coordinates:
       y: 9
       x: 1
-    visited: false
   8:
     description:
       long: in einem lichten Auwald.
@@ -110,7 +103,6 @@ locations:
     coordinates:
       y: 10
       x: 1
-    visited: false
   9:
     description:
       long: auf einer blühenden Heide.
@@ -123,7 +115,6 @@ locations:
     coordinates:
       y: 10
       x: 2
-    visited: false
   10:
     description:
       long: in einer verdorrten Steppe.
@@ -136,7 +127,6 @@ locations:
     coordinates:
       y: 10
       x: 3
-    visited: false
   11:
     description:
       long: auf dem Versammlungsplatz der Gnome.
@@ -149,7 +139,6 @@ locations:
     coordinates:
       y: 10
       x: 4
-    visited: false
   12:
     description:
       long: in der Waffenkammer der Gnome.
@@ -162,7 +151,6 @@ locations:
     coordinates:
       y: 10
       x: 5
-    visited: false
   13:
     description:
       long: in einer Tropfsteinhöhle.
@@ -175,7 +163,6 @@ locations:
     coordinates:
       y: 8
       x: 0
-    visited: false
   14:
     description:
       long: am Fuß eines Berges.
@@ -188,7 +175,6 @@ locations:
     coordinates:
       y: 8
       x: 1
-    visited: false
   15:
     description:
       long: in der Schatzkammer der Elfen.
@@ -201,7 +187,6 @@ locations:
     coordinates:
       y: 8
       x: 2
-    visited: false
   16:
     description:
       long: auf einer Bergwiese.
@@ -214,7 +199,6 @@ locations:
     coordinates:
       y: 7
       x: 0
-    visited: false
   17:
     description:
       long: an einer silbernen Quelle.
@@ -227,7 +211,6 @@ locations:
     coordinates:
       y: 7
       x: 1
-    visited: false
   18:
     description:
       long: in einer Schlucht mit vielen Farnen.
@@ -240,7 +223,6 @@ locations:
     coordinates:
       y: 7
       x: 2
-    visited: false
   19:
     description:
       long: in einer Bärenhöhle.
@@ -253,7 +235,6 @@ locations:
     coordinates:
       y: 7
       x: 3
-    visited: false
   20:
     description:
       long: auf einer schwankenden Hängebrücke.
@@ -266,7 +247,6 @@ locations:
     coordinates:
       y: 7
       x: 4
-    visited: false
   21:
     description:
       long: an einem Wiesenhang.
@@ -279,7 +259,6 @@ locations:
     coordinates:
       y: 7
       x: 5
-    visited: false
   22:
     description:
       long: in einer Rosenlaube.
@@ -292,7 +271,6 @@ locations:
     coordinates:
       y: 6
       x: 0
-    visited: false
   23:
     description:
       long: in einem verwilderten Park.
@@ -305,7 +283,6 @@ locations:
     coordinates:
       y: 6
       x: 1
-    visited: false
   24:
     description:
       long: auf einem verschlungenen Weg.
@@ -318,7 +295,6 @@ locations:
     coordinates:
       y: 6
       x: 2
-    visited: false
   25:
     description:
       long: an einer verfallenen Burgruine.
@@ -331,7 +307,6 @@ locations:
     coordinates:
       y: 6
       x: 3
-    visited: false
   26:
     description:
       long: in einem sonnigen Obsthain.
@@ -344,7 +319,6 @@ locations:
     coordinates:
       y: 6
       x: 5
-    visited: false
   27:
     description:
       long: in einem Kräutergarten.
@@ -357,7 +331,6 @@ locations:
     coordinates:
       y: 5
       x: 0
-    visited: false
   28:
     description:
       long: in einer finsteren Hexenküche.
@@ -370,7 +343,6 @@ locations:
     coordinates:
       y: 5
       x: 1
-    visited: false
   29:
     description:
       long: im Hof einer verlassenen Burg.
@@ -383,7 +355,6 @@ locations:
     coordinates:
       y: 5
       x: 2
-    visited: false
   30:
     description:
       long: in einem finsteren Burgverlies.
@@ -396,7 +367,6 @@ locations:
     coordinates:
       y: 5
       x: 3
-    visited: false
   31:
     description:
       long: in der Krone eines Baumes.\n++Ich kann nicht weit sehen.++
@@ -409,7 +379,6 @@ locations:
     coordinates:
       y: 9
       x: 3
-    visited: false
   32:
     description:
       long: in einem feuchten Laubwald.
@@ -422,7 +391,6 @@ locations:
     coordinates:
       y: 3
       x: 5
-    visited: false
   33:
     description:
       long: im Reich der Feen.
@@ -435,7 +403,6 @@ locations:
     coordinates:
       y: 3
       x: 4
-    visited: false
   34:
     description:
       long: in einer grauen Steinwüste.
@@ -448,7 +415,6 @@ locations:
     coordinates:
       y: 4
       x: 4
-    visited: false
   35:
     description:
       long: an einem breiten Fluss.\n++Am anderen Ufer bewegt sich etwas.++
@@ -461,7 +427,6 @@ locations:
     coordinates:
       y: 4
       x: 3
-    visited: false
   36:
     description:
       long: auf einem dreckigem Pfad.
@@ -474,7 +439,6 @@ locations:
     coordinates:
       y: 5
       x: 4
-    visited: false
   37:
     description:
       long: in einem Dornengestrüpp.\n++Ich finde mich nicht mehr zurecht.++
@@ -487,7 +451,6 @@ locations:
     coordinates:
       y: 4
       x: 6
-    visited: false
   38:
     description:
       long: in einem Dornengestrüpp.\n++Ich finde mich nicht mehr zurecht.++
@@ -500,7 +463,6 @@ locations:
     coordinates:
       y: 5
       x: 6
-    visited: false
   39:
     description:
       long: in einem Dornengestrüpp.\n++Ich finde mich nicht mehr zurecht.++
@@ -513,7 +475,6 @@ locations:
     coordinates:
       y: 4
       x: 7
-    visited: false
   40:
     description:
       long: auf einem Hohlweg.
@@ -526,7 +487,6 @@ locations:
     coordinates:
       y: 3
       x: 7
-    visited: false
   41:
     description:
       long: in einem unheimlichen Wald.\n++Man sieht kaum einen Weg. Ob hier ein\nDrache haust?!++
@@ -539,7 +499,6 @@ locations:
     coordinates:
       y: 2
       x: 6
-    visited: false
   42:
     description:
       long: in einem unheimlichen Wald.\n++Man sieht kaum einen Weg. Ob hier ein\nDrache haust?!++
@@ -552,7 +511,6 @@ locations:
     coordinates:
       y: 2
       x: 7
-    visited: false
   43:
     description:
       long: in einem unheimlichen Wald.\n++Man sieht kaum einen Weg. Ob hier ein\nDrache haust?!++
@@ -565,7 +523,6 @@ locations:
     coordinates:
       y: 1
       x: 6
-    visited: false
   44:
     description:
       long: in einem unheimlichen Wald.\n++Man sieht kaum einen Weg. Ob hier ein\nDrache haust?!++
@@ -578,7 +535,6 @@ locations:
     coordinates:
       y: 1
       x: 7
-    visited: false
   45:
     description:
       long: in einem unheimlichen Wald.\n++Man sieht kaum einen Weg. Ob hier ein\nDrache haust?!++
@@ -591,7 +547,6 @@ locations:
     coordinates:
       y: 1
       x: 8
-    visited: false
   46:
     description:
       long: in einem unheimlichen Wald.\n++Man sieht kaum einen Weg. Ob hier ein\nDrache haust?!++
@@ -604,7 +559,6 @@ locations:
     coordinates:
       y: 1
       x: 9
-    visited: false
   47:
     description:
       long: in einem unheimlichen Wald.\n++Man sieht kaum einen Weg. Ob hier ein\nDrache haust?!++
@@ -617,7 +571,6 @@ locations:
     coordinates:
       y: 0
       x: 6
-    visited: false
   48:
     description:
       long: in einem unheimlichen Wald.\n++Man sieht kaum einen Weg. Ob hier ein\nDrache haust?!++
@@ -630,7 +583,6 @@ locations:
     coordinates:
       y: 0
       x: 7
-    visited: false
   49:
     description:
       long: in einem unheimlichen Wald.\n++Man sieht kaum einen Weg. Ob hier ein\nDrache haust?!++
@@ -643,7 +595,6 @@ locations:
     coordinates:
       y: 0
       x: 8
-    visited: false
   50:
     description:
       long: in einem unheimlichen Wald.\n++Man sieht kaum einen Weg. Ob hier ein\nDrache haust?!++
@@ -656,7 +607,6 @@ locations:
     coordinates:
       y: 0
       x: 9
-    visited: false
   51:
     description:
       long: auf einer unzugänglichen Waldlichtung.
@@ -669,4 +619,3 @@ locations:
     coordinates:
       y: 2
       x: 9
-    visited: false

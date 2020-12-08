@@ -1,0 +1,24 @@
+elements:
+  iAm: Ich bin
+  iSee: Ich sehe
+  directions: Richtungen
+  next: Weiter
+  andNow: und nun
+  nextYesNo: Weiter (j/n)?
+  yesShort: j
+  north: Norden
+  south: Süden
+  east: Osten
+  west: Westen
+  verbsKnown: Verben, die ich kenne
+  imke: den pink Diamanten
+  gameOver: G A M E    O V E R
+  haveFound: Du hast gefunden
+  points: Punkte
+  movesNeeded: "Du hast weniger als %d Züge gebrauchtt: 7 Punkte"
+  visitedMoore: "- Du bist im Moor gewesen: %d Punkte"
+  visitedCastle: "- Du hast die verlassene Burg besucht: %d Punkte"
+  climbedTree: "- Du bist auf einen Baum geklettert: %d Punkte"
+  pointsOutOf: "Du hast %d von 200 Punkten!"
+  oneMoreGame:	"Noch ein Spiel? (j/n)"
+  comeOn: "Ach komm, noch 5 Minuten? (j/n)"
