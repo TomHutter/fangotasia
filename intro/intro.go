@@ -41,9 +41,9 @@ func Prelude() {
 	var text = []string{
 		"[red:black:b]F A N G O T A S I A",
 		"",
-		"[blue:black:b]- Ein Adventure von Klaus Hartmuth -",
+		"[blue:black:b]- Ein Adventure von Klaus Hartmuth (1984) -",
 		"",
-		"[yellow:black:b]- GO Version von Tom Hutter -",
+		"[yellow:black:b]- GO Version von Tom Hutter (2020) -",
 	}
 	grid.Grid.Clear()
 	grid.Grid.AddItem(grid.AreaGrid, 0, 0, 1, 1, 0, 0, false)
@@ -51,8 +51,4 @@ func Prelude() {
 	grid.AreaField.SetText("")
 	grid.App.SetFocus(grid.AreaField)
 	grid.AreaField.SetDoneFunc(func(key tcell.Key) { Intro() })
-	//grid.Pages.SwitchToPage("map")
-
-	//view.PrintScreen(text)
-	//view.Scanner("once: true")
 }
