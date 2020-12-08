@@ -9,19 +9,6 @@ import (
 )
 
 func folderListing() (filename string) {
-	/*
-		files, err := ioutil.ReadDir(pathname)
-		if err != nil {
-			fmt.Println(err)
-		}
-
-		fmt.Println("Files:")
-
-		for _, f := range files {
-			fmt.Println(f.Name())
-		}
-		//filename = pathname + view.Scanner("prompt: filename > ")
-	*/
 	filename = setup.PathName + "/save/fangotasia.sav"
 	return
 }

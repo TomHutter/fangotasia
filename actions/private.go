@@ -80,7 +80,6 @@ func getObjectByName(name string, area setup.Area) (object Object) {
 	// found an object but not in the current area?
 	if found {
 		r := setup.Reactions["dontSee"]
-		//view.AddFlashNotice(r.Statement, r.Sleep, "[red]")
 		grid.InputField.SetText("")
 		grid.Response.SetText(
 			fmt.Sprintf("\n%s%s%s\n",
@@ -92,7 +91,6 @@ func getObjectByName(name string, area setup.Area) (object Object) {
 	// don't know what you are talking about
 	r := setup.GetReactionByName("unknownNoun")
 	statement := fmt.Sprintf(r.Statement[0], name)
-	//view.AddFlashNotice(statement, r.Sleep, "[red]")
 	grid.InputField.SetText("")
 	grid.Response.SetText(
 		fmt.Sprintf("\n%s%s%s\n",

@@ -65,23 +65,6 @@ func (object Object) Open(area setup.Area) (r setup.Reaction) {
 		setup.Flags["DoorOpen"] = true
 		r = setup.Reactions["ok"]
 	}
-	/*
-	   	446 f=0:gosub605:iffl=1thenfl=0:goto280
-	   447 ifno=40thenprint"versuche 'sperre'.":goto280
-	   496 f=0:gosub605:iffl=1thenfl=0:goto280
-	   497 ifno<>40andno<>35thenprinta$(2):goto280
-	   498 ifno=35thenprint"versuche 'oeffne'.":goto280
-	   499 iftu=1thenprint"ist schon offen !":goto280
-	   500 ifge(26)<>-1thenprint"ich habe keinen schluessel.":goto280
-	   501 print"gut.":tu=1:goto281
-
-
-	   448 f=1:gosub607:iffl=1thenfl=0:goto280
-	   449 ifno<>35thenprinta$(2):goto280
-	   450 ifge(38)<>0thenprint"gut. es ist leer.":goto281
-	   451 ifge(26)<>-1thenprinta$(1):goto280
-	   452 print"zwei dinge fallen heraus. sag 'sieh'.":ge(38)=oa:ge(39)=oa:goto281
-	*/
 	return
 }
 

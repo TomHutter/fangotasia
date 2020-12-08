@@ -23,18 +23,12 @@ func Intro() {
 		"des Spieles abspeichern,",
 		"mit  [white:black:b]LOAD  [blue:black:-]wieder einlesen.",
 	}
-	//grid.Grid.Clear()
-	//grid.Grid.AddItem(grid.AreaGrid, 0, 0, 1, 1, 0, 0, false)
 	grid.AreaMap.SetText(strings.Join(text, "\n"))
-	//grid.AreaField.SetText("")
-	//grid.App.SetFocus(grid.AreaField)
 	grid.AreaField.SetDoneFunc(func(key tcell.Key) {
 		grid.Grid.Clear()
 		grid.Grid.AddItem(grid.InputGrid, 0, 0, 1, 1, 0, 0, false)
 		grid.App.SetFocus(grid.InputField)
 	})
-	//view.PrintScreen(text)
-	//view.Scanner("once: true")
 }
 
 func Prelude() {

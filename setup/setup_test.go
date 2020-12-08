@@ -22,7 +22,6 @@ func TestInit(t *testing.T) {
 }
 
 func TestGameObjects(t *testing.T) {
-	//setup.Init()
 	assert.Equal(t, "einen Zauberkuchen", setup.GameObjects[9].Description.Long, "The cake is a lie.")
 }
 

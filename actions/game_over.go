@@ -16,11 +16,9 @@ func GameOver(KO bool) {
 	if KO {
 		board = append(board, fmt.Sprintln("G A M E    O V E R"))
 	}
-	//board = append(board, fmt.Sprint(""))
 	inv := setup.ObjectsInArea(setup.GetAreaByID(setup.INVENTORY))
 	if len(inv) > 0 {
 		board = append(board, fmt.Sprintln("Du besitzt:"))
-		//board = append(board, fmt.Sprint(""))
 	}
 	for _, o := range inv {
 		val := o.Properties.Value
@@ -75,22 +73,14 @@ func GameOver(KO bool) {
 	grid.AreaField.SetLabel("Weiter (j/n) \u23CE ").
 		SetAcceptanceFunc(tview.InputFieldMaxLength(1)).
 		SetDoneFunc(func(key tcell.Key) {
-			//view.PrintScreen(board)
-			//res := view.Scanner("once: true")
 			if strings.ToLower(grid.AreaField.GetText()) != "j" {
-				//grid.AreaMap.SetText("")
-				//grid.Grid.Clear()
 				grid.App.Stop()
-				//exec.Command("stty", "-F", "/dev/tty", "echo").Run()
-				//os.Exit(0)
 			}
 			grid.Grid.Clear()
 			grid.Grid.AddItem(grid.InputGrid, 0, 0, 1, 1, 0, 0, false)
 			grid.App.SetFocus(grid.InputField)
 			grid.Response.SetText("")
 		})
-	//fmt.Println("\nYippeee ......")
-	//time.Sleep(time.Duration(3) * time.Second)
 	if KO {
 		setup.Setup()
 	}

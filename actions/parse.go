@@ -52,7 +52,6 @@ func Parse(input string, area setup.Area) setup.Area {
 		if len(command) > 0 {
 			answer := setup.GetReactionByName("unknownVerb")
 			notice := fmt.Sprintf(answer.Statement[0], command)
-			//view.AddFlashNotice(notice, answer.Sleep, "[red]")
 			grid.InputField.SetText("")
 			grid.Response.SetText(
 				fmt.Sprintf("\n%s%s%s\n",
@@ -75,8 +74,6 @@ func Parse(input string, area setup.Area) setup.Area {
 		for i := 0; i < val[0].Len(); i++ {
 			notice = append(notice, val[0].Index(i).String())
 		}
-		//sleep := int(val[1].Int())
-		// ToDo: get rid of knownVerb.Sleep
 		grid.InputField.SetText("")
 		grid.Response.SetText(
 			fmt.Sprintf("\n%s%s%s\n",

@@ -8,7 +8,6 @@ import (
 )
 
 func (v *verb) Verbs() (verbs []string, sleep int) {
-	//func (c *command) Verben() {
 	verbs = append(verbs, "Verben, die ich kenne: ")
 	var line []string
 	for i, val := range setup.Verbs {
@@ -26,7 +25,6 @@ func (v *verb) Verbs() (verbs []string, sleep int) {
 func (v *verb) Inventory() (inv []string, sleep int) {
 	objects := setup.ObjectsInArea(setup.GetAreaByID(setup.INVENTORY))
 	if len(objects) == 0 {
-		//fmt.Println("Ich habe nichts dabei.")
 		inv = append(inv, setup.Reactions["invEmpty"].Statement[0])
 		sleep = 2
 		return

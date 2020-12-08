@@ -8,20 +8,6 @@ import (
 	"gopkg.in/yaml.v2"
 )
 
-/*
-// Make life more colorful :-)
-const (
-	// https://en.wikipedia.org/wiki/ANSI_escape_code
-	RED     = "\033[01;31m"
-	GREEN   = "\033[01;32m"
-	YELLOW  = "\033[01;33m"
-	CYAN    = "\033[01;96m"
-	BLUE    = "\033[01;34m"
-	WHITE   = "\033[01;97m"
-	NEUTRAL = "\033[0m"
-)
-*/
-
 // Runes for creating boxes
 const (
 	BTL = "\u250F"
