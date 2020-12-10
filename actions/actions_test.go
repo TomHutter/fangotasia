@@ -186,9 +186,11 @@ func TestClimb(t *testing.T) {
 
 func TestThrow(t *testing.T) {
 	setup.Setup()
+	// throw sphere
 	// not area 4 - sphere breaks
 	area := setup.GetAreaByID(1)
 	sphere := actions.Object(setup.GetObjectByID(34))
+	sphere.NewAreaID(setup.INVENTORY)
 	res := sphere.Throw(area)
 	assert.Equal(t, setup.Reactions["brokenSphere"].Statement, res.Statement)
 	assert.Equal(t, 0, setup.GetObjectByID(34).Properties.Area)
@@ -204,18 +206,20 @@ func TestThrow(t *testing.T) {
 	// golden sphere
 	area = setup.GetAreaByID(1)
 	sphere = actions.Object(setup.GetObjectByID(46))
+	sphere.NewAreaID(setup.INVENTORY)
 	res = sphere.Throw(area)
-	assert.Equal(t, setup.Reactions["throwStone"].Statement, res.Statement)
+	assert.Equal(t, setup.Reactions["throwObject"].Statement, res.Statement)
 	assert.True(t, res.OK)
-	assert.Equal(t, 1, setup.GetObjectByID(46).Properties.Area)
+	assert.LessOrEqual(t, setup.GetObjectByID(46).Properties.Area, 51)
 
 	// stone
 	area = setup.GetAreaByID(9)
 	stone := actions.Object(setup.GetObjectByID(20))
+	stone.NewAreaID(setup.INVENTORY)
 	res = stone.Throw(area)
-	assert.Equal(t, setup.Reactions["throwStone"].Statement, res.Statement)
+	assert.Equal(t, setup.Reactions["throwObject"].Statement, res.Statement)
 	assert.True(t, res.OK)
-	assert.Equal(t, 9, setup.GetObjectByID(20).Properties.Area)
+	assert.LessOrEqual(t, setup.GetObjectByID(46).Properties.Area, 51)
 
 	// stone on tree - map present by setup
 	area = setup.GetAreaByID(31)
@@ -236,10 +240,10 @@ func TestThrow(t *testing.T) {
 	// fango
 	area = setup.GetAreaByID(9)
 	fango := actions.Object(setup.GetObjectByID(49))
+	fango.NewAreaID(setup.INVENTORY)
 	res = fango.Throw(area)
 	assert.Equal(t, setup.Reactions["throwFango"].Statement, res.Statement)
 	assert.True(t, res.OK)
-	assert.Equal(t, 0, setup.GetObjectByID(49).Properties.Area)
 
 	// fango at dwarf
 	area = setup.GetAreaByID(18)
@@ -247,7 +251,19 @@ func TestThrow(t *testing.T) {
 	res = fango.Throw(area)
 	assert.Equal(t, setup.Reactions["hitWithFango"].Statement, res.Statement)
 	assert.True(t, res.OK)
-	assert.Equal(t, 0, setup.GetObjectByID(49).Properties.Area)
+
+	// book
+	book := actions.Object(setup.GetObjectByID(11))
+	area = setup.GetAreaByID(2)
+	res = book.Throw(area)
+	assert.Equal(t, setup.Reactions["dontHave"].Statement, res.Statement)
+	assert.False(t, res.OK)
+
+	book.NewAreaID(setup.INVENTORY)
+	res = book.Throw(area)
+	assert.Equal(t, setup.Reactions["throwObject"].Statement, res.Statement)
+	assert.True(t, res.OK)
+	assert.LessOrEqual(t, setup.GetObjectByID(46).Properties.Area, 51)
 
 }
 
@@ -371,16 +387,18 @@ func TestSay(t *testing.T) {
 	assert.Equal(t, s, res.Statement[0])
 	assert.True(t, res.OK)
 
-	// say "fangotasia"
-	res = obj.Say(area, "fangotasia")
-	fangotasia := setup.GetReactionByName("fangotasia")
-	s = fmt.Sprintf(fangotasia.Statement[0], sword.Properties.Value+dagger.Properties.Value)
-	assert.Equal(t, s, res.Statement[0])
-	assert.True(t, res.OK)
+	/*
+		// say "fangotasia"
+		res = obj.Say(area, "Fangotasia")
+		fangotasia := setup.GetReactionByName("fangotasia")
+		s = fmt.Sprintf(fangotasia.Statement[0], sword.Properties.Value+dagger.Properties.Value)
+		assert.Equal(t, s, res.Statement[0])
+		assert.True(t, res.OK)
+	*/
 
 	// say "simsalabim"
 	area = setup.GetAreaByID(18)
-	res = obj.Say(area, "simsalabim")
+	res = obj.Say(area, "SimSalabim")
 	assert.Equal(t, setup.Reactions["simsalabim"].Statement, res.Statement)
 	assert.True(t, res.OK)
 }
@@ -581,9 +599,21 @@ func TestEat(t *testing.T) {
 	jar := actions.Object(setup.GetObjectByID(30))
 	cake := actions.Object(setup.GetObjectByID(9))
 	berries := actions.Object(setup.GetObjectByID(23))
+	tree := actions.Object(setup.GetObjectByID(27))
+
+	// eat Tree
+	res := tree.Eat(area)
+	assert.Equal(t, setup.Reactions["dontSee"].Statement, res.Statement)
+	assert.False(t, res.OK)
+
+	// eat Tree
+	area = setup.GetAreaByID(9)
+	res = tree.Eat(area)
+	assert.Equal(t, setup.Reactions["cantEat"].Statement, res.Statement)
+	assert.False(t, res.OK)
 
 	// eat jar
-	res := jar.Eat(area)
+	res = jar.Eat(area)
 	assert.Equal(t, setup.Reactions["dontHave"].Statement, res.Statement)
 	assert.False(t, res.OK)
 

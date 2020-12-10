@@ -31,19 +31,19 @@ func scoreBoard(yesNo bool, KO bool) {
 	}
 	board = append(board, fmt.Sprint(""))
 	// all valuable objects found
-	if sum == 170 {
+	if sum == 181 {
 		switch {
-		case moves < 500:
+		case setup.Moves < 500:
 			board = append(board, fmt.Sprintf(setup.TextElements["movesNeeeded"], 500))
-			sum += 7
+			sum += 10
 			fallthrough
-		case moves < 400:
+		case setup.Moves < 400:
 			board = append(board, fmt.Sprintf(setup.TextElements["movesNeeded"], 400))
-			sum += 7
+			sum += 10
 			fallthrough
-		case moves < 300:
+		case setup.Moves < 300:
 			board = append(board, fmt.Sprintf(setup.TextElements["movesNeeded"], 300))
-			sum += 7
+			sum += 10
 		}
 	}
 	board = append(board, fmt.Sprint(""))

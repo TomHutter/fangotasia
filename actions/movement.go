@@ -61,7 +61,7 @@ func (obj Object) Move(area setup.Area, dir string) (r setup.Reaction, areaID in
 		return
 	}
 	movement.RevealArea(newArea)
-	moves += 1
+	setup.Moves += 1
 	r.OK = true
 	r.KO = false
 	areaID = newArea
@@ -80,7 +80,7 @@ func (obj Object) Move(area setup.Area, dir string) (r setup.Reaction, areaID in
 func (object Object) Climb(area setup.Area) (r setup.Reaction, areaID int) {
 	if area.ID == 31 {
 		beads(area.ID)
-		moves += 1
+		setup.Moves += 1
 		r.OK = true
 		areaID = 9
 		return
@@ -88,7 +88,7 @@ func (object Object) Climb(area setup.Area) (r setup.Reaction, areaID int) {
 	if area.ID == 9 && object.ID == 27 {
 		beads(area.ID)
 		movement.RevealArea(31)
-		moves += 1
+		setup.Moves += 1
 		setup.Flags["Tree"] = true
 		r.OK = true
 		areaID = 31
@@ -115,7 +115,7 @@ func (object Object) Jump(area setup.Area) (r setup.Reaction, areaID int) {
 			return
 		} else {
 			beads(area.ID)
-			moves += 1
+			setup.Moves += 1
 			r.OK = true
 			areaID = 9
 			return

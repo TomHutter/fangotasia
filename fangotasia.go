@@ -13,6 +13,7 @@ import (
 
 /*
 ToDos:
+- forest mapping buggy
 */
 
 func init() {

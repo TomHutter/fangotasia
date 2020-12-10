@@ -227,12 +227,20 @@ reactions:
     ok: false
     ko: false
     color: RED
-  throwStone:
+  throwObject:
     statement:
-      - "Gut. Nichts passiert."
+      - "Aus den Augen aus dem Sinn."
+      - "Wow, neuer Wurfrekord."
+      - "Abrakadabra ....\nnicht mehr da."
     ok: true
     ko: false
     color: GREEN
+  throwFixedObject:
+    statement:
+      - "Umwerfende Idee!"
+    ok: false
+    ko: false
+    color: RED
   nothingWritten:
     statement:
       - "Da steht nichts geschrieben."

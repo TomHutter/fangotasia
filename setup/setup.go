@@ -111,6 +111,7 @@ var Overwrites []MapOverwrites
 var Reactions map[string]Reaction
 var Conditions map[string]Condition
 var Verbs []Verb
+var Moves int
 
 var Beads int
 var BoxLen int

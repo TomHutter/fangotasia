@@ -19,6 +19,6 @@ elements:
   visitedMoore: "- Du bist im Moor gewesen: %d Punkte"
   visitedCastle: "- Du hast die verlassene Burg besucht: %d Punkte"
   climbedTree: "- Du bist auf einen Baum geklettert: %d Punkte"
-  pointsOutOf: "Du hast %d von 200 Punkten!"
+  pointsOutOf: "Du hast %d von 220 Punkten!"
   oneMoreGame:	"Noch ein Spiel? (j/n)"
   comeOn: "Ach komm, noch 5 Minuten? (j/n)"

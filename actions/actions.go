@@ -7,7 +7,9 @@ import (
 	"fangotasia/setup"
 	"fangotasia/view"
 	"fmt"
+	"math/rand"
 	"strings"
+	"time"
 
 	"github.com/gdamore/tcell/v2"
 	"github.com/rivo/tview"
@@ -184,12 +186,43 @@ func (obj Object) Use(area setup.Area) (r setup.Reaction) {
 }
 
 func (obj Object) Throw(area setup.Area) (r setup.Reaction) {
+	switch obj.ID {
+	case 10, 14, 16, 18, 21, 22, 27, 29, 32, 36, 40, 45, 42, 43:
+		r = setup.Reactions["throwFixedObject"]
+		return
+	}
+
 	if !obj.inInventory() {
 		r = setup.Reactions["dontHave"]
 		return
 	}
+
+	// on the tree throwing stone?
+	if obj.ID == 20 && area.ID == 31 {
+		m := Object(setup.GetObjectByID(47))
+		// Map here?
+		if !m.inArea(area) {
+			r = setup.Reactions["throwObject"]
+			rand.Seed(time.Now().UnixNano())
+			obj.NewAreaID(rand.Intn(51))
+		}
+		if !setup.Flags["MapMissed"] {
+			r = setup.Reactions["missMap"]
+			setup.Flags["MapMissed"] = true
+			// stone falls to ground
+			obj.NewAreaID(9)
+			return
+		}
+		r = setup.Reactions["hitMap"]
+		// stone and map fall to ground
+		obj.NewAreaID(9)
+		m.NewAreaID(9)
+		return
+	}
+
+	switch obj.ID {
 	// sphere?
-	if obj.ID == 34 {
+	case 34:
 		// throwing sphere will always lead to loss
 		obj.NewAreaID(0)
 		gnome := Object(setup.GetObjectByID(36))
@@ -205,33 +238,8 @@ func (obj Object) Throw(area setup.Area) (r setup.Reaction) {
 		goldenSphere := Object(setup.GetObjectByID(46))
 		goldenSphere.NewAreaID(area.ID)
 		return
-	}
-	// on the tree throwing stone?
-	if obj.ID == 20 && area.ID == 31 {
-		m := Object(setup.GetObjectByID(47))
-		// Map here?
-		if !m.inArea(area) {
-			r = setup.Reactions["throwStone"]
-			obj.NewAreaID(9)
-		}
-		if !setup.Flags["MapMissed"] {
-			r = setup.Reactions["missMap"]
-			setup.Flags["MapMissed"] = true
-			// stone falls to ground
-			obj.NewAreaID(9)
-			return
-		}
-		r = setup.Reactions["hitMap"]
-		// stone and map fall to ground
-		obj.NewAreaID(9)
-		m.NewAreaID(9)
-		return
-	}
-	if obj.ID == 46 || obj.ID == 20 {
-		r = setup.Reactions["throwStone"]
-		obj.NewAreaID(area.ID)
-	}
-	if obj.ID == 49 {
+	// Fanto Tango
+	case 49:
 		for _, i := range []int{10, 14, 16, 18, 21, 29, 32, 36, 40, 42, 43, 45} {
 			object := Object(setup.GetObjectByID(i))
 			if object.inArea(area) {
@@ -250,6 +258,10 @@ func (obj Object) Throw(area setup.Area) (r setup.Reaction) {
 			}
 		}
 		r = setup.Reactions["throwFango"]
+	default:
+		r = setup.Reactions["throwObject"]
+		rand.Seed(time.Now().UnixNano())
+		obj.NewAreaID(rand.Intn(51))
 	}
 	return
 }
@@ -296,7 +308,7 @@ func (obj Object) Read(area setup.Area) (r setup.Reaction) {
 }
 
 func (obj Object) Say(area setup.Area, word string) (r setup.Reaction) {
-	switch word {
+	switch strings.ToLower(word) {
 	case "simsalabim":
 		dwarf := Object(setup.GetObjectByID(18))
 		if dwarf.inArea(area) {
@@ -441,7 +453,17 @@ func (obj Object) Eat(area setup.Area) (r setup.Reaction) {
 		}
 		obj.NewAreaID(0)
 		r = setup.Reactions["ok"]
+	case 10, 14, 16, 18, 21, 22, 27, 29, 32, 36, 40, 45, 42, 43:
+		if !obj.inArea(area) {
+			r = setup.Reactions["dontSee"]
+			return
+		}
+		r = setup.Reactions["cantEat"]
 	default:
+		if !obj.inInventory() {
+			r = setup.Reactions["dontHave"]
+			return
+		}
 		r = setup.Reactions["cantEat"]
 	}
 	return

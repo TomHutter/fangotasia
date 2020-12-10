@@ -23,7 +23,6 @@ type reaction struct {
 }
 
 var object string
-var moves int
 
 func Parse(input string, area setup.Area) setup.Area {
 

@@ -19,6 +19,7 @@ func (obj Object) Save(area setup.Area) (r setup.Reaction) {
 	m["map"] = setup.Map
 	m["objects"] = setup.GameObjects
 	m["flags"] = setup.Flags
+	m["moves"] = setup.Moves
 
 	filename := folderListing()
 
@@ -53,6 +54,7 @@ func (obj Object) Load(area setup.Area) (r setup.Reaction, areaID int) {
 		AreaMap [12][10]int                    `yaml:"map"`
 		Objects map[int]setup.ObjectProperties `yaml:"objects"`
 		Flags   map[string]bool                `yaml:"flags"`
+		Moves   int                            `yaml:"moves"`
 	}
 
 	filename := folderListing()
@@ -77,6 +79,7 @@ func (obj Object) Load(area setup.Area) (r setup.Reaction, areaID int) {
 	}
 
 	setup.Flags = content.Flags
+	setup.Moves = content.Moves
 
 	r = setup.Reactions["loaded"]
 	areaID = content.AreaID
