@@ -8,6 +8,7 @@ import (
 	"fangotasia/view"
 	"fmt"
 	"math/rand"
+	"regexp"
 	"strings"
 	"time"
 
@@ -71,6 +72,11 @@ func (object Object) Open(area setup.Area) (r setup.Reaction) {
 }
 
 func (object Object) Take(area setup.Area) (r setup.Reaction) {
+	// try to pick vanished hood?
+	if object.ID == 13 && setup.Flags["HoodVanished"] {
+		r = setup.Reactions["dontSee"]
+		return
+	}
 	if !object.available(area) {
 		r = setup.Reactions["dontSee"]
 		return
@@ -78,6 +84,20 @@ func (object Object) Take(area setup.Area) (r setup.Reaction) {
 	if object.inInventory() || object.inUse() {
 		r = setup.Reactions["haveAlready"]
 		return
+	}
+
+	grub := Object(setup.GetObjectByID(10))
+	if grub.inArea(area) {
+		switch object.ID {
+		case 10:
+			r = setup.Reactions["silly"]
+			return
+			// let's pick stone
+		case 20:
+			return Object(setup.GetObjectByID(20)).pick()
+		default:
+			return object.snatchFrom(grub)
+		}
 	}
 
 	switch object.ID {
@@ -231,6 +251,10 @@ func (obj Object) Throw(area setup.Area) (r setup.Reaction) {
 			r = setup.Reactions["brokenSphere"]
 			return
 		}
+		hood := Object(setup.GetObjectByID(13))
+		if hood.inArea(area) {
+			setup.Flags["HoodVanished"] = false
+		}
 		r = setup.Reactions["squashed"]
 		// gnome vanished
 		gnome.NewAreaID(0)
@@ -259,9 +283,21 @@ func (obj Object) Throw(area setup.Area) (r setup.Reaction) {
 		}
 		r = setup.Reactions["throwFango"]
 	default:
+		re := regexp.MustCompile(`\\n.*$`)
 		r = setup.Reactions["throwObject"]
 		rand.Seed(time.Now().UnixNano())
-		obj.NewAreaID(rand.Intn(51))
+		newAreaID := rand.Intn(51)
+		obj.NewAreaID(newAreaID)
+		r.Statement = make([]string, len(setup.Reactions["throwObject"].Statement))
+		copy(r.Statement, setup.Reactions["throwObject"].Statement)
+		newArea := setup.GetAreaByID(newAreaID)
+		article := strings.Title(obj.Properties.Description.Article)
+		short := obj.Properties.Description.Short
+		location := newArea.Properties.Description.Long
+		location = string(re.ReplaceAll([]byte(location), []byte(" ")))
+		for i, s := range r.Statement {
+			r.Statement[i] = fmt.Sprintf(s, article, short, location)
+		}
 	}
 	return
 }
@@ -312,6 +348,10 @@ func (obj Object) Say(area setup.Area, word string) (r setup.Reaction) {
 	case "simsalabim":
 		dwarf := Object(setup.GetObjectByID(18))
 		if dwarf.inArea(area) {
+			hood := Object(setup.GetObjectByID(13))
+			if hood.inArea(area) {
+				setup.Flags["HoodVanished"] = false
+			}
 			dwarf.NewAreaID(0)
 			r = setup.Reactions["simsalabim"]
 			return
@@ -379,6 +419,10 @@ func (obj Object) Feed(area setup.Area) (r setup.Reaction) {
 	case 16:
 		berries := Object(setup.GetObjectByID(23))
 		if berries.inInventory() {
+			hood := Object(setup.GetObjectByID(13))
+			if hood.inArea(area) {
+				setup.Flags["HoodVanished"] = false
+			}
 			r = setup.Reactions["feedBaerWithBerries"]
 			obj.NewAreaID(0)
 			berries.NewAreaID(0)
@@ -429,6 +473,10 @@ func (obj Object) Catapult(area setup.Area) (r setup.Reaction) {
 			obj.NewAreaID(29)
 			grub := Object(setup.GetObjectByID(10))
 			grub.NewAreaID(0)
+			hood := Object(setup.GetObjectByID(13))
+			if hood.inArea(setup.GetAreaByID(29)) {
+				setup.Flags["HoodVanished"] = false
+			}
 			r = setup.Reactions["ok"]
 		}
 	default:

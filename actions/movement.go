@@ -26,13 +26,6 @@ func beads(areaID int) {
 
 // As Move is called in context of object handling, Move reflects on Object even obj is not used.
 func (obj Object) Move(area setup.Area, dir string) (r setup.Reaction, areaID int) {
-	// wearing the hood?
-	hood := Object(setup.GetObjectByID(13))
-	if Object(hood).inUse() {
-		hood.NewAreaID(0)
-		r = setup.Reactions["hoodInUse"]
-	}
-
 	var direction = map[string]int{"n": 0, "s": 1, "o": 2, "w": 3}
 
 	newArea := area.Properties.Directions[direction[dir]]

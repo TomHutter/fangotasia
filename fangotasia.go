@@ -14,6 +14,7 @@ import (
 /*
 ToDos:
 - forest mapping buggy
+- fix load crash, when no save game
 */
 
 func init() {

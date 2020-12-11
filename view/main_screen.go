@@ -35,6 +35,10 @@ func Surroundings(area setup.Area) (text []string) {
 	text = append(text, "[-:-:-]")
 	var items []string
 	for _, object := range setup.ObjectsInArea(area) {
+		// skip hood, if vanished
+		if object.ID == 13 && setup.Flags["HoodVanished"] {
+			continue
+		}
 		item := Highlight(object.Properties.Description.Long, "[blue:black:-]")
 		items = append(items, fmt.Sprintf("%s  - %s", "[blue:black]", item))
 	}

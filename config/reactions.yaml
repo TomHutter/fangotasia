@@ -229,9 +229,9 @@ reactions:
     color: RED
   throwObject:
     statement:
-      - "Aus den Augen aus dem Sinn."
-      - "Wow, neuer Wurfrekord."
-      - "Abrakadabra ....\nnicht mehr da."
+      - "Aus den Augen aus dem Sinn.\n%s %s liegt jetzt %s"
+      - "Wow, neuer Wurfrekord.\n%s %s liegt jetzt %s"
+      - "Abrakadabra ....\nnicht mehr da.\n%s %s liegt jetzt %s"
     ok: true
     ko: false
     color: GREEN

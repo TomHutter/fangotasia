@@ -212,10 +212,11 @@ func Setup() {
 	Overwrites = getMapOverwrites()
 	initBoxLen()
 	initMap()
-	Flags = make(map[string]bool, 6)
+	Flags = make(map[string]bool, 7)
 	Flags["DoorOpen"] = false
 	Flags["BoxOpen"] = false
 	Flags["MapMissed"] = false
+	Flags["HoodVanished"] = false
 	Flags["Moore"] = false
 	Flags["Castle"] = false
 	Flags["Tree"] = false

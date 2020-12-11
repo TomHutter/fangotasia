@@ -26,13 +26,24 @@ func (object Object) available(area setup.Area) bool {
 func (object Object) snatchFrom(opponent Object) (r setup.Reaction) {
 	hood := Object(setup.GetObjectByID(13))
 	area := setup.GetAreaByID(object.Properties.Area)
-	if opponent.inArea(area) && !hood.inUse() {
-		r = setup.GetReactionByName("wontLet")
-		r.Statement[0] = fmt.Sprintf("%s %s %s",
-			strings.Title(opponent.Properties.Description.Article),
-			opponent.Properties.Description.Short,
-			r.Statement[0])
-		return
+	if opponent.inArea(area) {
+		if !hood.inUse() {
+			r = setup.GetReactionByName("wontLet")
+			r.Statement[0] = fmt.Sprintf("%s %s %s",
+				strings.Title(opponent.Properties.Description.Article),
+				opponent.Properties.Description.Short,
+				r.Statement[0])
+			return
+		} else {
+			// hood in use and object picked successfully?
+			r = object.pick()
+			if r.OK {
+				r = setup.Reactions["hoodInUse"]
+				setup.Flags["HoodVanished"] = true
+				hood.NewAreaID(object.Properties.Area)
+				return
+			}
+		}
 	}
 	return object.pick()
 }
@@ -45,8 +56,8 @@ func (obj Object) pick() (r setup.Reaction) {
 		return
 	}
 
-	obj.NewAreaID(setup.INVENTORY)
 	r = setup.Reactions["ok"]
+	obj.NewAreaID(setup.INVENTORY)
 	return
 }
 

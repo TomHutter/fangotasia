@@ -7,6 +7,7 @@ import (
 	"fangotasia/view"
 	"fmt"
 	"os"
+	"regexp"
 	"strings"
 	"testing"
 
@@ -68,9 +69,53 @@ func TestTake(t *testing.T) {
 	res = obj.Take(area)
 	assert.Equal(t, setup.Reactions["silly"].Statement, res.Statement)
 	assert.False(t, res.OK)
+
+	// to to area 29
+	area = setup.GetAreaByID(29)
+	// pick up grub
+	obj = actions.Object(setup.GetObjectByID(10))
+	res = obj.Take(area)
+	assert.Equal(t, setup.Reactions["silly"].Statement, res.Statement)
+	assert.False(t, res.OK)
+
+	// pick up stone
+	obj = actions.Object(setup.GetObjectByID(20))
+	obj.NewAreaID(area.ID)
+	res = obj.Take(area)
+	assert.Equal(t, setup.Reactions["ok"].Statement, res.Statement)
+	assert.True(t, res.OK)
+
+	// pick up sword
+	obj = actions.Object(setup.GetObjectByID(15))
+	grub := actions.Object(setup.GetObjectByID(10))
+	obj.NewAreaID(area.ID)
+	res = obj.Take(area)
+	r := setup.GetReactionByName("wontLet")
+	r.Statement[0] = fmt.Sprintf("%s %s %s",
+		strings.Title(grub.Properties.Description.Article),
+		grub.Properties.Description.Short,
+		r.Statement[0])
+	assert.Equal(t, r.Statement, res.Statement)
+	assert.False(t, res.OK)
+
+	// wear hood
+	hood := actions.Object(setup.GetObjectByID(13))
+	hood.NewAreaID(setup.INUSE)
+	res = obj.Take(area)
+	/*
+		r := setup.GetReactionByName("wontLet")
+		r.Statement[0] = fmt.Sprintf("%s %s %s",
+			strings.Title(grub.Properties.Description.Article),
+			grub.Properties.Description.Short,
+			r.Statement[0])
+		assert.Equal(t, r.Statement, res.Statement)
+	*/
+	assert.Equal(t, setup.Reactions["hoodInUse"].Statement, res.Statement)
+	assert.False(t, res.OK)
 }
 
 func TestStab(t *testing.T) {
+	setup.Setup()
 	// go to area 4
 	area := setup.GetAreaByID(4)
 	// stab gnome
@@ -113,9 +158,11 @@ func TestMove(t *testing.T) {
 	// pick magic shoes
 	obj = actions.Object(setup.GetObjectByID(31))
 	obj.Take(area)
+	obj = actions.Object(setup.GetObjectByID(31))
 	obj.Use(area)
+	obj = actions.Object(setup.GetObjectByID(31))
 	res, areaID = obj.Move(area, "o")
-	assert.Equal(t, areaID, 2)
+	assert.Equal(t, 2, areaID)
 	assert.True(t, res.OK)
 }
 
@@ -208,7 +255,19 @@ func TestThrow(t *testing.T) {
 	sphere = actions.Object(setup.GetObjectByID(46))
 	sphere.NewAreaID(setup.INVENTORY)
 	res = sphere.Throw(area)
-	assert.Equal(t, setup.Reactions["throwObject"].Statement, res.Statement)
+	sphere = actions.Object(setup.GetObjectByID(46))
+	statement := make([]string, len(setup.Reactions["throwObject"].Statement))
+	copy(statement, setup.Reactions["throwObject"].Statement)
+	newArea := setup.GetAreaByID(sphere.Properties.Area)
+	article := strings.Title(sphere.Properties.Description.Article)
+	short := sphere.Properties.Description.Short
+	location := newArea.Properties.Description.Long
+	re := regexp.MustCompile(`\\n.*$`)
+	location = string(re.ReplaceAll([]byte(location), []byte(" ")))
+	for i, s := range statement {
+		statement[i] = fmt.Sprintf(s, article, short, location)
+	}
+	assert.Equal(t, statement, res.Statement)
 	assert.True(t, res.OK)
 	assert.LessOrEqual(t, setup.GetObjectByID(46).Properties.Area, 51)
 
@@ -217,11 +276,23 @@ func TestThrow(t *testing.T) {
 	stone := actions.Object(setup.GetObjectByID(20))
 	stone.NewAreaID(setup.INVENTORY)
 	res = stone.Throw(area)
-	assert.Equal(t, setup.Reactions["throwObject"].Statement, res.Statement)
+	stone = actions.Object(setup.GetObjectByID(20))
+	statement = make([]string, len(setup.Reactions["throwObject"].Statement))
+	copy(statement, setup.Reactions["throwObject"].Statement)
+	newArea = setup.GetAreaByID(stone.Properties.Area)
+	article = strings.Title(stone.Properties.Description.Article)
+	short = stone.Properties.Description.Short
+	location = newArea.Properties.Description.Long
+	location = string(re.ReplaceAll([]byte(location), []byte(" ")))
+	for i, s := range statement {
+		statement[i] = fmt.Sprintf(s, article, short, location)
+	}
+	assert.Equal(t, statement, res.Statement)
 	assert.True(t, res.OK)
 	assert.LessOrEqual(t, setup.GetObjectByID(46).Properties.Area, 51)
 
 	// stone on tree - map present by setup
+	stone.NewAreaID(setup.INVENTORY)
 	area = setup.GetAreaByID(31)
 	assert.False(t, setup.Flags["MapMissed"])
 	res = stone.Throw(area)
@@ -261,7 +332,18 @@ func TestThrow(t *testing.T) {
 
 	book.NewAreaID(setup.INVENTORY)
 	res = book.Throw(area)
-	assert.Equal(t, setup.Reactions["throwObject"].Statement, res.Statement)
+	book = actions.Object(setup.GetObjectByID(11))
+	statement = make([]string, len(setup.Reactions["throwObject"].Statement))
+	copy(statement, setup.Reactions["throwObject"].Statement)
+	newArea = setup.GetAreaByID(book.Properties.Area)
+	article = strings.Title(book.Properties.Description.Article)
+	short = book.Properties.Description.Short
+	location = newArea.Properties.Description.Long
+	location = string(re.ReplaceAll([]byte(location), []byte(" ")))
+	for i, s := range statement {
+		statement[i] = fmt.Sprintf(s, article, short, location)
+	}
+	assert.Equal(t, statement, res.Statement)
 	assert.True(t, res.OK)
 	assert.LessOrEqual(t, setup.GetObjectByID(46).Properties.Area, 51)
 
