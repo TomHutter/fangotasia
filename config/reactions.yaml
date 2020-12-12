@@ -201,6 +201,12 @@ reactions:
     ok: true
     ko: false
     color: RED
+  noSaveFile:
+    statement:
+      - "Kein gespeichertes Spiel vorhanden."
+    ok: false
+    ko: false
+    color: RED
   loaded:
     statement:
       - "Spiel erfolgreich geladen."

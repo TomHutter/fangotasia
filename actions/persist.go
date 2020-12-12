@@ -58,6 +58,11 @@ func (obj Object) Load(area setup.Area) (r setup.Reaction, areaID int) {
 	}
 
 	filename := folderListing()
+	if _, err := os.Stat(filename); os.IsNotExist(err) {
+		r = setup.Reactions["noSaveFile"]
+		areaID = area.ID
+		return
+	}
 
 	yamlFile, err := ioutil.ReadFile(filename)
 	if err != nil {
