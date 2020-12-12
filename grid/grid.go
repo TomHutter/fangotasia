@@ -45,10 +45,7 @@ func SetupGrid() {
 
 	Surroundings = tview.NewTextView().
 		SetTextAlign(tview.AlignLeft).
-		SetDynamicColors(true).
-		SetChangedFunc(func() {
-			App.Draw()
-		})
+		SetDynamicColors(true)
 
 	AreaMap = tview.NewTextView().
 		SetTextAlign(tview.AlignCenter).

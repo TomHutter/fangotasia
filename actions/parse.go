@@ -24,7 +24,7 @@ type reaction struct {
 
 var object string
 
-func Parse(input string, area setup.Area) setup.Area {
+func Parse(input string, area *setup.Area) bool {
 
 	var command string
 	var order verb
@@ -56,7 +56,7 @@ func Parse(input string, area setup.Area) setup.Area {
 					"[red]",
 					notice, "[-:black:-]"))
 		}
-		return area
+		return false
 	}
 
 	if knownVerb.Single {
@@ -65,7 +65,7 @@ func Parse(input string, area setup.Area) setup.Area {
 			grid.InputField.SetText("")
 			grid.Response.SetText(
 				fmt.Sprintf(fmt.Sprintf("Func '%s' not yet implemented\n", knownVerb.Func), 2, "[red]"))
-			return area
+			return false
 		}
 		val := call.Call([]reflect.Value{})
 		var notice []string
@@ -78,7 +78,7 @@ func Parse(input string, area setup.Area) setup.Area {
 				"[green:black:-]",
 				strings.Join(notice, "\n"),
 				"[-:black:-]"))
-		return area
+		return false
 	}
 
 	argv := make([]reflect.Value, 0)
@@ -86,14 +86,14 @@ func Parse(input string, area setup.Area) setup.Area {
 	switch knownVerb.Func {
 	case "Move":
 		obj = Object{}
-		argv = append(argv, reflect.ValueOf(area))
+		argv = append(argv, reflect.ValueOf(*area))
 		argv = append(argv, reflect.ValueOf(knownVerb.Name))
 	case "Load", "Save", "Jump", "Map", "Help":
 		obj = Object{}
-		argv = append(argv, reflect.ValueOf(area))
+		argv = append(argv, reflect.ValueOf(*area))
 	case "Say":
 		obj = Object{}
-		argv = append(argv, reflect.ValueOf(area))
+		argv = append(argv, reflect.ValueOf(*area))
 		if len(parts) > 0 {
 			argv = append(argv, reflect.ValueOf(strings.Join(parts, " ")))
 		} else {
@@ -101,7 +101,7 @@ func Parse(input string, area setup.Area) setup.Area {
 		}
 	case "Drink":
 		obj = Object(setup.GetObjectByID(30))
-		argv = append(argv, reflect.ValueOf(area))
+		argv = append(argv, reflect.ValueOf(*area))
 	default:
 		if len(parts) < 1 {
 			answer := setup.GetReactionByName("needObject")
@@ -112,19 +112,19 @@ func Parse(input string, area setup.Area) setup.Area {
 					"[red]",
 					notice,
 					"[-:black:-]"))
-			return area
+			return false
 		}
 		for _, p := range parts {
-			obj = Object(getObjectByName(p, area))
+			obj = Object(getObjectByName(p, *area))
 			if obj != (Object{}) {
-				argv = append(argv, reflect.ValueOf(area))
+				argv = append(argv, reflect.ValueOf(*area))
 				break
 			}
 		}
 	}
 
 	if len(argv) < 1 {
-		return area
+		return false
 	}
 
 	// now method and all args should be known
@@ -133,7 +133,7 @@ func Parse(input string, area setup.Area) setup.Area {
 		grid.InputField.SetText("")
 		grid.Response.SetText(
 			fmt.Sprintf(fmt.Sprintf("Func '%s' not yet implemented\n", knownVerb.Func), 2, "[red]"))
-		return area
+		return false
 	}
 	val := call.Call(argv)
 
@@ -161,11 +161,12 @@ func Parse(input string, area setup.Area) setup.Area {
 		// OK
 		if val[0].Field(1).Bool() == true {
 			// Area
-			area = setup.GetAreaByID(int(val[1].Int()))
+			*area = setup.GetAreaByID(int(val[1].Int()))
 			setup.GameAreas[area.ID] = area.Properties
 		}
 		fallthrough
 	default:
+		grid.Surroundings.SetText(strings.Join(view.Surroundings(*area), "\n"))
 		grid.InputField.SetText("")
 		grid.Response.SetText(
 			fmt.Sprintf("\n%s%s%s\n",
@@ -174,20 +175,25 @@ func Parse(input string, area setup.Area) setup.Area {
 	}
 	// KO ?
 	if val[0].Field(2).Bool() == true {
-		time.Sleep(time.Duration(6) * time.Second)
-		area = setup.GetAreaByID(1)
-		grid.InputField.SetText("")
-		grid.Response.SetText("")
-		grid.Surroundings.SetText("")
-		scoreBoard(true, true)
+		return true
 	}
-	return area
+	return false
 }
 
 func REPL(area setup.Area) {
 	for {
+		var KO bool
 		command := <-grid.Input
-		area = Parse(command, area)
-		grid.Surroundings.SetText(strings.Join(view.Surroundings(area), "\n"))
+		KO = Parse(command, &area)
+		if KO {
+			// reload screen, sleep, die ....
+			time.Sleep(time.Duration(6) * time.Second)
+			grid.InputField.SetText("")
+			grid.Response.SetText("")
+			grid.Surroundings.SetText("")
+			scoreBoard(true, true)
+			area = setup.GetAreaByID(1)
+			grid.Surroundings.SetText(strings.Join(view.Surroundings(area), "\n"))
+		}
 	}
 }
