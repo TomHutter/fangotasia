@@ -103,7 +103,7 @@ reactions:
     color: RED
   stabDwarfHooded:
     statement:
-      - "Der Zwerg erschrickt und rennt weg.\n\nDie Tarnkappe hat sich in Luft aufgelöst!"
+      - "Der Zwerg erschrickt und versucht sich zu wehren, trifft aber ins Leere.\n\nDie Tarnkappe hat sich in Luft aufgelöst!"
     ok: true
     ko: false
     color: GREEN
@@ -115,7 +115,7 @@ reactions:
     color: RED
   stabGnomeHooded:
     statement:
-      - "Der Gnom erschrickt und rennt weg.\n\nDie Tarnkappe hat sich in Luft aufgelöst!"
+      - "Der Gnom erschrickt und spuckt wilde Flüche aus.\n\nDie Tarnkappe hat sich in Luft aufgelöst!"
     ok: true
     ko: false
     color: GREEN

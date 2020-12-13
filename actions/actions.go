@@ -156,8 +156,6 @@ func (object Object) Stab(area setup.Area) (r setup.Reaction) {
 	case 18:
 		hood := Object(setup.GetObjectByID(13))
 		if hood.inUse() {
-			dwarf := Object(setup.GetObjectByID(18))
-			dwarf.NewAreaID(0)
 			r = setup.Reactions["stabDwarfHooded"]
 			setup.Flags["HoodVanished"] = true
 			hood.NewAreaID(object.Properties.Area)
@@ -168,8 +166,6 @@ func (object Object) Stab(area setup.Area) (r setup.Reaction) {
 	case 36:
 		hood := Object(setup.GetObjectByID(13))
 		if hood.inUse() {
-			gnome := Object(setup.GetObjectByID(36))
-			gnome.NewAreaID(0)
 			r = setup.Reactions["stabGnomeHooded"]
 			setup.Flags["HoodVanished"] = true
 			hood.NewAreaID(object.Properties.Area)
