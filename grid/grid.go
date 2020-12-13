@@ -50,17 +50,11 @@ func SetupGrid() {
 	AreaMap = tview.NewTextView().
 		SetTextAlign(tview.AlignCenter).
 		SetDynamicColors(true).
-		SetWrap(false).
-		SetChangedFunc(func() {
-			App.Draw()
-		})
+		SetWrap(false)
 
 	Response = tview.NewTextView().
 		SetDynamicColors(true).
-		SetTextAlign(tview.AlignLeft).
-		SetChangedFunc(func() {
-			App.Draw()
-		})
+		SetTextAlign(tview.AlignLeft)
 
 	InputGrid = tview.NewGrid().
 		SetRows(0, 1, 0).

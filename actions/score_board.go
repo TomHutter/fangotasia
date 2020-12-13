@@ -34,7 +34,7 @@ func scoreBoard(yesNo bool, KO bool) {
 	if sum == 181 {
 		switch {
 		case setup.Moves < 500:
-			board = append(board, fmt.Sprintf(setup.TextElements["movesNeeeded"], 500))
+			board = append(board, fmt.Sprintf(setup.TextElements["movesNeeded"], 500))
 			sum += 10
 			fallthrough
 		case setup.Moves < 400:

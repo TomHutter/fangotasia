@@ -185,6 +185,7 @@ func REPL(area setup.Area) {
 		var KO bool
 		command := <-grid.Input
 		KO = Parse(command, &area)
+		grid.App.Draw()
 		if KO {
 			// reload screen, sleep, die ....
 			time.Sleep(time.Duration(6) * time.Second)
@@ -194,6 +195,7 @@ func REPL(area setup.Area) {
 			scoreBoard(true, true)
 			area = setup.GetAreaByID(1)
 			grid.Surroundings.SetText(strings.Join(view.Surroundings(area), "\n"))
+			grid.App.Draw()
 		}
 	}
 }

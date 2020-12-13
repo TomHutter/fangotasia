@@ -25,14 +25,14 @@ func TestParse(t *testing.T) {
 	setup.Setup()
 	grid.SetupGrid()
 	// go to area 1
-	area1 := setup.GetAreaByID(1)
-	area := actions.Parse("nimm zauberschuhe", area1)
-	assert.Equal(t, area1, area)
-	area = actions.Parse("trage zauberschuhe", area1)
-	assert.Equal(t, area1, area)
-	area = actions.Parse("o", area1)
-	area2 := setup.GetAreaByID(2)
-	assert.Equal(t, area2, area)
+	area := setup.GetAreaByID(1)
+	KO := actions.Parse("nimm zauberschuhe", &area)
+	assert.Equal(t, 1, area.ID)
+	KO = actions.Parse("trage zauberschuhe", &area)
+	assert.Equal(t, 1, area.ID)
+	KO = actions.Parse("o", &area)
+	assert.Equal(t, 2, area.ID)
+	assert.False(t, KO)
 }
 
 func TestTake(t *testing.T) {

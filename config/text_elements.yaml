@@ -15,7 +15,7 @@ elements:
   gameOver: G A M E    O V E R
   haveFound: Du hast gefunden
   points: Punkte
-  movesNeeded: "Du hast weniger als %d Züge gebrauchtt: 7 Punkte"
+  movesNeeded: "Du hast weniger als %d Züge gebrauchtt: 10 Punkte"
   visitedMoore: "- Du bist im Moor gewesen: %d Punkte"
   visitedCastle: "- Du hast die verlassene Burg besucht: %d Punkte"
   climbedTree: "- Du bist auf einen Baum geklettert: %d Punkte"
