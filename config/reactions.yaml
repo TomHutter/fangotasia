@@ -104,9 +104,9 @@ reactions:
   stabDwarfHooded:
     statement:
       - "Der Zwerg erschrickt und versucht sich zu wehren, trifft aber ins Leere.\n\nDie Tarnkappe hat sich in Luft aufgelöst!"
-    ok: true
+    ok: false
     ko: false
-    color: GREEN
+    color: RED
   stabGnome:
     statement:
       - "Der Gnom verzaubert mich!"
@@ -116,9 +116,9 @@ reactions:
   stabGnomeHooded:
     statement:
       - "Der Gnom erschrickt und spuckt wilde Flüche aus.\n\nDie Tarnkappe hat sich in Luft aufgelöst!"
-    ok: true
+    ok: false
     ko: false
-    color: GREEN
+    color: RED
   stabDragon:
     statement:
       - "Der Drache verbrennt mich!"

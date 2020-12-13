@@ -16,16 +16,6 @@ ToDos:
 - forest mapping buggy
 */
 
-/*
-func recoverFromTviewPanic() {
-	if r := recover(); r != nil {
-		fmt.Println("recovered from ", r)
-        (actions.Object{}).Save(area setup.Area) (r setup.Reaction) {
-	}
-	setup.PathName, _ = os.Getwd()
-}
-*/
-
 func init() {
 	setup.PathName, _ = os.Getwd()
 }
