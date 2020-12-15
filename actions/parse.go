@@ -62,9 +62,11 @@ func Parse(input string, area *setup.Area) bool {
 	if knownVerb.Single {
 		call := reflect.ValueOf(&order).MethodByName(knownVerb.Func)
 		if !call.IsValid() {
-			grid.InputField.SetText("")
-			grid.Response.SetText(
-				fmt.Sprintf(fmt.Sprintf("Func '%s' not yet implemented\n", knownVerb.Func), 2, "[red]"))
+			setResponse(
+				fmt.Sprintf(
+					fmt.Sprintf("Func '%s' not yet implemented\n", knownVerb.Func),
+					2,
+					"[red]"))
 			return false
 		}
 		val := call.Call([]reflect.Value{})
@@ -72,8 +74,7 @@ func Parse(input string, area *setup.Area) bool {
 		for i := 0; i < val[0].Len(); i++ {
 			notice = append(notice, val[0].Index(i).String())
 		}
-		grid.InputField.SetText("")
-		grid.Response.SetText(
+		setResponse(
 			fmt.Sprintf("\n%s%s%s\n",
 				"[green:black:-]",
 				strings.Join(notice, "\n"),
@@ -106,8 +107,7 @@ func Parse(input string, area *setup.Area) bool {
 		if len(parts) < 1 {
 			answer := setup.GetReactionByName("needObject")
 			notice := fmt.Sprintln(answer.Statement[0])
-			grid.InputField.SetText("")
-			grid.Response.SetText(
+			setResponse(
 				fmt.Sprintf("\n%s%s%s\n",
 					"[red]",
 					notice,
@@ -130,9 +130,11 @@ func Parse(input string, area *setup.Area) bool {
 	// now method and all args should be known
 	call := reflect.ValueOf(obj).MethodByName(knownVerb.Func)
 	if !call.IsValid() {
-		grid.InputField.SetText("")
-		grid.Response.SetText(
-			fmt.Sprintf(fmt.Sprintf("Func '%s' not yet implemented\n", knownVerb.Func), 2, "[red]"))
+		setResponse(
+			fmt.Sprintf(
+				fmt.Sprintf("Func '%s' not yet implemented\n", knownVerb.Func),
+				2,
+				"[red]"))
 		return false
 	}
 	val := call.Call(argv)
@@ -166,9 +168,10 @@ func Parse(input string, area *setup.Area) bool {
 		}
 		fallthrough
 	default:
-		grid.Surroundings.SetText(strings.Join(view.Surroundings(*area), "\n"))
-		grid.InputField.SetText("")
-		grid.Response.SetText(
+		grid.App.QueueUpdate(func() {
+			grid.Surroundings.SetText(strings.Join(view.Surroundings(*area), "\n"))
+		})
+		setResponse(
 			fmt.Sprintf("\n%s%s%s\n",
 				color,
 				notice, "[-:black:-]"))
@@ -189,12 +192,14 @@ func REPL(area setup.Area) {
 		if KO {
 			// reload screen, sleep, die ....
 			time.Sleep(time.Duration(6) * time.Second)
-			grid.InputField.SetText("")
-			grid.Response.SetText("")
-			grid.Surroundings.SetText("")
-			scoreBoard(true, true)
-			area = setup.GetAreaByID(1)
-			grid.Surroundings.SetText(strings.Join(view.Surroundings(area), "\n"))
+			grid.App.QueueUpdate(func() {
+				grid.InputField.SetText("")
+				grid.Response.SetText("")
+				grid.Surroundings.SetText("")
+				scoreBoard(true, true)
+				area = setup.GetAreaByID(1)
+				grid.Surroundings.SetText(strings.Join(view.Surroundings(area), "\n"))
+			})
 			grid.App.Draw()
 		}
 	}

@@ -7,6 +7,13 @@ import (
 	"strings"
 )
 
+func setResponse(response string) {
+	grid.App.QueueUpdate(func() {
+		grid.InputField.SetText("")
+		grid.Response.SetText(response)
+	})
+}
+
 func (object Object) inArea(area setup.Area) bool {
 	return object.Properties.Area == area.ID
 }

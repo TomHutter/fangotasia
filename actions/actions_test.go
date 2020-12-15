@@ -2,7 +2,6 @@ package actions_test
 
 import (
 	"fangotasia/actions"
-	"fangotasia/grid"
 	"fangotasia/setup"
 	"fangotasia/view"
 	"fmt"
@@ -17,10 +16,10 @@ import (
 func TestSetup(t *testing.T) {
 	path, _ := os.Getwd()
 	setup.PathName = path + "/../"
-	fmt.Println(setup.PathName)
 	setup.Setup()
 }
 
+/*
 func TestParse(t *testing.T) {
 	setup.Setup()
 	grid.SetupGrid()
@@ -34,6 +33,7 @@ func TestParse(t *testing.T) {
 	assert.Equal(t, 2, area.ID)
 	assert.False(t, KO)
 }
+*/
 
 func TestTake(t *testing.T) {
 	setup.Setup()
