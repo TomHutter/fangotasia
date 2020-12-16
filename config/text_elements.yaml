@@ -20,5 +20,25 @@ elements:
   visitedCastle: "- Du hast die verlassene Burg besucht: %d Punkte"
   climbedTree: "- Du bist auf einen Baum geklettert: %d Punkte"
   pointsOutOf: "Du hast %d von 220 Punkten!"
-  oneMoreGame:	"Noch ein Spiel? (j/n)"
+  oneMoreGame:  "Noch ein Spiel? (j/n)"
   comeOn: "Ach komm, noch 5 Minuten? (j/n)"
+  intro: |
+    [blue:black:-]Mach Dich auf den gefahrenreichen Weg in
+    das zauberhafte Land Fangotasia und suche
+    nach märchenhaften Schätzen.
+    Führe mich mit einfachen Kommandos in
+    einem oder zwei Worten, z.B.:
+    
+    [yellow:black:b]SPRING      BENUTZE TARNKAPPE      ENDE
+    
+    LEGE RUBIN     FÜTTERE DRACHE     INVENTAR
+    
+    [blue:black:-]Mit  [white:black:b]SAVE  [blue:black:-]kannst Du den aktuellen Stand
+    des Spieles abspeichern,
+    mit  [white:black:b]LOAD  [blue:black:-]wieder einlesen.
+  prelude: |
+    [red:black:b]F A N G O T A S I A
+    
+    [blue:black:b]- Ein Adventure von Klaus Hartmuth (1984) -
+    
+    [yellow:black:b]- GO Version von Tom Hutter (2020) -

@@ -6,10 +6,10 @@ conditions:
     full: einen vollen Wasserkrug
     empty: einen leeren Wasserkrug
   ring:
-    golden: "::ein ring aus Goldfäden::"
+    golden: "::ein Ring aus Goldfäden::"
   bush:
     ugly: einen hässlichen Strauch
-    watered: einen Strauch
+    watered: einen edlen Strauch
   fango:
     die: "eine ::besudelte:: %s"
     der: "einen ::besudelten:: %s"
