@@ -4,9 +4,6 @@ goarch_x86=amd64
 goarch_arm=arm
 goos=linux
 
-ODIR=/tmp/fangotasia
-WORKDIR=${PWD}
-
 SOURCES = $(wildcard *.go) $(wildcard */*.go)
 
 fangotasia.arm: ${SOURCES}
@@ -20,21 +17,18 @@ release: release.arm release.x86
 current:
 	echo ${WORKDIR}
 
-release.arm: clean
-	mkdir -p $(ODIR)/save
-	tar --transform "s/^./fangotasia/" -cvf ${WORKDIR}/fangotasia.arm.tar ./fangotasia.arm ./config
-	(cd /tmp && tar -rvf ${WORKDIR}/fangotasia.arm.tar fangotasia )
-	gzip ${WORKDIR}/fangotasia.arm.tar
+release.arm: clean fangotasia.arm
+	tar --transform "s/^./fangotasia/" -cvf fangotasia.arm.tar ./fangotasia.arm ./config
+	gzip fangotasia.arm.tar
 
-release.x86: clean
-	mkdir -p $(ODIR)/save
-	tar --transform "s/^./fangotasia/" -cvf ${WORKDIR}/fangotasia.x86.tar ./fangotasia.x86 ./config
-	(cd /tmp && tar -rvf ${WORKDIR}/fangotasia.x86.tar fangotasia )
-	gzip ${WORKDIR}/fangotasia.x86.tar
+release.x86: clean fangotasia.x86
+	tar --transform "s/^./fangotasia/" -cvf fangotasia.x86.tar ./fangotasia.x86 ./config
+	gzip fangotasia.x86.tar
 
 .PHONY: clean
 
 clean:
-	rm -rf $(ODIR)/*
-	rmdir $(ODIR) || echo -n ""
-	rm ${WORKDIR}/fangotasia.*.tar.gz || echo -n ""
+	rm fangotasia.arm || echo -n ""
+	rm fangotasia.arm.tar.gz || echo -n ""
+	rm fangotasia.x86 || echo -n ""
+	rm fangotasia.x86.tar.gz || echo -n ""

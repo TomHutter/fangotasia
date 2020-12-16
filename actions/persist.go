@@ -22,6 +22,9 @@ func (obj Object) Save(area setup.Area) (r setup.Reaction) {
 	m["moves"] = setup.Moves
 
 	filename := folderListing()
+	if _, err := os.Stat(setup.PathName + "/save/"); os.IsNotExist(err) {
+		os.Mkdir(setup.PathName+"/save/", os.FileMode(0755))
+	}
 
 	r = setup.Reactions["saved"]
 	file, err := os.Create(filename)
