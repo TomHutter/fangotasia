@@ -125,7 +125,9 @@ func (object Object) Take(area setup.Area) (r setup.Reaction) {
 		return
 	case 48:
 		r = setup.GetReactionByName("takeImke")
-		r.Statement[0] = fmt.Sprintf(r.Statement[0], "[#ff69b4::b]<IMKE>[green:black:-]")
+		r.Statement[0] = fmt.Sprintf(r.Statement[0],
+			"[#ff69b4::b]<IMKE>[green:black:-]",
+			"[#ff69b4::b]<IMKE>[green:black:-]")
 		return
 	case 47:
 		if area.ID == 31 {

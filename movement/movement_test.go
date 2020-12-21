@@ -22,7 +22,7 @@ func TestSurroundings(t *testing.T) {
 	area := setup.GetAreaByID(1)
 	objects := setup.ObjectsInArea(area)
 	s := strings.Join(view.Surroundings(area), "\n")
-	assert.Contains(t, s, "Torbogen")
+	assert.Contains(t, s, setup.GetAreaByID(1).Properties.Description.Short)
 	assert.Contains(t, s, objects[0].Properties.Description.Long)
 }
 

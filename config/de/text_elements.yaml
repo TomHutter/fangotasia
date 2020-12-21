@@ -1,4 +1,5 @@
 elements:
+  selectLanguage: "Bitte Sprache auswählen und Enter drücken:"
   iAm: Ich bin
   iSee: Ich sehe
   directions: Richtungen

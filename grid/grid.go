@@ -9,15 +9,16 @@ import (
 )
 
 var (
-	App          *tview.Application
-	Grid         *tview.Grid
-	InputGrid    *tview.Grid
-	InputField   *tview.InputField
-	Surroundings *tview.TextView
-	Response     *tview.TextView
-	AreaGrid     *tview.Grid
-	AreaField    *tview.InputField
-	AreaMap      *tview.TextView
+	App            *tview.Application
+	Grid           *tview.Grid
+	InputGrid      *tview.Grid
+	InputField     *tview.InputField
+	Surroundings   *tview.TextView
+	Response       *tview.TextView
+	LanguageSelect *tview.DropDown
+	AreaGrid       *tview.Grid
+	AreaField      *tview.InputField
+	AreaMap        *tview.TextView
 )
 
 var Input = make(chan string, 1)
@@ -55,6 +56,8 @@ func SetupGrid() {
 	Response = tview.NewTextView().
 		SetDynamicColors(true).
 		SetTextAlign(tview.AlignLeft)
+
+	LanguageSelect = tview.NewDropDown()
 
 	InputGrid = tview.NewGrid().
 		SetRows(0, 1, 0).

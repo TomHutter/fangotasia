@@ -5,6 +5,7 @@ import (
 	"fangotasia/setup"
 	"fmt"
 	"math/rand"
+	"strings"
 	"time"
 )
 
@@ -26,7 +27,16 @@ func beads(areaID int) {
 
 // As Move is called in context of object handling, Move reflects on Object even obj is not used.
 func (obj Object) Move(area setup.Area, dir string) (r setup.Reaction, areaID int) {
-	var direction = map[string]int{"n": 0, "s": 1, "o": 2, "w": 3}
+	var char string
+	var direction = map[string]int{}
+	char = strings.ToLower(string(setup.TextElements["north"][0]))
+	direction[char] = 0
+	char = strings.ToLower(string(setup.TextElements["south"][0]))
+	direction[char] = 1
+	char = strings.ToLower(string(setup.TextElements["east"][0]))
+	direction[char] = 2
+	char = strings.ToLower(string(setup.TextElements["west"][0]))
+	direction[char] = 3
 
 	newArea := area.Properties.Directions[direction[dir]]
 	if newArea == 0 {

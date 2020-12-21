@@ -1,287 +1,288 @@
 reactions:
   silly:
     statement:
-      - "Sei nicht albern."
-      - "Schon klar ..."
-      - "Nee, das wird nix."
+      - "Dont't be silly."
+      - "Right ..."
+      - "I don't think so."
       - "Nice try ...."
     ok: false
     ko: false
     color: RED
   noTool:
     statement:
-      - "Ich habe nicht das richtige Werkzeug."
+      - "I don't have the fitting tools."
     ok: false
     ko: false
     color: RED
   dontKnowHow:
     statement:
-      - "Ich weis nicht wie das geht."
-      - "Wie soll das gehen?"
+      - "I don't know how to do this."
+      - "How should this work?"
     ok: false
     ko: false
     color: RED
   wontLet:
     statement:
-      - "lässt mich nicht."
+      - "is blocking me."
     ok: false
     ko: false
     color: RED
   tooHeavy:
     statement:
-      - "Zu schwer."
+      - "Too heavy."
     ok: false
     ko: false
     color: RED
   unreachable:
     statement:
-      - "Kann ich nicht erreichen."
-      - "Komm nicht dran."
+      - "I can't reach it."
+      - "My arms are to short."
     ok: false
     ko: false
     color: RED
   invFull:
     statement: 
       - |
-        Ich habe zuviel zu tragen.
-        Ich müsste etwas weglegen.
+        I am carrying to much.
+        I have to put something down.
     ok: false
     ko: false
     color: RED
   ok:
     statement:
-      - "Gut."
+      - "Done."
       - "Okay."
-      - "So geschehen."
+      - "As you command."
       - "Roger."
     ok: true
     ko: false
     color: GREEN
   noWay:
     statement:
-      - "In diese Richtung führt kein Weg."
-      - "Da geht es nicht lang."
-      - "Nur die Richtungen, die angegeben sind ...."
+      - "There is no way in this direction."
+      - "No way!"
+      - "Only the given directions ...."
     ok: false
     ko: false
     color: RED
   noShoes:
     statement:
-      - "Hilfe...\n\nIch versinke im Boden."
+      - "Help...\n\nI am sinking in the ground."
     ok: false
     ko: true
     color: RED
   locked:
     statement:
-      - "Die Tür ist versperrt."
+      - "The door is closed."
     ok: false
     ko: false
     color: RED
   tryCut:
     statement:
-      - "Versuche schneide."
+      - "Try cut."
     ok: true
     ko: false
     color: GREEN
   stabGrub:
     statement:
-      - "Die Raupe ist kitzelig und lacht laut!"
+      - "The grub is tickelish and starts laughing loud!"
     ok: true
     ko: false
     color: GREEN
   stabBear:
     statement:
-      - "Der Bär brummt unwillig."
+      - "The baer growls reluctantly."
     ok: true
     ko: false
     color: GREEN
   stabDwarf:
     statement:
-      - "Der Zwerg wird böse und tötet mich!"
+      - "The dwarf gets angry and kills me!"
     ok: false
     ko: true
     color: RED
   stabDwarfHooded:
     statement:
-      - "Der Zwerg erschrickt und versucht sich zu wehren, trifft aber ins Leere.\n\nDie Tarnkappe hat sich in Luft aufgelöst!"
+      - "The dwarf gets scared and tries to hit me, but misses.\n\nThe magic hood disolves into thin air!"
     ok: false
     ko: false
     color: RED
   stabGnome:
     statement:
-      - "Der Gnom verzaubert mich!"
+      - "The gnome bewitches me.!"
     ok: false
     ko: true
     color: RED
   stabGnomeHooded:
     statement:
-      - "Der Gnom erschrickt und spuckt wilde Flüche aus.\n\nDie Tarnkappe hat sich in Luft aufgelöst!"
+      - "The gnome gets scared and starts swearing.\n\nThe magic hood disolves into thin air!"
     ok: false
     ko: false
     color: RED
   stabDragon:
     statement:
-      - "Der Drache verbrennt mich!"
+      - "The dragon burns me alive!"
     ok: false
     ko: true
     color: RED
   dontSee:
     statement:
-      - "Sehe ich hier nicht."
+      - "I dont't see this."
     ok: false
     ko: false
     color: RED
   haveAlready:
     statement:
-      - "Hab ich schon."
+      - "I already have this."
     ok: true
     ko: false
     color: GREEN
   dontHave:
     statement:
-      - "Hab ich nicht dabei."
+      - "I don't have this with me."
     ok: false
     ko: false
     color: RED
   invEmpty:
     statement:
-      - "Ich habe nichts dabei."
+      - "I have have nothing with me."
     ok: true
     ko: false
     color: RED
   inv:
     statement:
-      - "Ich habe:"
+      - "I have:"
     ok: true
     ko: false
     color: GREEN
   useHood:
     statement:
-      - "Gut. Ich setze die Tarnkappe auf."
+      - "Done. I put on the magic hood."
     ok: true
     ko: false
     color: GREEN
   hoodInUse:
     statement:
-      - "Die Tarnkappe hat sich in Luft aufgelöst!"
+      - "The magic hood disolves into thin air!"
     ok: false
     ko: false
     color: RED
   useShoes:
     statement:
-      - "Gut. Ich zog die Zauberschuhe an."
+      - "Okay. I put on the wizard shoes."
     ok: true
     ko: false
     color: GREEN
   unknownVerb:
     statement:
       - |
-        '%s' kenne ich nicht.
-        Das Kommando 'Verben' gibt eine Liste aller verfügbaren Verben aus.
+        I don't know '%s'.
+        The command 'verbs' gives you a list of all the verbs I know.
     ok: true
     ko: false
     color: RED
   unknownNoun:
     statement:
-      - "'%s' kenne ich nicht."
-      - "'%s' kommt erst morgen wieder rein."
+      - "I don't know '%s'."
+      - "'%s' will be in store tomorrow again."
       - "%s?"
     ok: false
     ko: false
     color: RED
   needObject:
     statement:
-      - "Bitte gib ein Objekt an."
+      - "Please add an object."
     ok: false
     ko: false
     color: RED
   inTheMoor:
     statement:
-      - "Im Moor ist alles verschwunden, was ich bei mir hatte!"
+      - "I lost everythin I was carrying in the swamp!"
     ok: true
     ko: false
     color: RED
   noSaveFile:
     statement:
-      - "Kein gespeichertes Spiel vorhanden."
+      - "There is so saved game."
     ok: false
     ko: false
     color: RED
   loaded:
     statement:
-      - "Spiel erfolgreich geladen."
+      - "Game successfully loaded."
     ok: true
     ko: false
     color: GREEN
   saved:
     statement:
-      - "Spiel erfolgreich geschrieben."
+      - "Game successfully saved."
     ok: true
     ko: false
     color: GREEN
   squashed:
     statement:
       - |
-        Die Kugel zerquetscht den Gnom und
-        verwandelt sich in eine goldene Kugel.
+        The sphere squashes the gnome and
+        turns to gold.
     ok: true
     ko: false
     color: GREEN
   brokenSphere:
     statement:
-      - "Die Kugel fällt auf den Boden und zerbricht."
+      - "The sphere falls to the ground and shatters."
     ok: false
     ko: false
     color: RED
   throwObject:
     statement:
-      - "Aus den Augen aus dem Sinn.\n%s %s liegt jetzt %s"
-      - "Wow, neuer Wurfrekord.\n%s %s liegt jetzt %s"
-      - "Abrakadabra ....\nnicht mehr da.\n%s %s liegt jetzt %s"
+      - "Out of sight, out of mind.\n%s %s is now %s."
+      - "Wow new throwing record.\n%s %s is now %s."
+      - "Zadong ...\nand gone.\n%s %s is now %s." 
     ok: true
     ko: false
     color: GREEN
   throwFixedObject:
     statement:
-      - "Umwerfende Idee!"
+      - "Brilliant idea!"
     ok: false
     ko: false
     color: RED
   nothingWritten:
     statement:
-      - "Da steht nichts geschrieben."
+      - "There is nothing written on it."
     ok: false
     ko: false
     color: RED
   book:
     statement:
       - |
-        Im Buch steht: 
-        Messer sind zum stechen da!
+        The book says:
+        Knives are for stabbing!
     ok: true
     ko: false
     color: GREEN
   paper:
     statement:
       - |
-        Auf dem Zettel steht:
-        Drachen lassen sich nicht verjagen.
-        Sie sind unverwundbar und unsterblich!
+        The slip of paper says:
+        You can't chase dragons away.
+        They are invulnerable and immortal!
     ok: true
     ko: false
     color: GREEN
   shield:
     statement:
       - |
-        In den Schild ist eingaviert:
-        Dinge drehen sich um Ringe!
+        Engraved in the buckler is:
+        Things spin around rings!
     ok: true
     ko: false
     color: GREEN
   wallpainting:
     statement:
       - |
-        Die Hölenmalerei besagt: Ein Zauberer war hier.
+        The wall painting says:
+                 Some wizard was here.
                       Simsalabim!
     ok: true
     ko: false
@@ -289,275 +290,264 @@ reactions:
   parchment:
     statement:
       - |
-        Auf dem Pergament steht:
-        Vögel wurden vor langer Zeit in Zwerge verwandelt.
+        The parchmet says:
+        Long time ago birds have been enchanted into dwarfs.
     ok: true
     ko: false
     color: GREEN
   panel:
     statement:
       - |
-        Auf dem Schrifttafel steht:
-        Fremdling, der du betrittst dies Land,
-        suche nach den verlorenen ::Schätzen::!
-        Bringe sie hierher und leg sie hin.
-        Sag 'Fangotasia'!
+        The board says:
+        Foreigner who enters this realm,
+        search for the lost ::treasures::!
+        Bring them here and put them down.
+        Say 'Fangotasia'!
     ok: true
     ko: false
     color: GREEN
   letter:
     statement:
       - |
-        Im Brief steht:
-        Pflanzen brauchen Wasser!
+        The letter says:
+        Plants need water!
     ok: true
     ko: false
     color: GREEN
   rottenPanel:
     statement:
       - |
-        Auf der Tafel kann man fast nicht mehr lesen:
-        Hüte dich vor dem Drachen!
+        The writing on the board is almost gone:
+        Beware of the dragon!
     ok: true
     ko: false
     color: GREEN
   missMap:
     statement:
-      - "Ups. Diesmal nicht getroffen"
+      - "Oops. Missed this time."
     ok: true
     ko: false
     color: RED
   hitMap:
     statement:
-      - "Der Stein trifft die Landkarte und sie fällt zu Boden."
+      - "The stone hits the map and both fall to the ground."
     ok: true
     ko: false
     color: GREEN
   readMap:
     statement:
-      - "Die Landkarte zeigt die Gebiete in denen ich schon war."
+      - "The map shows all areas I already have been to."
     ok: true
     ko: false
     color: GREEN
   useMap:
     statement:
       - |
-        Gut.
-        Jetzt sehe ich endlich wo ich bin und wo ich schon war.
-        Ich kenne jetzt das Wort 'Karte'.
-        Sag 'Karte'.
+        Perfect.
+        Now I can see where I am and where I have been.
+        Now I know the word "map".
+        Say 'map'.
     ok: true
     ko: false
     color: GREEN
   noKey:
     statement:
-      - "Ich habe keinen Schlüssel."
+      - "I don't have a key."
     ok: false
     ko: false
     color: RED
   openBox:
     statement:
-      - "Zwei Dinge fallen heraus."
+      - "Two things fall out."
     ok: true
     ko: false
     color: GREEN
   alreadyOpen:
     statement:
-      - "Ist schon offen."
+      - "It's already open."
     ok: true
     ko: false
     color: GREEN
   say:
     statement:
-      - "'%s'\n...\n...\nNichts passiert."
+      - "'%s'\n...\n...\nNothing happens."
     ok: true
     ko: false
     color: GREEN
   simsalabim:
     statement:
-      - "Der Zwerg verwandelt sich in einen bunten Vogel\nund fliegt davon!"
-    ok: true
-    ko: false
-    color: GREEN
-  fangotasia:
-    statement:
-      - |
-        Du hast %d von maximal 170 Punkten.
-        Dazu gibt es einen Bonus von bis zu 30
-        Punkten,wenn du aufhörst, also insge-
-        samt ein Maximum von 200 Punkten."
+      - "The dwarf turns into a colorful bird\nand flies away!"
     ok: true
     ko: false
     color: GREEN
   unusable:
     statement:
-      - "Wirklich? Ich soll %s mit Wasser füllen? Wie soll das denn gehen?"
+      - "Really?\nYou want me to fill %s with Water?\nThink again!"
     ok: false
     ko: false
     color: RED
   unsuitable:
     statement:
-      - "%s eignet sich nicht dafür."
+      - "%s is unsuitable for this."
     ok: false
     ko: false
     color: RED
   noWater:
     statement:
-      - "Hier ist weit und breit kein Wasser zu sehen."
+      - "There is no water far and wide."
     ok: false
     ko: false
     color: RED
   waterUnreachable:
     statement:
-      - "Ich kann das Wasser nicht erreichen."
+      - "I can't reach the water."
     ok: false
     ko: false
     color: RED
   feed:
     statement:
-      - "%s hat keinen Hunger."
+      - "%s is not hungry."
     ok: false
     ko: false
     color: RED
   feedBaer:
     statement:
-      - "Der Bär ist sehr hungrig und frisst\n... \nmich!"
+      - "The baer is very hungry and starts eating\n... \nme!"
     ok: false
     ko: true
     color: RED
   feedBaerWithBerries:
     statement:
-      - "Der Bär verschlingt die Beeren und läuft davon."
+      - "The baer swallows the berreies and walks away."
     ok: true
     ko: false
     color: GREEN
   cutFruit:
     statement:
-      - "Ich habe die Frucht geteilt und etwas\nfällt heraus."
+      - "I split the fruit and something falls out."
     ok: true
     ko: false
     color: GREEN
   fruitAlreadyCut:
     statement:
-      - "Die Frucht ist bereits zerteilt."
+      - "The fruit is already split."
     ok: true
     ko: false
     color: GREEN
   tryThrow:
     statement:
-      - "Versuche 'wirf'."
+      - "Try 'throw'."
     ok: true
     ko: false
     color: GREEN
   eatCake:
     statement:
-      - "Brrrrr! Schmeckt ja scheußlich!\nIch fühle mich jetzt besonders stark!"
+      - "Brrrrr! Tastes horrible!\nNow I feel very strong!"
     ok: true
     ko: false
     color: GREEN
   drinkJar:
     statement:
-      - "Aaaaaah gut!"
+      - "Aaaaaah good!"
     ok: true
     ko: false
     color: GREEN
   jarEmpty:
     statement:
-      - "Der Krug ist leer."
+      - "The jar is empty."
     ok: false
     ko: false
     color: RED
   cantEat:
     statement:
-      - "Klar! Und was trinke ich dazu? Pangalatischen Donnergurgler?"
+      - "Of course! And what do I drink? Pangalatic Gargle Blaster?"
     ok: false
     ko: false
     color: RED
   spin:
     statement:
-      - "Gut.\n...\nNichts passiert."
+      - "Okay.\n...\nNothing happens."
     ok: true
     ko: false
     color: GREEN
   dontSpin:
     statement:
-      - "Lässt sich nicht drehen."
+      - "Won't spin."
     ok: false
     ko: false
     color: RED
   spinRing:
     statement:
-      - "Alles beginnt sich zu drehen!\n\nDer Ring fällt mir aus der Hand!"
+      - "Everything starts spinning around me!\n\nThe ring falls out of my hand!"
     ok: true
     ko: false
     color: RED
   noJar:
     statement:
-      - "Ich habe nichts zum Gießen."
+      - "I have nothing to water with."
     ok: false
     ko: false
     color: RED
   waterBush:
     statement:
-      - "Der Strauch beginnt zu blühen und es\nwachsen rote beeren.\nDann verwandelt er sich."
+      - "The bush starts blooming and\ngrows red berries.\nThen the bush starts turning."
     ok: true
     ko: false
     color: GREEN
   looksGood:
     statement:
-      - "Sieht verdammt gut aus!"
-      - "beeindruckend"
-      - "Da ist doch ....\n... nee, wohl doch nicht."
+      - "Loogs awsome!"
+      - "impressive"
+      - "Isn't that a ....\n... well, maybe not."
     ok: true
     ko: false
     color: GREEN
   takeImke:
     statement:
-      - "Ich kann %s nicht einfach so nehmen.\n\nSie ist da und daran kann ich mich erfeuen."
+      - "I can't take %s just like that.\n\n%s is here and I can rejoice in it."
     ok: true
     ko: false
     color: GREEN
   scare:
     statement:
-      - "%s lässt sich nicht verjagen."
+      - "%s can't be scared away."
     ok: false
     ko: false
     color: RED
   jump:
     statement:
-      - "Hüpf....hüpf...hüpf."
+      - "Bounce....bounce...bounce."
     ok: true
     ko: false
     color: GREEN
   jumpTree:
     statement:
-      - "Plumps..aua!\n\nIch bin herunter gefallen."
+      - "Plump..ouch!\n\nI fell to the ground."
     ok: false
     ko: true
     color: RED
   throwFango:
     statement:
-      - "Klatsch .... ein Fango-Fladen!"
-      - "Kein passendes Ziel."
-      - "Mehr Glück beim nächsten Mal."
+      - "Clap .... a fango patty!"
+      - "No suitable targed around."
+      - "Better luck next time."
     ok: true
     ko: false
     color: GREEN
   hitWithFango:
     statement:
-      - "Klatsch .... getroffen!"
+      - "Clap .... a hit!"
       - "veni, vidi, vici"
-      - "Sei albern!!"
-      - "Wer hat noch nicht, wer will noch mal?"
+      - "Be silly!!"
       - "Fango Tango."
     ok: true
     ko: false
     color: GREEN
   alreadyFangoed:
     statement:
-      - "Fango auf Fango"
-      - "Mehr geht nicht."
-      - "Hat schon genug."
+      - "Fango on Fango"
+      - "More is not possible."
+      - "Has enough already."
     ok: true
     ko: false
     color: GREEN

@@ -3,6 +3,7 @@ package setup
 import (
 	"io/ioutil"
 	"log"
+	"os"
 	"strings"
 
 	"gopkg.in/yaml.v2"
@@ -103,21 +104,24 @@ type Reaction struct {
 
 type Condition map[string]string
 
-var PathName string
-var TextElements map[string]string
-var GameObjects map[int]ObjectProperties
-var GameAreas map[int]AreaProperties
-var Overwrites []MapOverwrites
-var Reactions map[string]Reaction
-var Conditions map[string]Condition
-var Verbs []Verb
-var Moves int
+var (
+	PathName     string
+	Language     string
+	TextElements map[string]string
+	GameObjects  map[int]ObjectProperties
+	GameAreas    map[int]AreaProperties
+	Overwrites   []MapOverwrites
+	Reactions    map[string]Reaction
+	Conditions   map[string]Condition
+	Verbs        []Verb
+	Moves        int
 
-var Beads int
-var BoxLen int
-var Flags map[string]bool
+	Beads  int
+	BoxLen int
+	Flags  map[string]bool
 
-var Map [12][10]int
+	Map [12][10]int
+)
 
 func initMap() {
 	for y := 0; y < 12; y++ {
@@ -135,7 +139,7 @@ func AreaVisible(a int) bool {
 
 // GetConf : Read yaml config files into struct Conf
 func (c *conf) getConf(filename string) {
-	yamlFile, err := ioutil.ReadFile(filename)
+	yamlFile, err := ioutil.ReadFile(PathName + "/config/" + Language + "/" + filename)
 	if err != nil {
 		log.Printf("yamlFile.Get err   #%v ", err)
 	}
@@ -147,7 +151,7 @@ func (c *conf) getConf(filename string) {
 
 func getMapOverwrites() (overwrites []MapOverwrites) {
 	var c conf
-	c.getConf(PathName + "/config/map_overwrites.yaml")
+	c.getConf("map_overwrites.yaml")
 	for _, v := range c.Overwrites {
 		var o MapOverwrites
 		o.Area = v.Area
@@ -170,7 +174,7 @@ func removeMapVerb(verbs []Verb) []Verb {
 
 func AddMapVerb(verbs []Verb) []Verb {
 	var c conf
-	c.getConf(PathName + "/config/verbs.yaml")
+	c.getConf("verbs.yaml")
 	for _, v := range c.Verbs {
 		if v.Func == "Map" {
 			return append(verbs, v)
@@ -195,19 +199,26 @@ func initBoxLen() {
 	BoxLen = BoxLen + 2 // one blank and border left and right
 }
 
+func setLang() {
+	if _, err := os.Stat(PathName + "/.fangotasia.lang"); os.IsNotExist(err) {
+		Language = "en"
+	}
+}
+
 func Setup() {
 	var c conf
-	c.getConf(PathName + "/config/text_elements.yaml")
+	setLang()
+	c.getConf("text_elements.yaml")
 	TextElements = c.TextElements
-	c.getConf(PathName + "/config/objects.yaml")
+	c.getConf("objects.yaml")
 	GameObjects = c.Objects
-	c.getConf(PathName + "/config/locations.yaml")
+	c.getConf("locations.yaml")
 	GameAreas = c.Locations
-	c.getConf(PathName + "/config/reactions.yaml")
+	c.getConf("reactions.yaml")
 	Reactions = c.Reactions
-	c.getConf(PathName + "/config/verbs.yaml")
+	c.getConf("verbs.yaml")
 	Verbs = removeMapVerb(c.Verbs)
-	c.getConf(PathName + "/config/conditions.yaml")
+	c.getConf("conditions.yaml")
 	Conditions = c.Contitions
 	Overwrites = getMapOverwrites()
 	initBoxLen()

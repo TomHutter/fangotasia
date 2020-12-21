@@ -1,0 +1,554 @@
+reactions:
+  silly:
+    statement:
+      - "Sei nicht albern."
+      - "Schon klar ..."
+      - "Nee, das wird nix."
+      - "Nice try ...."
+    ok: false
+    ko: false
+    color: RED
+  noTool:
+    statement:
+      - "Ich habe nicht das richtige Werkzeug."
+    ok: false
+    ko: false
+    color: RED
+  dontKnowHow:
+    statement:
+      - "Ich weis nicht wie das geht."
+      - "Wie soll das gehen?"
+    ok: false
+    ko: false
+    color: RED
+  wontLet:
+    statement:
+      - "lässt mich nicht."
+    ok: false
+    ko: false
+    color: RED
+  tooHeavy:
+    statement:
+      - "Zu schwer."
+    ok: false
+    ko: false
+    color: RED
+  unreachable:
+    statement:
+      - "Kann ich nicht erreichen."
+      - "Komm nicht dran."
+    ok: false
+    ko: false
+    color: RED
+  invFull:
+    statement: 
+      - |
+        Ich habe zuviel zu tragen.
+        Ich müsste etwas weglegen.
+    ok: false
+    ko: false
+    color: RED
+  ok:
+    statement:
+      - "Gut."
+      - "Okay."
+      - "So geschehen."
+      - "Roger."
+    ok: true
+    ko: false
+    color: GREEN
+  noWay:
+    statement:
+      - "In diese Richtung führt kein Weg."
+      - "Da geht es nicht lang."
+      - "Nur die Richtungen, die angegeben sind ...."
+    ok: false
+    ko: false
+    color: RED
+  noShoes:
+    statement:
+      - "Hilfe...\n\nIch versinke im Boden."
+    ok: false
+    ko: true
+    color: RED
+  locked:
+    statement:
+      - "Die Tür ist versperrt."
+    ok: false
+    ko: false
+    color: RED
+  tryCut:
+    statement:
+      - "Versuche schneide."
+    ok: true
+    ko: false
+    color: GREEN
+  stabGrub:
+    statement:
+      - "Die Raupe ist kitzelig und lacht laut!"
+    ok: true
+    ko: false
+    color: GREEN
+  stabBear:
+    statement:
+      - "Der Bär brummt unwillig."
+    ok: true
+    ko: false
+    color: GREEN
+  stabDwarf:
+    statement:
+      - "Der Zwerg wird böse und tötet mich!"
+    ok: false
+    ko: true
+    color: RED
+  stabDwarfHooded:
+    statement:
+      - "Der Zwerg erschrickt und versucht sich zu wehren, trifft aber ins Leere.\n\nDie Tarnkappe hat sich in Luft aufgelöst!"
+    ok: false
+    ko: false
+    color: RED
+  stabGnome:
+    statement:
+      - "Der Gnom verzaubert mich!"
+    ok: false
+    ko: true
+    color: RED
+  stabGnomeHooded:
+    statement:
+      - "Der Gnom erschrickt und spuckt wilde Flüche aus.\n\nDie Tarnkappe hat sich in Luft aufgelöst!"
+    ok: false
+    ko: false
+    color: RED
+  stabDragon:
+    statement:
+      - "Der Drache verbrennt mich!"
+    ok: false
+    ko: true
+    color: RED
+  dontSee:
+    statement:
+      - "Sehe ich hier nicht."
+    ok: false
+    ko: false
+    color: RED
+  haveAlready:
+    statement:
+      - "Hab ich schon."
+    ok: true
+    ko: false
+    color: GREEN
+  dontHave:
+    statement:
+      - "Hab ich nicht dabei."
+    ok: false
+    ko: false
+    color: RED
+  invEmpty:
+    statement:
+      - "Ich habe nichts dabei."
+    ok: true
+    ko: false
+    color: RED
+  inv:
+    statement:
+      - "Ich habe:"
+    ok: true
+    ko: false
+    color: GREEN
+  useHood:
+    statement:
+      - "Gut. Ich setze die Tarnkappe auf."
+    ok: true
+    ko: false
+    color: GREEN
+  hoodInUse:
+    statement:
+      - "Die Tarnkappe hat sich in Luft aufgelöst!"
+    ok: false
+    ko: false
+    color: RED
+  useShoes:
+    statement:
+      - "Gut. Ich zog die Zauberschuhe an."
+    ok: true
+    ko: false
+    color: GREEN
+  unknownVerb:
+    statement:
+      - |
+        '%s' kenne ich nicht.
+        Das Kommando 'Verben' gibt eine Liste aller verfügbaren Verben aus.
+    ok: true
+    ko: false
+    color: RED
+  unknownNoun:
+    statement:
+      - "'%s' kenne ich nicht."
+      - "'%s' kommt erst morgen wieder rein."
+      - "%s?"
+    ok: false
+    ko: false
+    color: RED
+  needObject:
+    statement:
+      - "Bitte gib ein Objekt an."
+    ok: false
+    ko: false
+    color: RED
+  inTheMoor:
+    statement:
+      - "Im Moor ist alles verschwunden, was ich bei mir hatte!"
+    ok: true
+    ko: false
+    color: RED
+  noSaveFile:
+    statement:
+      - "Kein gespeichertes Spiel vorhanden."
+    ok: false
+    ko: false
+    color: RED
+  loaded:
+    statement:
+      - "Spiel erfolgreich geladen."
+    ok: true
+    ko: false
+    color: GREEN
+  saved:
+    statement:
+      - "Spiel erfolgreich geschrieben."
+    ok: true
+    ko: false
+    color: GREEN
+  squashed:
+    statement:
+      - |
+        Die Kugel zerquetscht den Gnom und
+        verwandelt sich in eine goldene Kugel.
+    ok: true
+    ko: false
+    color: GREEN
+  brokenSphere:
+    statement:
+      - "Die Kugel fällt auf den Boden und zerbricht."
+    ok: false
+    ko: false
+    color: RED
+  throwObject:
+    statement:
+      - "Aus den Augen aus dem Sinn.\n%s %s liegt jetzt %s"
+      - "Wow, neuer Wurfrekord.\n%s %s liegt jetzt %s"
+      - "Abrakadabra ....\nnicht mehr da.\n%s %s liegt jetzt %s"
+    ok: true
+    ko: false
+    color: GREEN
+  throwFixedObject:
+    statement:
+      - "Umwerfende Idee!"
+    ok: false
+    ko: false
+    color: RED
+  nothingWritten:
+    statement:
+      - "Da steht nichts geschrieben."
+    ok: false
+    ko: false
+    color: RED
+  book:
+    statement:
+      - |
+        Im Buch steht: 
+        Messer sind zum stechen da!
+    ok: true
+    ko: false
+    color: GREEN
+  paper:
+    statement:
+      - |
+        Auf dem Zettel steht:
+        Drachen lassen sich nicht verjagen.
+        Sie sind unverwundbar und unsterblich!
+    ok: true
+    ko: false
+    color: GREEN
+  shield:
+    statement:
+      - |
+        In den Schild ist eingaviert:
+        Dinge drehen sich um Ringe!
+    ok: true
+    ko: false
+    color: GREEN
+  wallpainting:
+    statement:
+      - |
+        Die Hölenmalerei besagt: 
+                 Ein Zauberer war hier.
+                      Simsalabim!
+    ok: true
+    ko: false
+    color: GREEN
+  parchment:
+    statement:
+      - |
+        Auf dem Pergament steht:
+        Vögel wurden vor langer Zeit in Zwerge verwandelt.
+    ok: true
+    ko: false
+    color: GREEN
+  panel:
+    statement:
+      - |
+        Auf dem Schrifttafel steht:
+        Fremdling, der du betrittst dies Land,
+        suche nach den verlorenen ::Schätzen::!
+        Bringe sie hierher und leg sie hin.
+        Sag 'Fangotasia'!
+    ok: true
+    ko: false
+    color: GREEN
+  letter:
+    statement:
+      - |
+        Im Brief steht:
+        Pflanzen brauchen Wasser!
+    ok: true
+    ko: false
+    color: GREEN
+  rottenPanel:
+    statement:
+      - |
+        Auf der Tafel kann man fast nicht mehr lesen:
+        Hüte dich vor dem Drachen!
+    ok: true
+    ko: false
+    color: GREEN
+  missMap:
+    statement:
+      - "Ups. Diesmal nicht getroffen"
+    ok: true
+    ko: false
+    color: RED
+  hitMap:
+    statement:
+      - "Der Stein trifft die Landkarte und sie fällt zu Boden."
+    ok: true
+    ko: false
+    color: GREEN
+  readMap:
+    statement:
+      - "Die Landkarte zeigt die Gebiete in denen ich schon war."
+    ok: true
+    ko: false
+    color: GREEN
+  useMap:
+    statement:
+      - |
+        Gut.
+        Jetzt sehe ich endlich wo ich bin und wo ich schon war.
+        Ich kenne jetzt das Wort 'Karte'.
+        Sag 'Karte'.
+    ok: true
+    ko: false
+    color: GREEN
+  noKey:
+    statement:
+      - "Ich habe keinen Schlüssel."
+    ok: false
+    ko: false
+    color: RED
+  openBox:
+    statement:
+      - "Zwei Dinge fallen heraus."
+    ok: true
+    ko: false
+    color: GREEN
+  alreadyOpen:
+    statement:
+      - "Ist schon offen."
+    ok: true
+    ko: false
+    color: GREEN
+  say:
+    statement:
+      - "'%s'\n...\n...\nNichts passiert."
+    ok: true
+    ko: false
+    color: GREEN
+  simsalabim:
+    statement:
+      - "Der Zwerg verwandelt sich in einen bunten Vogel\nund fliegt davon!"
+    ok: true
+    ko: false
+    color: GREEN
+  unusable:
+    statement:
+      - "Wirklich?\nIch soll %s mit Wasser füllen?\nWie soll das denn gehen?"
+    ok: false
+    ko: false
+    color: RED
+  unsuitable:
+    statement:
+      - "%s eignet sich nicht dafür."
+    ok: false
+    ko: false
+    color: RED
+  noWater:
+    statement:
+      - "Hier ist weit und breit kein Wasser zu sehen."
+    ok: false
+    ko: false
+    color: RED
+  waterUnreachable:
+    statement:
+      - "Ich kann das Wasser nicht erreichen."
+    ok: false
+    ko: false
+    color: RED
+  feed:
+    statement:
+      - "%s hat keinen Hunger."
+    ok: false
+    ko: false
+    color: RED
+  feedBaer:
+    statement:
+      - "Der Bär ist sehr hungrig und frisst\n... \nmich!"
+    ok: false
+    ko: true
+    color: RED
+  feedBaerWithBerries:
+    statement:
+      - "Der Bär verschlingt die Beeren und läuft davon."
+    ok: true
+    ko: false
+    color: GREEN
+  cutFruit:
+    statement:
+      - "Ich habe die Frucht geteilt und etwas\nfällt heraus."
+    ok: true
+    ko: false
+    color: GREEN
+  fruitAlreadyCut:
+    statement:
+      - "Die Frucht ist bereits zerteilt."
+    ok: true
+    ko: false
+    color: GREEN
+  tryThrow:
+    statement:
+      - "Versuche 'wirf'."
+    ok: true
+    ko: false
+    color: GREEN
+  eatCake:
+    statement:
+      - "Brrrrr! Schmeckt ja scheußlich!\nIch fühle mich jetzt besonders stark!"
+    ok: true
+    ko: false
+    color: GREEN
+  drinkJar:
+    statement:
+      - "Aaaaaah gut!"
+    ok: true
+    ko: false
+    color: GREEN
+  jarEmpty:
+    statement:
+      - "Der Krug ist leer."
+    ok: false
+    ko: false
+    color: RED
+  cantEat:
+    statement:
+      - "Klar! Und was trinke ich dazu? Pangalatischen Donnergurgler?"
+    ok: false
+    ko: false
+    color: RED
+  spin:
+    statement:
+      - "Gut.\n...\nNichts passiert."
+    ok: true
+    ko: false
+    color: GREEN
+  dontSpin:
+    statement:
+      - "Lässt sich nicht drehen."
+    ok: false
+    ko: false
+    color: RED
+  spinRing:
+    statement:
+      - "Alles beginnt sich zu drehen!\n\nDer Ring fällt mir aus der Hand!"
+    ok: true
+    ko: false
+    color: RED
+  noJar:
+    statement:
+      - "Ich habe nichts zum Gießen."
+    ok: false
+    ko: false
+    color: RED
+  waterBush:
+    statement:
+      - "Der Strauch beginnt zu blühen und es\nwachsen rote beeren.\nDann verwandelt er sich."
+    ok: true
+    ko: false
+    color: GREEN
+  looksGood:
+    statement:
+      - "Sieht verdammt gut aus!"
+      - "beeindruckend"
+      - "Da ist doch ....\n... nee, wohl doch nicht."
+    ok: true
+    ko: false
+    color: GREEN
+  takeImke:
+    statement:
+      - "Ich kann %s nicht einfach so nehmen.\n\n%s ist da und daran kann ich mich erfreuen."
+    ok: true
+    ko: false
+    color: GREEN
+  scare:
+    statement:
+      - "%s lässt sich nicht verjagen."
+    ok: false
+    ko: false
+    color: RED
+  jump:
+    statement:
+      - "Hüpf....hüpf...hüpf."
+    ok: true
+    ko: false
+    color: GREEN
+  jumpTree:
+    statement:
+      - "Plumps..aua!\n\nIch bin herunter gefallen."
+    ok: false
+    ko: true
+    color: RED
+  throwFango:
+    statement:
+      - "Klatsch .... ein Fango-Fladen!"
+      - "Kein passendes Ziel."
+      - "Mehr Glück beim nächsten Mal."
+    ok: true
+    ko: false
+    color: GREEN
+  hitWithFango:
+    statement:
+      - "Klatsch .... getroffen!"
+      - "veni, vidi, vici"
+      - "Sei albern!!"
+      - "Wer hat noch nicht, wer will noch mal?"
+      - "Fango Tango."
+    ok: true
+    ko: false
+    color: GREEN
+  alreadyFangoed:
+    statement:
+      - "Fango auf Fango"
+      - "Mehr geht nicht."
+      - "Hat schon genug."
+    ok: true
+    ko: false
+    color: GREEN

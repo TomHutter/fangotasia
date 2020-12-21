@@ -22,7 +22,7 @@ func TestInit(t *testing.T) {
 }
 
 func TestGameObjects(t *testing.T) {
-	assert.Equal(t, "einen Zauberkuchen", setup.GameObjects[9].Description.Long, "The cake is a lie.")
+	assert.IsType(t, setup.ObjectProperties{}, setup.GameObjects[9])
 }
 
 func TestGetAreaByID(t *testing.T) {
@@ -50,7 +50,7 @@ func TestObjectsInArea(t *testing.T) {
 }
 
 func TestGetOverwriteByArea(t *testing.T) {
-	o := setup.GetOverwriteByArea(52)
-	assert.Equal(t, 52, o.Area, "Object ID not equal.")
-	assert.Contains(t, o.Content[1], "Felswand")
+	o := setup.GetOverwriteByArea(54)
+	assert.Equal(t, 54, o.Area, "Object ID not equal.")
+	assert.Contains(t, o.Content[0], "┏━━━━━━━━┻━━━━━━┻━┓")
 }

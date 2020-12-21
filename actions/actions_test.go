@@ -149,7 +149,7 @@ func TestMove(t *testing.T) {
 	assert.Equal(t, areaID, 1)
 
 	// move east
-	res, areaID = obj.Move(area, "o")
+	res, areaID = obj.Move(area, strings.ToLower(string(setup.TextElements["east"][0])))
 	assert.Equal(t, setup.Reactions["noShoes"].Statement, res.Statement)
 	assert.False(t, res.OK)
 	assert.True(t, res.KO)
@@ -161,7 +161,7 @@ func TestMove(t *testing.T) {
 	obj = actions.Object(setup.GetObjectByID(31))
 	obj.Use(area)
 	obj = actions.Object(setup.GetObjectByID(31))
-	res, areaID = obj.Move(area, "o")
+	res, areaID = obj.Move(area, strings.ToLower(string(setup.TextElements["east"][0])))
 	assert.Equal(t, 2, areaID)
 	assert.True(t, res.OK)
 }

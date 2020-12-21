@@ -7,6 +7,9 @@ import (
 	"fangotasia/movement"
 	"fangotasia/setup"
 	"fangotasia/view"
+	"fmt"
+	"io/ioutil"
+	"log"
 	"os"
 	"strings"
 )
@@ -16,8 +19,23 @@ ToDos:
 - forest mapping buggy
 */
 
+// init() will be called before main() by go convention
 func init() {
 	setup.PathName, _ = os.Getwd()
+}
+
+func SetupLanguage() {
+	files, err := ioutil.ReadDir("./")
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	for _, f := range files {
+		fmt.Println(f.Name())
+	}
+	grid.LanguageSelect.
+		SetLabel(setup.TextElements["selectLanguage"]).
+		SetOptions([]string{"First", "Second", "Third", "Fourth", "Fifth"}, nil)
 }
 
 func main() {
