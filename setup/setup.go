@@ -66,9 +66,10 @@ type Object struct {
 
 // ObjectProperties : Contain long and short description of locations.
 type ObjectProperties struct {
-	Description description
-	Area        int
-	Value       int
+	Description  description
+	Area         int
+	Value        int
+	NewCondition string
 }
 
 type Area struct {
@@ -243,7 +244,12 @@ func ObjectsInArea(area Area) (objects []Object) {
 }
 
 func GetObjectByID(id int) (object Object) {
-	return Object{id, GameObjects[id]}
+	object = Object{id, GameObjects[id]}
+	if object.Properties.NewCondition != "" {
+		cond := strings.Split(object.Properties.NewCondition, "::")
+		object.Properties.Description.Long = Conditions[cond[0]][cond[1]]
+	}
+	return
 }
 
 func GetAreaByID(id int) (area Area) {

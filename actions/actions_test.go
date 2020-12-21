@@ -521,6 +521,8 @@ func TestFill(t *testing.T) {
 	area = setup.GetAreaByID(17)
 	res = jar.Fill(area)
 	assert.Equal(t, setup.Reactions["ok"].Statement, res.Statement)
+	jar = actions.Object(setup.GetObjectByID(30))
+	assert.Equal(t, "jar::full", jar.Properties.NewCondition)
 	assert.True(t, res.OK)
 
 	// fill goblet at well
@@ -773,7 +775,7 @@ func TestWater(t *testing.T) {
 	assert.False(t, res.OK)
 
 	// fill jar
-	jar.NewCondition(setup.Conditions["jar"]["full"])
+	jar.NewCondition("jar::full")
 	res = bush.Water(area)
 	assert.Equal(t, setup.Reactions["waterBush"].Statement, res.Statement)
 	assert.True(t, res.OK)
@@ -785,14 +787,14 @@ func TestWater(t *testing.T) {
 
 	// water tree
 	area = setup.GetAreaByID(9)
-	jar.NewCondition(setup.Conditions["jar"]["full"])
+	jar.NewCondition("jar::full")
 	res = tree.Water(area)
 	assert.Equal(t, setup.Reactions["ok"].Statement, res.Statement)
 	assert.True(t, res.OK)
 
 	// water panel
 	area = setup.GetAreaByID(1)
-	jar.NewCondition(setup.Conditions["jar"]["full"])
+	jar.NewCondition("jar::full")
 	res = panel.Water(area)
 	assert.Equal(t, setup.Reactions["silly"].Statement, res.Statement)
 	assert.False(t, res.OK)

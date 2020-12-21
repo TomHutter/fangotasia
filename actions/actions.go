@@ -22,8 +22,9 @@ func (obj *Object) NewAreaID(areaID int) {
 }
 
 func (obj *Object) NewCondition(condition string) {
-	obj.Properties.Description.Long = condition
+	obj.Properties.NewCondition = condition
 	setup.GameObjects[obj.ID] = obj.Properties
+	*obj = Object(setup.GetObjectByID(obj.ID))
 }
 
 func (object Object) Open(area setup.Area) (r setup.Reaction) {
@@ -406,7 +407,7 @@ func (obj Object) Fill(area setup.Area) (r setup.Reaction) {
 		r = setup.Reactions["waterUnreachable"]
 	case 17:
 		r = setup.Reactions["ok"]
-		obj.NewCondition(setup.Conditions["jar"]["full"])
+		obj.NewCondition("jar::full")
 	default:
 		r = setup.Reactions["noWater"]
 	}
@@ -526,11 +527,11 @@ func (jar Object) Drink(area setup.Area) (r setup.Reaction) {
 		r = setup.Reactions["noTool"]
 		return
 	}
-	if jar.Properties.Description.Long == setup.Conditions["jar"]["empty"] {
+	if jar.Properties.NewCondition == "" || jar.Properties.NewCondition == "jar::empty" {
 		r = setup.Reactions["jarEmpty"]
 	}
-	if jar.Properties.Description.Long == setup.Conditions["jar"]["full"] {
-		jar.NewCondition(setup.Conditions["jar"]["empty"])
+	if jar.Properties.NewCondition == "jar::full" {
+		jar.NewCondition("jar::empty")
 		r = setup.Reactions["drinkJar"]
 	}
 	return
@@ -545,10 +546,10 @@ func (obj Object) Spin(area setup.Area) (r setup.Reaction) {
 			r = setup.Reactions["dontHave"]
 			return
 		}
-		if obj.Properties.Description.Long == setup.Conditions["ring"]["golden"] {
+		if obj.Properties.NewCondition == "ring::golden" {
 			r = setup.Reactions["spin"]
 		} else {
-			obj.NewCondition(setup.Conditions["ring"]["golden"])
+			obj.NewCondition("ring::golden")
 			obj.NewAreaID(area.ID)
 			r = setup.Reactions["spinRing"]
 		}
@@ -570,7 +571,7 @@ func (obj Object) Water(area setup.Area) (r setup.Reaction) {
 			r = setup.Reactions["noJar"]
 			return
 		}
-		if jar.Properties.Description.Long == setup.Conditions["jar"]["empty"] {
+		if jar.Properties.NewCondition == "" || jar.Properties.NewCondition == "jar::empty" {
 			r = setup.Reactions["jarEmpty"]
 			return
 		}
@@ -584,12 +585,12 @@ func (obj Object) Water(area setup.Area) (r setup.Reaction) {
 		r = setup.Reactions["ok"]
 	case 22:
 		jar := Object(setup.GetObjectByID(30))
-		jar.NewCondition(setup.Conditions["jar"]["empty"])
-		if obj.Properties.Description.Long == setup.Conditions["bush"]["watered"] {
+		jar.NewCondition("jar::empty")
+		if obj.Properties.NewCondition == "bush::watered" {
 			r = setup.Reactions["ok"]
 		} else {
 			r = setup.Reactions["waterBush"]
-			obj.NewCondition(setup.Conditions["bush"]["watered"])
+			obj.NewCondition("bush::watered")
 			berries := Object(setup.GetObjectByID(23))
 			berries.NewAreaID(area.ID)
 			leaves := Object(setup.GetObjectByID(24))
