@@ -91,10 +91,10 @@ func TestTake(t *testing.T) {
 	obj.NewAreaID(area.ID)
 	res = obj.Take(area)
 	r := setup.GetReactionByName("wontLet")
-	r.Statement[0] = fmt.Sprintf("%s %s %s",
-		strings.Title(grub.Properties.Description.Article),
-		grub.Properties.Description.Short,
-		r.Statement[0])
+	r.Statement[setup.Language][0] = fmt.Sprintf("%s %s %s",
+		strings.Title(grub.Properties.Description[setup.Language].Article),
+		grub.Properties.Description[setup.Language].Short,
+		r.Statement[setup.Language][0])
 	assert.Equal(t, r.Statement, res.Statement)
 	assert.False(t, res.OK)
 
@@ -149,7 +149,7 @@ func TestMove(t *testing.T) {
 	assert.Equal(t, areaID, 1)
 
 	// move east
-	res, areaID = obj.Move(area, strings.ToLower(string(setup.TextElements["east"][0])))
+	res, areaID = obj.Move(area, strings.ToLower(string(setup.TextElements["east"][setup.Language][0])))
 	assert.Equal(t, setup.Reactions["noShoes"].Statement, res.Statement)
 	assert.False(t, res.OK)
 	assert.True(t, res.KO)
@@ -161,7 +161,7 @@ func TestMove(t *testing.T) {
 	obj = actions.Object(setup.GetObjectByID(31))
 	obj.Use(area)
 	obj = actions.Object(setup.GetObjectByID(31))
-	res, areaID = obj.Move(area, strings.ToLower(string(setup.TextElements["east"][0])))
+	res, areaID = obj.Move(area, strings.ToLower(string(setup.TextElements["east"][setup.Language][0])))
 	assert.Equal(t, 2, areaID)
 	assert.True(t, res.OK)
 }
@@ -255,19 +255,20 @@ func TestThrow(t *testing.T) {
 	sphere = actions.Object(setup.GetObjectByID(46))
 	sphere.NewAreaID(setup.INVENTORY)
 	res = sphere.Throw(area)
+	// reload sphere
 	sphere = actions.Object(setup.GetObjectByID(46))
-	statement := make([]string, len(setup.Reactions["throwObject"].Statement))
-	copy(statement, setup.Reactions["throwObject"].Statement)
+	statement := make([]string, len(setup.Reactions["throwObject"].Statement[setup.Language]))
+	copy(statement, setup.Reactions["throwObject"].Statement[setup.Language])
 	newArea := setup.GetAreaByID(sphere.Properties.Area)
-	article := strings.Title(sphere.Properties.Description.Article)
-	short := sphere.Properties.Description.Short
-	location := newArea.Properties.Description.Long
+	article := strings.Title(sphere.Properties.Description[setup.Language].Article)
+	short := sphere.Properties.Description[setup.Language].Short
+	location := newArea.Properties.Description[setup.Language].Long
 	re := regexp.MustCompile(`\\n.*$`)
 	location = string(re.ReplaceAll([]byte(location), []byte(" ")))
 	for i, s := range statement {
 		statement[i] = fmt.Sprintf(s, article, short, location)
 	}
-	assert.Equal(t, statement, res.Statement)
+	assert.Equal(t, statement, res.Statement[setup.Language])
 	assert.True(t, res.OK)
 	assert.LessOrEqual(t, setup.GetObjectByID(46).Properties.Area, 51)
 
@@ -277,17 +278,17 @@ func TestThrow(t *testing.T) {
 	stone.NewAreaID(setup.INVENTORY)
 	res = stone.Throw(area)
 	stone = actions.Object(setup.GetObjectByID(20))
-	statement = make([]string, len(setup.Reactions["throwObject"].Statement))
-	copy(statement, setup.Reactions["throwObject"].Statement)
+	statement = make([]string, len(setup.Reactions["throwObject"].Statement[setup.Language]))
+	copy(statement, setup.Reactions["throwObject"].Statement[setup.Language])
 	newArea = setup.GetAreaByID(stone.Properties.Area)
-	article = strings.Title(stone.Properties.Description.Article)
-	short = stone.Properties.Description.Short
-	location = newArea.Properties.Description.Long
+	article = strings.Title(stone.Properties.Description[setup.Language].Article)
+	short = stone.Properties.Description[setup.Language].Short
+	location = newArea.Properties.Description[setup.Language].Long
 	location = string(re.ReplaceAll([]byte(location), []byte(" ")))
 	for i, s := range statement {
 		statement[i] = fmt.Sprintf(s, article, short, location)
 	}
-	assert.Equal(t, statement, res.Statement)
+	assert.Equal(t, statement, res.Statement[setup.Language])
 	assert.True(t, res.OK)
 	assert.LessOrEqual(t, setup.GetObjectByID(46).Properties.Area, 51)
 
@@ -333,17 +334,20 @@ func TestThrow(t *testing.T) {
 	book.NewAreaID(setup.INVENTORY)
 	res = book.Throw(area)
 	book = actions.Object(setup.GetObjectByID(11))
-	statement = make([]string, len(setup.Reactions["throwObject"].Statement))
-	copy(statement, setup.Reactions["throwObject"].Statement)
-	newArea = setup.GetAreaByID(book.Properties.Area)
-	article = strings.Title(book.Properties.Description.Article)
-	short = book.Properties.Description.Short
-	location = newArea.Properties.Description.Long
-	location = string(re.ReplaceAll([]byte(location), []byte(" ")))
-	for i, s := range statement {
-		statement[i] = fmt.Sprintf(s, article, short, location)
+	st := make(map[string][]string, len(setup.Reactions["throwObject"].Statement))
+	for lang := range setup.Reactions["throwObject"].Statement {
+		st[lang] = make([]string, len(setup.Reactions["throwObject"].Statement[lang]))
+		copy(st[lang], setup.Reactions["throwObject"].Statement[lang])
+		newArea = setup.GetAreaByID(book.Properties.Area)
+		article = strings.Title(book.Properties.Description[lang].Article)
+		short = book.Properties.Description[lang].Short
+		location = newArea.Properties.Description[lang].Long
+		location = string(re.ReplaceAll([]byte(location), []byte(" ")))
+		for i, s := range setup.Reactions["throwObject"].Statement[lang] {
+			st[lang][i] = fmt.Sprintf(s, article, short, location)
+		}
 	}
-	assert.Equal(t, statement, res.Statement)
+	assert.Equal(t, st, res.Statement)
 	assert.True(t, res.OK)
 	assert.LessOrEqual(t, setup.GetObjectByID(46).Properties.Area, 51)
 
@@ -354,7 +358,8 @@ func TestRead(t *testing.T) {
 	area := setup.GetAreaByID(1)
 	panel := actions.Object(setup.GetObjectByID(32))
 	res := panel.Read(area)
-	assert.Equal(t, view.Highlight(setup.Reactions["panel"].Statement[0], "[green:black:-]"), res.Statement[0])
+	assert.Equal(t, view.Highlight(setup.Reactions["panel"].Statement[setup.Language][0],
+		"[green:black:-]"), res.Statement[setup.Language][0])
 	assert.True(t, res.OK)
 
 	// read letter
@@ -465,8 +470,8 @@ func TestSay(t *testing.T) {
 	// say "blubb"
 	res := obj.Say(area, "blubb")
 	say := setup.GetReactionByName("say")
-	s := fmt.Sprintf(say.Statement[0], "blubb")
-	assert.Equal(t, s, res.Statement[0])
+	s := fmt.Sprintf(say.Statement[setup.Language][0], "blubb")
+	assert.Equal(t, s, res.Statement[setup.Language][0])
 	assert.True(t, res.OK)
 
 	/*
@@ -495,8 +500,9 @@ func TestFill(t *testing.T) {
 
 	res := sword.Fill(area)
 	unusable := setup.GetReactionByName("unusable")
-	s := view.Highlight(fmt.Sprintf(unusable.Statement[0], sword.Properties.Description.Long), "[red]")
-	assert.Equal(t, s, res.Statement[0])
+	s := view.Highlight(fmt.Sprintf(unusable.Statement[setup.Language][0],
+		sword.Properties.Description[setup.Language].Long), "[red]")
+	assert.Equal(t, s, res.Statement[setup.Language][0])
 	assert.False(t, res.OK)
 
 	// fill jar
@@ -521,8 +527,6 @@ func TestFill(t *testing.T) {
 	area = setup.GetAreaByID(17)
 	res = jar.Fill(area)
 	assert.Equal(t, setup.Reactions["ok"].Statement, res.Statement)
-	jar = actions.Object(setup.GetObjectByID(30))
-	assert.Equal(t, "jar::full", jar.Properties.NewCondition)
 	assert.True(t, res.OK)
 
 	// fill goblet at well
@@ -530,11 +534,11 @@ func TestFill(t *testing.T) {
 	// put goblet into inv
 	goblet.NewAreaID(setup.INVENTORY)
 	res = goblet.Fill(area)
-	a := strings.Title(goblet.Properties.Description.Article)
-	desc := fmt.Sprintf("%s %s", a, goblet.Properties.Description.Short)
+	a := strings.Title(goblet.Properties.Description[setup.Language].Article)
+	desc := fmt.Sprintf("%s %s", a, goblet.Properties.Description[setup.Language].Short)
 	unsuitable := setup.GetReactionByName("unsuitable")
-	s = fmt.Sprintf(unsuitable.Statement[0], desc)
-	assert.Equal(t, s, res.Statement[0])
+	s = fmt.Sprintf(unsuitable.Statement[setup.Language][0], desc)
+	assert.Equal(t, s, res.Statement[setup.Language][0])
 	assert.False(t, res.OK)
 }
 
@@ -552,10 +556,10 @@ func TestFeed(t *testing.T) {
 	area = setup.GetAreaByID(18)
 	dwarf := actions.Object(setup.GetObjectByID(18))
 	res = dwarf.Feed(area)
-	a := strings.Title(dwarf.Properties.Description.Article)
-	desc := fmt.Sprintf("%s %s", a, dwarf.Properties.Description.Short)
+	a := strings.Title(dwarf.Properties.Description[setup.Language].Article)
+	desc := fmt.Sprintf("%s %s", a, dwarf.Properties.Description[setup.Language].Short)
 	feed := setup.GetReactionByName("feed")
-	assert.Equal(t, fmt.Sprintf(feed.Statement[0], desc), res.Statement[0])
+	assert.Equal(t, fmt.Sprintf(feed.Statement[setup.Language][0], desc), res.Statement[setup.Language][0])
 	assert.False(t, res.OK)
 
 	// feed baer
@@ -674,7 +678,9 @@ func TestDrink(t *testing.T) {
 	assert.Equal(t, setup.Reactions["drinkJar"].Statement, res.Statement)
 	jar = actions.Object(setup.GetObjectByID(30))
 	assert.True(t, res.OK)
-	assert.Equal(t, setup.Conditions["jar"]["empty"], jar.Properties.Description.Long)
+	for lang := range jar.Properties.Description {
+		assert.Equal(t, setup.Conditions["jar"]["empty"][lang], jar.Properties.Description[lang].Long)
+	}
 }
 
 func TestEat(t *testing.T) {
@@ -744,7 +750,10 @@ func TestSpin(t *testing.T) {
 	res = ring.Spin(area)
 	assert.Equal(t, setup.Reactions["spinRing"].Statement, res.Statement)
 	assert.True(t, res.OK)
-	assert.Equal(t, setup.Conditions["ring"]["golden"], setup.GetObjectByID(ring.ID).Properties.Description.Long)
+	for lang := range jar.Properties.Description {
+		assert.Equal(t, setup.Conditions["ring"]["golden"][lang],
+			setup.GetObjectByID(ring.ID).Properties.Description[lang].Long)
+	}
 	assert.Equal(t, area.ID, setup.GetObjectByID(ring.ID).Properties.Area)
 
 	// spin golden ring
@@ -775,7 +784,7 @@ func TestWater(t *testing.T) {
 	assert.False(t, res.OK)
 
 	// fill jar
-	jar.NewCondition("jar::full")
+	jar.NewCondition(setup.Conditions["jar"]["full"])
 	res = bush.Water(area)
 	assert.Equal(t, setup.Reactions["waterBush"].Statement, res.Statement)
 	assert.True(t, res.OK)
@@ -787,14 +796,14 @@ func TestWater(t *testing.T) {
 
 	// water tree
 	area = setup.GetAreaByID(9)
-	jar.NewCondition("jar::full")
+	jar.NewCondition(setup.Conditions["jar"]["full"])
 	res = tree.Water(area)
 	assert.Equal(t, setup.Reactions["ok"].Statement, res.Statement)
 	assert.True(t, res.OK)
 
 	// water panel
 	area = setup.GetAreaByID(1)
-	jar.NewCondition("jar::full")
+	jar.NewCondition(setup.Conditions["jar"]["full"])
 	res = panel.Water(area)
 	assert.Equal(t, setup.Reactions["silly"].Statement, res.Statement)
 	assert.False(t, res.OK)

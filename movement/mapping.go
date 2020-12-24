@@ -17,10 +17,10 @@ func drawBox(a int, boxLen int) (box [3]string) {
 		return
 	}
 	// we have an overwrite for this box?
-	ov := setup.GetOverwriteByArea(a)
-	if ov != (setup.MapOverwrites{}) {
+	ok, ov := setup.GetOverwriteByArea(a)
+	if ok {
 		var dummy [3]string
-		for i, v := range ov.Content {
+		for i, v := range ov.Content[setup.Language] {
 			dummy[i] = v
 		}
 		box = dummy
@@ -29,7 +29,7 @@ func drawBox(a int, boxLen int) (box [3]string) {
 	var leftCon, rightCon, topCon, bottomCon string
 	area := setup.GetAreaByID(a)
 	// get first line of area from locations
-	text := area.Properties.Description.Short
+	text := area.Properties.Description[setup.Language].Short
 	textLen := len([]rune(text)) + 2 // two space left and right
 	leftSpacer := strings.Repeat(" ", (boxLen-textLen)/2)
 	rightSpacer := strings.Repeat(" ", boxLen-len(leftSpacer)-textLen)
@@ -179,7 +179,11 @@ func RevealArea(area int) {
 			setup.Map[4][7] = 0
 		}
 	case 40:
-		setup.Map[3][6] = 61
+		if setup.AreaVisible(51) {
+			setup.Map[3][6] = 67
+		} else {
+			setup.Map[3][6] = 61
+		}
 		setup.Map[4][6] = 62
 		setup.Map[5][6] = 63
 		setup.Map[6][6] = 64
@@ -188,17 +192,13 @@ func RevealArea(area int) {
 	case 41:
 		if setup.AreaVisible(51) {
 			setup.Map[2][6] = 66
-			if setup.AreaVisible(40) {
-				setup.Map[3][6] = 64
-			} else {
-				setup.Map[3][6] = 67
-			}
+			setup.Map[3][6] = 67
+		} else {
+			setup.Map[2][6] = 0
 		}
 	case 42:
 		if setup.AreaVisible(51) {
 			setup.Map[2][7] = 68
-		} else {
-			setup.Map[2][7] = 42
 		}
 	case 43:
 		if setup.AreaVisible(51) {

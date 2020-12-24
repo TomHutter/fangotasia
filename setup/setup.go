@@ -4,7 +4,6 @@ import (
 	"io/ioutil"
 	"log"
 	"os"
-	"strings"
 
 	"gopkg.in/yaml.v2"
 )
@@ -33,25 +32,23 @@ const (
 )
 
 type Verb struct {
-	Name   string
 	Func   string
 	Single bool
+	Name   map[string][]string
 }
 
 // Conf : Struct to read from yaml config files
 type conf struct {
-	Verbs        []Verb                   `yaml:"verbs"`
-	Nouns        []string                 `yaml:"nouns"`
-	Objects      map[int]ObjectProperties `yaml:"objects"`
-	ID           int
-	Reactions    map[string]Reaction    `yaml:"reactions"`
-	Locations    map[int]AreaProperties `yaml:"locations"`
-	Overwrites   []MapOverwrites        `yaml:"overwrites"`
-	Contitions   map[string]Condition   `yaml:"conditions"`
-	TextElements map[string]string      `yaml:"elements"`
+	Verbs        []Verb                       `yaml:"verbs"`
+	Objects      map[int]ObjectProperties     `yaml:"objects"`
+	Reactions    map[string]Reaction          `yaml:"reactions"`
+	Locations    map[int]AreaProperties       `yaml:"locations"`
+	Overwrites   []MapOverwrites              `yaml:"overwrites"`
+	Contitions   map[string]Condition         `yaml:"conditions"`
+	TextElements map[string]map[string]string `yaml:"elements"`
 }
 
-// Long and short description and the article for the noun
+// Long, short and alternative description and the article for the noun
 type description struct {
 	Long    string
 	Short   string
@@ -66,10 +63,9 @@ type Object struct {
 
 // ObjectProperties : Contain long and short description of locations.
 type ObjectProperties struct {
-	Description  description
-	Area         int
-	Value        int
-	NewCondition string
+	Description map[string]description
+	Area        int
+	Value       int
 }
 
 type Area struct {
@@ -81,7 +77,7 @@ type Area struct {
 //        directions: which area will be reachable in n,s,e,w
 //        coordinates: y and x coordinates for area on map
 type AreaProperties struct {
-	Description description
+	Description map[string]description
 	Directions  [4]int
 	Coordinates Coordinates
 }
@@ -93,22 +89,22 @@ type Coordinates struct {
 
 type MapOverwrites struct {
 	Area    int
-	Content [3]string
+	Content map[string][]string
 }
 
 type Reaction struct {
-	Statement []string
+	Statement map[string][]string
 	OK        bool
 	KO        bool
 	Color     string
 }
 
-type Condition map[string]string
+type Condition map[string]map[string]string
 
 var (
 	PathName     string
 	Language     string
-	TextElements map[string]string
+	TextElements map[string]map[string]string
 	GameObjects  map[int]ObjectProperties
 	GameAreas    map[int]AreaProperties
 	Overwrites   []MapOverwrites
@@ -118,7 +114,7 @@ var (
 	Moves        int
 
 	Beads  int
-	BoxLen int
+	BoxLen int = 19
 	Flags  map[string]bool
 
 	Map [12][10]int
@@ -140,7 +136,7 @@ func AreaVisible(a int) bool {
 
 // GetConf : Read yaml config files into struct Conf
 func (c *conf) getConf(filename string) {
-	yamlFile, err := ioutil.ReadFile(PathName + "/config/" + Language + "/" + filename)
+	yamlFile, err := ioutil.ReadFile(PathName + "/config/" + filename)
 	if err != nil {
 		log.Printf("yamlFile.Get err   #%v ", err)
 	}
@@ -156,10 +152,21 @@ func getMapOverwrites() (overwrites []MapOverwrites) {
 	for _, v := range c.Overwrites {
 		var o MapOverwrites
 		o.Area = v.Area
-		for i, line := range v.Content {
-			o.Content[i] = line
-		}
 		overwrites = append(overwrites, o)
+		overwrites[len(overwrites)-1].Content = make(map[string][]string)
+		o.Content = make(map[string][]string)
+		for lang, c := range v.Content {
+			var ov []string
+			ov = make([]string, 3)
+			//o.Content[lang] = [3]string{}
+			o.Content[lang] = make([]string, 3)
+			overwrites[len(overwrites)-1].Content[lang] = make([]string, 3)
+			for i, line := range c {
+				ov[i] = line
+			}
+			copy(o.Content[lang], ov)
+			copy(overwrites[len(overwrites)-1].Content[lang], ov)
+		}
 	}
 	return
 }
@@ -184,11 +191,12 @@ func AddMapVerb(verbs []Verb) []Verb {
 	return verbs
 }
 
+/*
 // InitBoxLen : Get min length for boxes to fit all short descriptions of locations
 func initBoxLen() {
 	BoxLen = 0
 	for _, v := range GameAreas {
-		lineLen := len([]rune(strings.Split(v.Description.Short, "\n")[0]))
+		lineLen := len([]rune(strings.Split(v.Description[Language].Short, "\n")[0]))
 		if lineLen > BoxLen {
 			BoxLen = lineLen
 		}
@@ -199,10 +207,14 @@ func initBoxLen() {
 	}
 	BoxLen = BoxLen + 2 // one blank and border left and right
 }
+*/
 
 func setLang() {
-	if _, err := os.Stat(PathName + "/.fangotasia.lang"); os.IsNotExist(err) {
+	if _, err := os.Stat(PathName + "/save/fangotasia.lang"); os.IsNotExist(err) {
 		Language = "en"
+	} else {
+		lang, _ := ioutil.ReadFile(PathName + "/save/fangotasia.lang")
+		Language = string(lang)
 	}
 }
 
@@ -222,14 +234,14 @@ func Setup() {
 	c.getConf("conditions.yaml")
 	Conditions = c.Contitions
 	Overwrites = getMapOverwrites()
-	initBoxLen()
+	//initBoxLen()
 	initMap()
 	Flags = make(map[string]bool, 7)
 	Flags["DoorOpen"] = false
 	Flags["BoxOpen"] = false
 	Flags["MapMissed"] = false
 	Flags["HoodVanished"] = false
-	Flags["Moore"] = false
+	Flags["Swamp"] = false
 	Flags["Castle"] = false
 	Flags["Tree"] = false
 }
@@ -244,30 +256,28 @@ func ObjectsInArea(area Area) (objects []Object) {
 }
 
 func GetObjectByID(id int) (object Object) {
-	object = Object{id, GameObjects[id]}
-	if object.Properties.NewCondition != "" {
-		cond := strings.Split(object.Properties.NewCondition, "::")
-		object.Properties.Description.Long = Conditions[cond[0]][cond[1]]
-	}
-	return
+	return Object{id, GameObjects[id]}
 }
 
 func GetAreaByID(id int) (area Area) {
 	return Area{id, GameAreas[id]}
 }
 
-func GetOverwriteByArea(area int) (o MapOverwrites) {
+func GetOverwriteByArea(area int) (ok bool, o MapOverwrites) {
 	for _, o := range Overwrites {
 		if o.Area == area {
-			return o
+			return true, o
 		}
 	}
-	return
+	return false, o
 }
 
 func GetReactionByName(name string) (r Reaction) {
 	r = Reactions[name]
-	r.Statement = make([]string, len(Reactions[name].Statement))
-	copy(r.Statement, Reactions[name].Statement)
+	r.Statement = make(map[string][]string, len(Reactions[name].Statement))
+	for lang := range Reactions[name].Statement {
+		r.Statement[lang] = make([]string, len(Reactions[name].Statement[lang]))
+		copy(r.Statement[lang], Reactions[name].Statement[lang])
+	}
 	return
 }

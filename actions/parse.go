@@ -38,18 +38,22 @@ func Parse(input string, area *setup.Area) bool {
 	// pop parts
 	parts = parts[1:]
 
+verbFound:
 	for _, v := range setup.Verbs {
-		if v.Name == command {
-			knownVerb = v
-			break
+		for _, v1 := range v.Name[setup.Language] {
+			if v1 == command {
+				knownVerb = v
+				break verbFound
+			}
 		}
 	}
 
-	if knownVerb == (setup.Verb{}) {
+	// no fitting func found?
+	if knownVerb.Func == "" {
 		// do we have input?
 		if len(command) > 0 {
 			answer := setup.GetReactionByName("unknownVerb")
-			notice := fmt.Sprintf(answer.Statement[0], command)
+			notice := fmt.Sprintf(answer.Statement[setup.Language][0], command)
 			grid.InputField.SetText("")
 			grid.Response.SetText(
 				fmt.Sprintf("\n%s%s%s\n",
@@ -88,8 +92,8 @@ func Parse(input string, area *setup.Area) bool {
 	case "Move":
 		obj = Object{}
 		argv = append(argv, reflect.ValueOf(*area))
-		argv = append(argv, reflect.ValueOf(knownVerb.Name))
-	case "Load", "Save", "Jump", "Map", "Help":
+		argv = append(argv, reflect.ValueOf(command))
+	case "Load", "Save", "Jump", "Map", "Help", "Lang":
 		obj = Object{}
 		argv = append(argv, reflect.ValueOf(*area))
 	case "Say":
@@ -106,7 +110,7 @@ func Parse(input string, area *setup.Area) bool {
 	default:
 		if len(parts) < 1 {
 			answer := setup.GetReactionByName("needObject")
-			notice := fmt.Sprintln(answer.Statement[0])
+			notice := fmt.Sprintln(answer.Statement[setup.Language][0])
 			setResponse(
 				fmt.Sprintf("\n%s%s%s\n",
 					"[red]",
@@ -115,8 +119,10 @@ func Parse(input string, area *setup.Area) bool {
 			return false
 		}
 		for _, p := range parts {
-			obj = Object(getObjectByName(p, *area))
-			if obj != (Object{}) {
+			var ok bool
+			ok, obj = getObjectByName(p, *area)
+			if ok {
+				obj = Object(obj)
 				argv = append(argv, reflect.ValueOf(*area))
 				break
 			}
@@ -142,8 +148,9 @@ func Parse(input string, area *setup.Area) bool {
 	var color string
 	var notice string
 	// Reaction
-	resp := val[0].Field(0)
+	resp := val[0].Field(0).MapIndex(reflect.ValueOf(setup.Language))
 	respLen := resp.Len()
+	// choose from multiple answers?
 	if respLen > 0 {
 		rand.Seed(time.Now().UnixNano())
 		notice = resp.Index(rand.Intn(respLen)).String()

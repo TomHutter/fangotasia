@@ -1,0 +1,37 @@
+conditions:
+  door:
+    south:
+      de: eine Tür im Süden
+      en: a door in the south
+    north:
+      de: eine Tür im Norden
+      en: a door in the north
+  jar:
+    full:
+      de: einen vollen Wasserkrug
+      en: a full jar
+    empty:
+      de: einen leeren Wasserkrug
+      en: an empty jar
+  ring:
+    golden:
+      de: "::ein Ring aus Goldfäden::"
+      en: "::a ring made of golden threads::"
+  bush:
+    ugly:
+      de: einen hässlichen Strauch
+      en: an ugly bush
+    watered:
+      de: einen edlen Strauch
+      en: a beautiful bush
+  fango:
+    de:
+      die: "eine ::besudelte:: %s"
+      der: "einen ::besudelten:: %s"
+      das: "ein ::besudeltes:: %s"
+    en:
+      the: "a ::besmirched:: %s"
+  imke:
+    long:
+      de: den pink Diamanten
+      en: the pink diamond

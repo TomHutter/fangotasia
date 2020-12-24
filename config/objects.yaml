@@ -1,0 +1,514 @@
+objects:
+  9:
+    description:
+      de:
+        long: einen Zauberkuchen
+        short: Zauberkuchen
+        alt: Kuchen
+        article: der
+      en:
+        long: a magic cake
+        short: cake
+        article: the
+    area: 28
+    value: 0
+  10:
+    description:
+      de:
+        long: eine haarige Raupe
+        short: Raupe
+        article: die
+      en:
+        long: a hairy grub
+        short: grub
+        article: the
+    area: 29
+    value: 0
+  11:
+    description:
+      de:
+        long: ein grünes Buch
+        short: Buch
+        article: das
+      en:
+        long: a green book
+        short: book
+        article: the
+    area: 8
+    value: 0
+  12:
+    description:
+      de:
+        long: einen Zettel
+        short: Zettel
+        article: der
+      en:
+        long: a slip of paper
+        short: slip
+        alt: paper
+        article: the
+    area: 24
+    value: 0
+  13:
+    description:
+      de:
+        long: eine Tarnkappe
+        short: Tarnkappe
+        alt: Kappe
+        article: die
+      en:
+        long: a magic hood
+        short: hood
+        article: the
+    area: 2
+    value: 0
+  14:
+    description:
+      de:
+        long: eine Riesenfrucht
+        short: Riesenfrucht
+        alt: Frucht
+        article: die
+      en:
+        long: a giant fruit
+        short: fruit
+        article: the
+    area: 26
+    value: 0
+  15:
+    description:
+      de:
+        long: "::ein Feuerschwert::"
+        short: Feuerschwert
+        alt: Schwert
+        article: das
+      en:
+        long: "::a fire sword::"
+        short: sword
+        article: the
+    area: 20
+    value: 10
+  16:
+    description:
+      de:
+        long:  einen grossen Bären
+        short: Bär
+        article: der
+      en:
+        long:  a big baer
+        short: baer
+        article: the
+    area: 19
+    value: 0
+  17:
+    description:
+      de:
+        long: "::einen Schild aus Bronze::"
+        short: Schild
+        article: der
+      en:
+        long: "::a buckler made of bronze::"
+        short: buckler
+        article: the
+    area: 19
+    value: 22
+  18:
+    description:
+      de:
+        long: einen Zwerg
+        short: Zwerg
+        article: der
+      en:
+        long: a dwarf
+        short: dwarf
+        article: the
+    area: 18
+    value: 0
+  19:
+    description:
+      de:
+        long: "::goldene Dracheneier::"
+        short: Dracheneier
+        alt: Eier
+        article: die
+      en:
+        long: "::golden dragon eggs::"
+        short: eggs
+        article: the
+    area: 18
+    value: 20
+  20:
+    description:
+      de:
+        long: einen Stein
+        short: Stein
+        article: der
+      en:
+        long: a stone
+        short: stone
+        article: the
+    area: 16
+    value: 0
+  21:
+    description:
+      de:
+        long: eine Hölenmalerei
+        short: Hölenmalerei
+        alt: Malerei
+        article: die
+      en:
+        long: a wall painting
+        short: painting
+        article: the
+    area: 13
+    value: 0
+  22:
+    description:
+      de:
+        long: einen hässlichen Strauch
+        short: Strauch
+        article: der
+      en:
+        long: an ugly bush
+        short: bush
+        article: the
+    area: 14
+    value: 0
+  23:
+    description:
+      de:
+        long: viele rote Beeren
+        short: Beeren
+        article: die
+      en:
+        long: a lot of red berries
+        short: berries
+        article: the
+    area: 0
+    value: 0
+  24:
+    description:
+      de:
+        long: "::goldene Blätter::"
+        short: Blätter
+        article: die
+      en:
+        long: "::golden leaves::"
+        short: leaves
+        article: the
+    area: 0
+    value: 26
+  25:
+    description:
+      de:
+        long: "::ein Diamantmesser::"
+        short: Diamantmesser
+        alt: Messer
+        article: das
+      en:
+        long: "::a diamond knife::"
+        short: knife
+        article: the
+    area: 15
+    value: 5
+  26:
+    description:
+      de:
+        long: "::einen Silberschlüssel::"
+        short: Silberschlüssel
+        alt: Schlüssel
+        article: der
+      en:
+        long: "::a silver key::"
+        short: key
+        article: the
+    area: 8
+    value: 5
+  27:
+    description:
+      de:
+        long: einen dürren Baum
+        short: Baum
+        article: der
+      en:
+        long: a brittle tree
+        short: tree
+        article: the
+    area: 9
+    value: 0
+  28:
+    description:
+      de:
+        long: ein vergilbtes Pergament
+        short: Pergament
+        article: das
+      en:
+        long: a yellowed parchment
+        short: parchment
+        article: the
+    area: 11
+    value: 0
+  29:
+    description:
+      de:
+        long: eine grosse Steinschleuder
+        short: Steinschleuder
+        alt: Schleuder
+        article: die
+      en:
+        long: a big catapult
+        short: catapult
+        article: the
+    area: 12
+    value: 0
+  30:
+    description:
+      de:
+        long: einen leeren Wasserkrug
+        short: Wasserkrug
+        alt: Krug
+        article: der
+      en:
+        long: an empty jar
+        short: jar
+        article: the
+    area: 1
+    value: 0
+  31:
+    description:
+      de:
+        long: ein Paar Zauberschuhe
+        short: Zauberschuhe
+        alt: Schuhe
+        article: die
+      en:
+        long: a pair of wizard shoes
+        short: shoes
+        article: the
+    area: 1
+    value: 0
+  32:
+    description:
+      de:
+        long: eine Schrifttafel
+        short: Schrifttafel
+        alt: Tafel
+        article: die
+      en:
+        long: a sign board
+        short: board
+        alt: sign
+        article: the
+    area: 1
+    value: 0
+  33:
+    description:
+      de:
+        long: "::einen Zwergendolch::"
+        short: Zwergendolch
+        alt: Dolch
+        article: der
+      en:
+        long: "::a dwarf dagger::"
+        short: dagger
+        article: the
+    area: 3
+    value: 7
+  34:
+    description:
+      de:
+        long: eine grosse Kugel
+        short: Kugel
+        article: die
+      en:
+        long: a big shpere
+        short: shpere
+        article: the
+    area: 4
+    value: 0
+  35:
+    description:
+      de:
+        long: ein rotes Kästchen
+        short: Kästchen
+        article: das
+      en:
+        long: a red box
+        short: box
+        article: the
+    area: 4
+    value: 0
+  36:
+    description:
+      de:
+        long: einen bösen Gnom
+        short: Gnom
+        article: der
+      en:
+        long: an evil gnome
+        short: gnome
+        article: the
+    area: 4
+    value: 0
+  37:
+    description:
+      de:
+        long: einen eisernen Ring
+        short: Ring
+        article: der
+      en:
+        long: an iron ring
+        short: ring
+        article: the
+    area: 0
+    value: 0
+  38:
+    description:
+      de:
+        long: einen Brief
+        short: Brief
+        article: der
+      en:
+        long: a letter
+        short: letter
+        article: the
+    area: 0
+    value: 0
+  39:
+    description:
+      de:
+        long: "::einen roten Rubin::"
+        short: Rubin
+        article: der
+      en:
+        long: "::a red ruby::"
+        short: ruby
+        article: the
+    area: 0
+    value: 18
+  40:
+    description:
+      de:
+        long: eine Tür im Norden
+        short: Tür
+        article: die
+      en:
+        long: a door in the north
+        short: door
+        article: the
+    area: 25
+    value: 0
+  45:
+    description:
+      de:
+        long: eine Tür im Süden
+        short: Tür
+        article: die
+      en:
+        long: a door in the south
+        short: door
+        article: the
+    area: 30
+    value: 0
+  41:
+    description:
+      de:
+        long: "::goldenes Feenhaar::"
+        short: Feenhaar
+        alt: Haar
+        article: das
+      en:
+        long: "::a golden hair of a fairy::"
+        short: hair
+        article: the
+    area: 33
+    value: 10
+  42:
+    description:
+      de:
+        long: einen feuerspeienden Drachen
+        short: Drachen
+        article: der
+      en:
+        long: a fire breathing dragon
+        short: dragon
+        article: the
+    area: 51
+    value: 0
+  43:
+    description:
+      de:
+        long: eine verwitterte Holztafel
+        short: Holztafel
+        alt: Tafel
+        article: die
+      en:
+        long: a rotten board
+        short: board
+        article: the
+    area: 40
+    value: 0
+  44:
+    description:
+      de:
+        long: "::einen silbernen Pokal::"
+        short: Pokal
+        article: der
+      en:
+        long: "::a silver goblet::"
+        short: goblet
+        article: the
+    area: 51
+    value: 47
+  46:
+    description:
+      de:
+        long: "::eine goldene Kugel::"
+        short: Kugel
+        article: die
+      en:
+        long: "::a golden sphere::"
+        short: sphere
+        article: the
+    area: 0
+    value: 11
+  47:
+    description:
+      de:
+        long: "eine ausgeblichene Landkarte"
+        short: Landkarte
+        alt: Karte
+        article: die
+      en:
+        long: "a faded map"
+        short: map
+        article: the
+    area: 31
+    value: 0
+  48:
+    description:
+      de:
+        long: "ein unbekannter Gegenstand"
+        short: Gegenstand
+        alt: Gegenstand
+        article: der
+      en:
+        long: "an unknown item"
+        short: item
+        article: the
+    area: 0
+    value: 0
+  49:
+    description:
+      de:
+        long: "eine Fango-Packung"
+        short: Fango-Packung
+        alt: Fango
+        article: die
+      en:
+        long: "a fango package"
+        short: package
+        alt: fango
+        article: the
+    area: 5
+    value: 0

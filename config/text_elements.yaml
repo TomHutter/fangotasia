@@ -1,0 +1,114 @@
+elements:
+  selectLanguage:
+    de: "Bitte Sprache auswählen und Enter drücken:"
+    en: "Please select languaga and press Enter:"
+  iAm:
+    de: Ich bin
+    en: I am
+  iSee:
+    de: Ich sehe
+    en: I see
+  directions:
+    de: Richtungen
+    en: Directions
+  next:
+    de: Weiter
+    en: Continue
+  andNow:
+    de: und nun
+    en: and now
+  nextYesNo:
+    de: Weiter (j/n)?
+    en: Continue (y/n)?
+  yesShort:
+    de: j
+    en: y
+  north:
+    de: Norden
+    en: north
+  south:
+    de: Süden
+    en: south
+  east:
+    de: Osten
+    en: east
+  west:
+    de: Westen
+    en: west
+  verbsKnown:
+    de: Verben, die ich kenne
+    en: Verbs, I know
+  imke:
+    de: den pink Diamanten
+    en: the pink diamond
+  gameOver:
+    de: G A M E    O V E R
+    en: G A M E    O V E R
+  haveFound:
+    de: Du hast gefunden
+    en: You have found
+  points:
+    de: Punkte
+    en: points
+  movesNeeded:
+    de: "Du hast weniger als %d Züge gebrauchtt: 10 Punkte"
+    en: "You needed less than %d moves: 10 points"
+  visitedSwamp:
+    de: "- Du bist im Moor gewesen %d Punkte"
+    en: "- You have been to the swamp: %d points"
+  visitedCastle:
+    de: "- Du hast die verlassene Burg besucht: %d Punkte"
+    en: "- You have visited the castle: %d points"
+  climbedTree:
+    de: "- Du bist auf einen Baum geklettert: %d Punkte"
+    en: "- You have climbed a tree: %d points"
+  pointsOutOf:
+    de: "Du hast %d von 220 Punkten!"
+    en: "You have %d of 220 points!"
+  oneMoreGame:
+    de: "Noch ein Spiel? (j/n)"
+    en: "One more game? (y/n)"
+  comeOn:
+    de: "Ach komm, noch 5 Minuten? (j/n)"
+    en: "Come on, five more minutes? (y/n)"
+  intro:
+    de: |
+      [blue:black:-]Mach Dich auf den gefahrenreichen Weg in
+      das zauberhafte Land Fangotasia und suche
+      nach märchenhaften Schätzen.
+      Führe mich mit einfachen Kommandos in
+      einem oder zwei Worten, z.B.:
+      
+      [yellow:black:b]SPRING      BENUTZE TARNKAPPE      ENDE
+      
+      LEGE RUBIN     FÜTTERE DRACHE     INVENTAR
+      
+      [blue:black:-]Mit  [white:black:b]SAVE  [blue:black:-]kannst Du den aktuellen Stand
+      des Spieles abspeichern,
+      mit  [white:black:b]LOAD  [blue:black:-]wieder einlesen.
+    en: |
+      [blue:black:-]Set out for the perilous journey to
+      the magical realm of Fangotasia and search
+      for legendary treasures.
+      Command me with simple commands in
+      one or two words like:
+      
+      [yellow:black:b]JUMP          USE HOOD            END
+      
+      PUT RUBY       FEED DRAGON       INVENTORY
+      
+      [white:black:b]SAVE [blue:black:-]the current game, or
+      [white:black:b]LOAD [blue:black:-]a previous one.
+  prelude:
+    de: |
+      [red:black:b]F A N G O T A S I A
+      
+      [blue:black:b]- Ein Adventure von Klaus Hartmuth (1984) -
+      
+      [yellow:black:b]- GO Version von Tom Hutter (2020) -
+    en: |
+      [red:black:b]F A N G O T A S I A
+      
+      [blue:black:b]- An Adventure from Klaus Hartmuth (1984) -
+      
+      [yellow:black:b]- GO Version from Tom Hutter (2020) -

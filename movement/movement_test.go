@@ -22,8 +22,8 @@ func TestSurroundings(t *testing.T) {
 	area := setup.GetAreaByID(1)
 	objects := setup.ObjectsInArea(area)
 	s := strings.Join(view.Surroundings(area), "\n")
-	assert.Contains(t, s, setup.GetAreaByID(1).Properties.Description.Short)
-	assert.Contains(t, s, objects[0].Properties.Description.Long)
+	assert.Contains(t, s, setup.GetAreaByID(1).Properties.Description[setup.Language].Short)
+	assert.Contains(t, s, objects[0].Properties.Description[setup.Language].Long)
 }
 
 func TestDrawMap(t *testing.T) {
@@ -32,7 +32,7 @@ func TestDrawMap(t *testing.T) {
 	m.NewAreaID(setup.INUSE)
 	area := setup.GetAreaByID(1)
 	s := strings.Join(movement.DrawMap(area), "\n")
-	assert.Contains(t, s, area.Properties.Description.Short)
+	assert.Contains(t, s, area.Properties.Description[setup.Language].Short)
 }
 
 func TestRevealArea(t *testing.T) {

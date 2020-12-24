@@ -9,6 +9,7 @@ import (
 	"fmt"
 	"math/rand"
 	"regexp"
+	"sort"
 	"strings"
 	"time"
 
@@ -21,10 +22,13 @@ func (obj *Object) NewAreaID(areaID int) {
 	setup.GameObjects[obj.ID] = obj.Properties
 }
 
-func (obj *Object) NewCondition(condition string) {
-	obj.Properties.NewCondition = condition
-	setup.GameObjects[obj.ID] = obj.Properties
-	*obj = Object(setup.GetObjectByID(obj.ID))
+func (obj *Object) NewCondition(condition map[string]string) {
+	for lang := range condition {
+		desc := obj.Properties.Description[lang]
+		desc.Long = condition[lang]
+		setup.GameObjects[obj.ID].Description[lang] = desc
+		obj.Properties.Description[lang] = desc
+	}
 }
 
 func (object Object) Open(area setup.Area) (r setup.Reaction) {
@@ -126,7 +130,7 @@ func (object Object) Take(area setup.Area) (r setup.Reaction) {
 		return
 	case 48:
 		r = setup.GetReactionByName("takeImke")
-		r.Statement[0] = fmt.Sprintf(r.Statement[0],
+		r.Statement[setup.Language][0] = fmt.Sprintf(r.Statement[setup.Language][0],
 			"[#ff69b4::b]<IMKE>[green:black:-]",
 			"[#ff69b4::b]<IMKE>[green:black:-]")
 		return
@@ -272,15 +276,19 @@ func (obj Object) Throw(area setup.Area) (r setup.Reaction) {
 		for _, i := range []int{10, 14, 16, 18, 21, 29, 32, 36, 40, 42, 43, 45} {
 			object := Object(setup.GetObjectByID(i))
 			if object.inArea(area) {
-				if strings.Contains(object.Properties.Description.Long, "::") {
+				if strings.Contains(object.Properties.Description[setup.Language].Long, "::") {
 					r = setup.Reactions["alreadyFangoed"]
 					return
 				} else {
-					article := object.Properties.Description.Article
-					parts := strings.Split(object.Properties.Description.Long, " ")[1:]
-					long := strings.Join(parts, " ")
-					newLong := fmt.Sprintf(setup.Conditions["fango"][article], long)
-					object.NewCondition(newLong)
+					var cond map[string]string
+					cond = make(map[string]string)
+					for lang := range setup.Conditions["fango"] {
+						article := object.Properties.Description[lang].Article
+						parts := strings.Split(object.Properties.Description[lang].Long, " ")[1:]
+						long := strings.Join(parts, " ")
+						cond[lang] = fmt.Sprintf(setup.Conditions["fango"][lang][article], long)
+					}
+					object.NewCondition(cond)
 					r = setup.Reactions["hitWithFango"]
 					return
 				}
@@ -290,18 +298,21 @@ func (obj Object) Throw(area setup.Area) (r setup.Reaction) {
 	default:
 		re := regexp.MustCompile(`\\n.*$`)
 		r = setup.Reactions["throwObject"]
+		r.Statement = make(map[string][]string, len(setup.Reactions["throwObject"].Statement))
 		rand.Seed(time.Now().UnixNano())
 		newAreaID := rand.Intn(51)
 		obj.NewAreaID(newAreaID)
-		r.Statement = make([]string, len(setup.Reactions["throwObject"].Statement))
-		copy(r.Statement, setup.Reactions["throwObject"].Statement)
-		newArea := setup.GetAreaByID(newAreaID)
-		article := strings.Title(obj.Properties.Description.Article)
-		short := obj.Properties.Description.Short
-		location := newArea.Properties.Description.Long
-		location = string(re.ReplaceAll([]byte(location), []byte(" ")))
-		for i, s := range r.Statement {
-			r.Statement[i] = fmt.Sprintf(s, article, short, location)
+		for lang := range setup.Reactions["throwObject"].Statement {
+			r.Statement[lang] = make([]string, len(setup.Reactions["throwObject"].Statement[lang]))
+			copy(r.Statement[lang], setup.Reactions["throwObject"].Statement[lang])
+			newArea := setup.GetAreaByID(newAreaID)
+			article := strings.Title(obj.Properties.Description[lang].Article)
+			short := obj.Properties.Description[lang].Short
+			location := newArea.Properties.Description[lang].Long
+			location = string(re.ReplaceAll([]byte(location), []byte(" ")))
+			for i, s := range setup.Reactions["throwObject"].Statement[lang] {
+				r.Statement[lang][i] = fmt.Sprintf(s, article, short, location)
+			}
 		}
 	}
 	return
@@ -341,7 +352,7 @@ func (obj Object) Read(area setup.Area) (r setup.Reaction) {
 		r = setup.Reactions[reaction[obj.ID]]
 	case 32:
 		r = setup.GetReactionByName(reaction[obj.ID])
-		r.Statement[0] = view.Highlight(r.Statement[0], "[green:black:-]")
+		r.Statement[setup.Language][0] = view.Highlight(r.Statement[setup.Language][0], "[green:black:-]")
 	default:
 		r = setup.Reactions["dontKnowHow"]
 	}
@@ -368,7 +379,7 @@ func (obj Object) Say(area setup.Area, word string) (r setup.Reaction) {
 		}
 	}
 	r = setup.GetReactionByName("say")
-	r.Statement[0] = fmt.Sprintf(r.Statement[0], word)
+	r.Statement[setup.Language][0] = fmt.Sprintf(r.Statement[setup.Language][0], word)
 	return
 }
 
@@ -392,13 +403,14 @@ func (obj Object) Fill(area setup.Area) (r setup.Reaction) {
 		r = setup.Reactions["ok"]
 	case 35, 44:
 		r = setup.GetReactionByName("unsuitable")
-		a := strings.Title(obj.Properties.Description.Article)
-		desc := fmt.Sprintf("%s %s", a, obj.Properties.Description.Short)
-		r.Statement[0] = fmt.Sprintf(r.Statement[0], desc)
+		a := strings.Title(obj.Properties.Description[setup.Language].Article)
+		desc := fmt.Sprintf("%s %s", a, obj.Properties.Description[setup.Language].Short)
+		r.Statement[setup.Language][0] = fmt.Sprintf(r.Statement[setup.Language][0], desc)
 		return
 	default:
 		r = setup.GetReactionByName("unusable")
-		r.Statement[0] = fmt.Sprintf(r.Statement[0], view.Highlight(obj.Properties.Description.Long, "[red]"))
+		r.Statement[setup.Language][0] = fmt.Sprintf(r.Statement[setup.Language][0],
+			view.Highlight(obj.Properties.Description[setup.Language].Long, "[red]"))
 		return
 	}
 
@@ -407,7 +419,7 @@ func (obj Object) Fill(area setup.Area) (r setup.Reaction) {
 		r = setup.Reactions["waterUnreachable"]
 	case 17:
 		r = setup.Reactions["ok"]
-		obj.NewCondition("jar::full")
+		obj.NewCondition(setup.Conditions["jar"]["full"])
 	default:
 		r = setup.Reactions["noWater"]
 	}
@@ -418,9 +430,9 @@ func (obj Object) Feed(area setup.Area) (r setup.Reaction) {
 	switch obj.ID {
 	case 10, 18, 36, 24:
 		r = setup.GetReactionByName("feed")
-		a := strings.Title(obj.Properties.Description.Article)
-		desc := fmt.Sprintf("%s %s", a, obj.Properties.Description.Short)
-		r.Statement[0] = fmt.Sprintf(setup.Reactions["feed"].Statement[0], desc)
+		a := strings.Title(obj.Properties.Description[setup.Language].Article)
+		desc := fmt.Sprintf("%s %s", a, obj.Properties.Description[setup.Language].Short)
+		r.Statement[setup.Language][0] = fmt.Sprintf(setup.Reactions["feed"].Statement[setup.Language][0], desc)
 	case 16:
 		berries := Object(setup.GetObjectByID(23))
 		if berries.inInventory() {
@@ -527,11 +539,13 @@ func (jar Object) Drink(area setup.Area) (r setup.Reaction) {
 		r = setup.Reactions["noTool"]
 		return
 	}
-	if jar.Properties.NewCondition == "" || jar.Properties.NewCondition == "jar::empty" {
+	if jar.Properties.Description[setup.Language].Long ==
+		setup.Conditions["jar"]["empty"][setup.Language] {
 		r = setup.Reactions["jarEmpty"]
 	}
-	if jar.Properties.NewCondition == "jar::full" {
-		jar.NewCondition("jar::empty")
+	if jar.Properties.Description[setup.Language].Long ==
+		setup.Conditions["jar"]["full"][setup.Language] {
+		jar.NewCondition(setup.Conditions["jar"]["empty"])
 		r = setup.Reactions["drinkJar"]
 	}
 	return
@@ -546,10 +560,11 @@ func (obj Object) Spin(area setup.Area) (r setup.Reaction) {
 			r = setup.Reactions["dontHave"]
 			return
 		}
-		if obj.Properties.NewCondition == "ring::golden" {
+		if obj.Properties.Description[setup.Language].Long ==
+			setup.Conditions["ring"]["golden"][setup.Language] {
 			r = setup.Reactions["spin"]
 		} else {
-			obj.NewCondition("ring::golden")
+			obj.NewCondition(setup.Conditions["ring"]["golden"])
 			obj.NewAreaID(area.ID)
 			r = setup.Reactions["spinRing"]
 		}
@@ -571,7 +586,8 @@ func (obj Object) Water(area setup.Area) (r setup.Reaction) {
 			r = setup.Reactions["noJar"]
 			return
 		}
-		if jar.Properties.NewCondition == "" || jar.Properties.NewCondition == "jar::empty" {
+		if jar.Properties.Description[setup.Language].Long ==
+			setup.Conditions["jar"]["empty"][setup.Language] {
 			r = setup.Reactions["jarEmpty"]
 			return
 		}
@@ -585,12 +601,13 @@ func (obj Object) Water(area setup.Area) (r setup.Reaction) {
 		r = setup.Reactions["ok"]
 	case 22:
 		jar := Object(setup.GetObjectByID(30))
-		jar.NewCondition("jar::empty")
-		if obj.Properties.NewCondition == "bush::watered" {
+		jar.NewCondition(setup.Conditions["jar"]["empty"])
+		if obj.Properties.Description[setup.Language].Long ==
+			setup.Conditions["bush"]["watered"][setup.Language] {
 			r = setup.Reactions["ok"]
 		} else {
 			r = setup.Reactions["waterBush"]
-			obj.NewCondition("bush::watered")
+			obj.NewCondition(setup.Conditions["bush"]["watered"])
 			berries := Object(setup.GetObjectByID(23))
 			berries.NewAreaID(area.ID)
 			leaves := Object(setup.GetObjectByID(24))
@@ -604,9 +621,9 @@ func (obj Object) Scare(area setup.Area) (r setup.Reaction) {
 	switch obj.ID {
 	case 10, 16, 18, 36, 42:
 		r = setup.GetReactionByName("scare")
-		a := strings.Title(obj.Properties.Description.Article)
-		desc := fmt.Sprintf("%s %s", a, obj.Properties.Description.Short)
-		r.Statement[0] = fmt.Sprintf(setup.Reactions["scare"].Statement[0], desc)
+		a := strings.Title(obj.Properties.Description[setup.Language].Article)
+		desc := fmt.Sprintf("%s %s", a, obj.Properties.Description[setup.Language].Short)
+		r.Statement[setup.Language][0] = fmt.Sprintf(setup.Reactions["scare"].Statement[setup.Language][0], desc)
 	default:
 		r = setup.Reactions["silly"]
 	}
@@ -619,7 +636,7 @@ func (obj Object) Map(area setup.Area) (r setup.Reaction) {
 	grid.Grid.Clear()
 	grid.Grid.AddItem(grid.AreaGrid, 0, 0, 1, 1, 0, 0, false)
 	grid.AreaField.SetText("").
-		SetLabel("Weiter \u23CE ").
+		SetLabel(fmt.Sprintf("%s \u23CE ", setup.TextElements["next"][setup.Language])).
 		SetAcceptanceFunc(tview.InputFieldMaxLength(0)).
 		SetDoneFunc(func(key tcell.Key) {
 			grid.Grid.Clear()
@@ -627,6 +644,36 @@ func (obj Object) Map(area setup.Area) (r setup.Reaction) {
 			grid.App.SetFocus(grid.InputField)
 		})
 	grid.App.SetFocus(grid.AreaField)
+	r = setup.Reactions["ok"]
+	return
+}
+
+func (obj Object) Lang(area setup.Area) (r setup.Reaction) {
+	var keys []string
+	keys = make([]string, 0)
+
+	for k := range setup.TextElements["selectLanguage"] {
+		keys = append(keys, k)
+	}
+
+	sort.Strings(keys)
+
+	grid.InputField.SetText("")
+	grid.Response.SetText("")
+	grid.Grid.Clear()
+	grid.Grid.AddItem(grid.LanguageGrid, 0, 0, 1, 1, 0, 0, false)
+	grid.LanguageSelect.
+		SetLabel(setup.TextElements["selectLanguage"][setup.Language]).
+		SetOptions(keys, nil).
+		SetSelectedFunc(func(o string, i int) {
+			setup.Language = o
+			grid.Surroundings.SetText(strings.Join(view.Surroundings(area), "\n"))
+			grid.Grid.Clear()
+			grid.Grid.AddItem(grid.InputGrid, 0, 0, 1, 1, 0, 0, false)
+			grid.App.SetFocus(grid.InputField)
+		})
+	grid.App.SetFocus(grid.LanguageSelect)
+	r = setup.Reactions["ok"]
 	return
 }
 
@@ -637,5 +684,6 @@ func (obj Object) Help(area setup.Area) (r setup.Reaction) {
 	grid.AreaField.SetText("")
 	grid.App.SetFocus(grid.AreaField)
 	intro.Intro()
+	r = setup.Reactions["ok"]
 	return
 }

@@ -18,9 +18,13 @@ func beads(areaID int) {
 
 	if setup.Beads == 108 {
 		imke := Object(setup.GetObjectByID(48))
-		imke.Properties.Description.Long = fmt.Sprintf("[#ff69b4::b]<IMKE>[blue:black:-] %s",
-			setup.TextElements["imke"])
-		imke.Properties.Description.Short = "Imke"
+		for lang := range imke.Properties.Description {
+			desc := imke.Properties.Description[lang]
+			desc.Long = fmt.Sprintf("[#ff69b4::b]<IMKE>[blue:black:-] %s",
+				setup.TextElements["imke"][lang])
+			desc.Short = "Imke"
+			setup.GameObjects[imke.ID].Description[lang] = desc
+		}
 		imke.NewAreaID(areaID)
 	}
 }
@@ -29,13 +33,13 @@ func beads(areaID int) {
 func (obj Object) Move(area setup.Area, dir string) (r setup.Reaction, areaID int) {
 	var char string
 	var direction = map[string]int{}
-	char = strings.ToLower(string(setup.TextElements["north"][0]))
+	char = strings.ToLower(string(setup.TextElements["north"][setup.Language][0]))
 	direction[char] = 0
-	char = strings.ToLower(string(setup.TextElements["south"][0]))
+	char = strings.ToLower(string(setup.TextElements["south"][setup.Language][0]))
 	direction[char] = 1
-	char = strings.ToLower(string(setup.TextElements["east"][0]))
+	char = strings.ToLower(string(setup.TextElements["east"][setup.Language][0]))
 	direction[char] = 2
-	char = strings.ToLower(string(setup.TextElements["west"][0]))
+	char = strings.ToLower(string(setup.TextElements["west"][setup.Language][0]))
 	direction[char] = 3
 
 	newArea := area.Properties.Directions[direction[dir]]
@@ -65,17 +69,16 @@ func (obj Object) Move(area setup.Area, dir string) (r setup.Reaction, areaID in
 	}
 	movement.RevealArea(newArea)
 	setup.Moves += 1
-	r.OK = true
-	r.KO = false
+	r = setup.Reactions["ok"]
 	areaID = newArea
-	// Direction Moor?
+	// Direction swamp?
 	if newArea == 5 {
-		setup.Flags["Moore"] = true
+		setup.Flags["Swamp"] = true
 		for _, o := range setup.ObjectsInArea(setup.GetAreaByID(setup.INVENTORY)) {
 			obj := Object(o)
 			obj.NewAreaID(29)
 		}
-		r = setup.Reactions["inTheMoor"]
+		r = setup.Reactions["inTheSwamp"]
 	}
 	return
 }
@@ -84,7 +87,7 @@ func (object Object) Climb(area setup.Area) (r setup.Reaction, areaID int) {
 	if area.ID == 31 {
 		beads(area.ID)
 		setup.Moves += 1
-		r.OK = true
+		r = setup.Reactions["ok"]
 		areaID = 9
 		return
 	}
@@ -93,7 +96,7 @@ func (object Object) Climb(area setup.Area) (r setup.Reaction, areaID int) {
 		movement.RevealArea(31)
 		setup.Moves += 1
 		setup.Flags["Tree"] = true
-		r.OK = true
+		r = setup.Reactions["ok"]
 		areaID = 31
 		return
 	}
@@ -119,7 +122,7 @@ func (object Object) Jump(area setup.Area) (r setup.Reaction, areaID int) {
 		} else {
 			beads(area.ID)
 			setup.Moves += 1
-			r.OK = true
+			r = setup.Reactions["ok"]
 			areaID = 9
 			return
 		}

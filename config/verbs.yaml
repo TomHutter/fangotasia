@@ -1,0 +1,224 @@
+verbs:
+  - func: Stab
+    single: false
+    name:
+      de:
+       - stich
+      en:
+       - stab
+  - func: Look
+    single: false
+    name:
+      de:
+        - schau
+        - betrachte
+      en:
+        - look
+  - func: Inventory
+    single: true
+    name:
+      de:
+        - inventar
+        - inv
+      en:
+        - inventory
+        - inv
+  - func: Save
+    single: false
+    name:
+      de:
+        - save
+      en:
+        - save
+  - func: Load
+    single: false
+    name:
+      de:
+        - load
+      en:
+        - load
+  - func: End
+    single: true
+    name:
+      de:
+        - ende
+      en:
+        - end
+  - func: Throw
+    single: false
+    name:
+      de:
+        - wirf
+      en:
+        - throw
+  - func: Read
+    single: false
+    name:
+      de:
+        - lies
+      en:
+        - read
+  - func: Fill
+    single: false
+    name:
+      de:
+        - fülle
+      en:
+        - fill
+  - func: Open
+    single: false
+    name:
+      de:
+        - öffne
+      en:
+        - open
+        - unlock
+  - func: Use
+    single: false
+    name:
+      de:
+        - benutze
+        - verwende
+        - trage
+      en:
+        - use
+  - func: Say
+    single: false
+    name:
+      de:
+        - sag
+        - sage
+      en:
+        - say
+  - func: Water
+    single: false
+    name:
+      de:
+        - gieße
+      en:
+        - water
+  - func: Feed
+    single: false
+    name:
+      de:
+        - füttere
+      en:
+        - feed
+  - func: Cut
+    single: false
+    name:
+      de:
+        - schneide
+      en:
+        - cut
+  - func: Help
+    single: false
+    name:
+      de:
+        - hilfe
+      en:
+        - help
+  - func: Climb
+    single: false
+    name:
+      de:
+        - klettere
+      en:
+        - climb
+  - func: Catapult
+    single: false
+    name:
+      de:
+        - schleudere
+      en:
+        - catapult
+  - func: Eat
+    single: false
+    name:
+      de:
+        - iss
+      en:
+        - eat
+  - func: Take
+    single: false
+    name:
+      de:
+        - nimm
+      en:
+        - take
+        - get
+        - pick
+  - func: Scare
+    single: false
+    name:
+      de:
+        - verjage
+      en:
+        - scare
+        - chase
+  - func: Put
+    single: false
+    name:
+      de:
+        - lege
+      en:
+        - put
+        - lay
+  - func: Spin
+    single: false
+    name:
+      de:
+        - drehe
+      en:
+        - spin
+  - func: Jump
+    single: false
+    name:
+      de:
+        - spring
+      en:
+        - jump
+  - func: Drink
+    single: false
+    name:
+      de:
+        - trink
+      en:
+        - dink
+  - func: Verbs
+    single: true
+    name:
+      de:
+        - verben
+      en:
+        - verbs
+  - func: Move
+    single: false
+    name:
+      de:
+        - n
+        - s
+        - o
+        - w
+      en:
+        - n
+        - s
+        - e
+        - w
+  - func: Map
+    single: false
+    name:
+      de:
+        - karte
+      en:
+        - map
+  - func: Lang
+    single: false
+    name:
+      de:
+        - sprache
+        - lang
+      en:
+        - language
+        - lang
+

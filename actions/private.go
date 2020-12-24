@@ -36,10 +36,10 @@ func (object Object) snatchFrom(opponent Object) (r setup.Reaction) {
 	if opponent.inArea(area) {
 		if !hood.inUse() {
 			r = setup.GetReactionByName("wontLet")
-			r.Statement[0] = fmt.Sprintf("%s %s %s",
-				strings.Title(opponent.Properties.Description.Article),
-				opponent.Properties.Description.Short,
-				r.Statement[0])
+			r.Statement[setup.Language][0] = fmt.Sprintf("%s %s %s",
+				strings.Title(opponent.Properties.Description[setup.Language].Article),
+				opponent.Properties.Description[setup.Language].Short,
+				r.Statement[setup.Language][0])
 			return
 		} else {
 			// hood in use and object picked successfully?
@@ -78,22 +78,22 @@ func (obj Object) drop(area setup.Area) (r setup.Reaction) {
 	return
 }
 
-func getObjectByName(name string, area setup.Area) (object Object) {
+func getObjectByName(name string, area setup.Area) (ok bool, object Object) {
 	found := false
 	var obj Object
 	for id, prop := range setup.GameObjects {
-		if strings.ToLower(prop.Description.Short) == strings.ToLower(name) ||
-			strings.ToLower(prop.Description.Alt) == strings.ToLower(name) {
+		if strings.ToLower(prop.Description[setup.Language].Short) == strings.ToLower(name) ||
+			strings.ToLower(prop.Description[setup.Language].Alt) == strings.ToLower(name) {
 			found = true
 			obj = Object{id, prop}
 			if obj.available(area) {
-				return obj
+				return found, obj
 			}
 		}
 	}
 	// on treetop climbing down?
 	if area.ID == 31 && obj.ID == 27 {
-		return obj
+		return found, obj
 	}
 	// found an object but not in the current area?
 	if found {
@@ -102,13 +102,13 @@ func getObjectByName(name string, area setup.Area) (object Object) {
 		grid.Response.SetText(
 			fmt.Sprintf("\n%s%s%s\n",
 				"[red]",
-				r.Statement[0],
+				r.Statement[setup.Language][0],
 				"[-:black:-]"))
 		return
 	}
 	// don't know what you are talking about
 	r := setup.GetReactionByName("unknownNoun")
-	statement := fmt.Sprintf(r.Statement[0], name)
+	statement := fmt.Sprintf(r.Statement[setup.Language][0], name)
 	grid.InputField.SetText("")
 	grid.Response.SetText(
 		fmt.Sprintf("\n%s%s%s\n",

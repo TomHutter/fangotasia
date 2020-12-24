@@ -28,7 +28,8 @@ func TestGameObjects(t *testing.T) {
 func TestGetAreaByID(t *testing.T) {
 	area := setup.GetAreaByID(9)
 	assert.Equal(t, 9, area.ID, "Area ID not equal.")
-	assert.Contains(t, area.Properties.Description.Long, area.Properties.Description.Short)
+	assert.Contains(t, area.Properties.Description[setup.Language].Long,
+		area.Properties.Description[setup.Language].Short)
 	assert.IsType(t, [4]int{}, area.Properties.Directions, "Area directions have to be type [4]int.")
 	assert.IsType(t, 0, area.Properties.Coordinates.X, "Area x coordinates shoud by type int.")
 	assert.IsType(t, 0, area.Properties.Coordinates.Y, "Area y coordinates should be type int.")
@@ -37,8 +38,8 @@ func TestGetAreaByID(t *testing.T) {
 func TestGetObjectByID(t *testing.T) {
 	obj := setup.GetObjectByID(15)
 	assert.Equal(t, 15, obj.ID, "Object ID not equal.")
-	assert.Contains(t, obj.Properties.Description.Long, obj.Properties.Description.Short)
-	assert.IsType(t, "das", obj.Properties.Description.Article, "Object article not type string.")
+	assert.Contains(t, obj.Properties.Description[setup.Language].Long, obj.Properties.Description[setup.Language].Short)
+	assert.IsType(t, "das", obj.Properties.Description[setup.Language].Article, "Object article not type string.")
 	assert.Equal(t, 20, obj.Properties.Area, "Object area not equal.")
 	assert.Equal(t, 10, obj.Properties.Value, "Object value not equal.")
 }
@@ -50,7 +51,7 @@ func TestObjectsInArea(t *testing.T) {
 }
 
 func TestGetOverwriteByArea(t *testing.T) {
-	o := setup.GetOverwriteByArea(54)
+	_, o := setup.GetOverwriteByArea(54)
 	assert.Equal(t, 54, o.Area, "Object ID not equal.")
-	assert.Contains(t, o.Content[0], "┏━━━━━━━━┻━━━━━━┻━┓")
+	assert.Contains(t, o.Content[setup.Language][0], "┏━━━━━━━━┻━━━━━━┻━┓")
 }

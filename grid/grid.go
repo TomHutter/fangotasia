@@ -15,6 +15,7 @@ var (
 	InputField     *tview.InputField
 	Surroundings   *tview.TextView
 	Response       *tview.TextView
+	LanguageGrid   *tview.Grid
 	LanguageSelect *tview.DropDown
 	AreaGrid       *tview.Grid
 	AreaField      *tview.InputField
@@ -27,7 +28,7 @@ func SetupGrid() {
 	App = tview.NewApplication()
 
 	InputField = tview.NewInputField().
-		SetLabel(fmt.Sprintf("%s? > ", setup.TextElements["andNow"])).
+		SetLabel(fmt.Sprintf("%s? > ", setup.TextElements["andNow"][setup.Language])).
 		SetLabelColor(tcell.ColorDarkCyan).
 		SetFieldWidth(80).
 		SetFieldBackgroundColor(tcell.ColorBlack).
@@ -37,7 +38,7 @@ func SetupGrid() {
 		})
 
 	AreaField = tview.NewInputField().
-		SetLabel(fmt.Sprintf("%s \u23CE ", setup.TextElements["next"])).
+		SetLabel(fmt.Sprintf("%s \u23CE ", setup.TextElements["next"][setup.Language])).
 		SetLabelColor(tcell.ColorDarkCyan).
 		SetFieldWidth(20).
 		SetFieldBackgroundColor(tcell.ColorBlack).
@@ -73,6 +74,12 @@ func SetupGrid() {
 		SetBorders(false).
 		AddItem(AreaMap, 0, 0, 1, 1, 0, 0, false).
 		AddItem(AreaField, 1, 0, 1, 1, 0, 0, false)
+
+	LanguageGrid = tview.NewGrid().
+		SetRows(0).
+		SetColumns(0).
+		SetBorders(false).
+		AddItem(LanguageSelect, 0, 0, 1, 1, 0, 0, false)
 
 	Grid = tview.NewGrid().
 		SetRows(0).
