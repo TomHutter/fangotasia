@@ -61,7 +61,7 @@ func SetupLanguage() {
 		SetSelectedFunc(func(o string, i int) {
 			//i, o := grid.LanguageSelect.GetCurrentOption()
 			if i >= 0 {
-				ioutil.WriteFile(filename, []byte(o), 0777)
+				ioutil.WriteFile(filename, []byte(o), 0644)
 			}
 			setup.Language = o
 			grid.Grid.Clear()

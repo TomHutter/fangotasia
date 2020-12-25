@@ -1,4 +1,0 @@
-https://github.com/rivo/tview
-
-export GOOS=linux
-export GOARCH=arm

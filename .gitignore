@@ -1,4 +1,6 @@
-save/*
+save/*sav*
+save/*lang*
 fangotasia
 fangotasia.arm*
 fangotasia.x86*
+*.tar.gz
