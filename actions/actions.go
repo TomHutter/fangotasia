@@ -375,7 +375,6 @@ func (obj Object) Say(area setup.Area, word string) (r setup.Reaction) {
 	case "fangotasia":
 		if area.ID == 1 {
 			scoreBoard(false, false)
-			return
 		}
 	}
 	r = setup.GetReactionByName("say")
