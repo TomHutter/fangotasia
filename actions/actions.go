@@ -7,6 +7,7 @@ import (
 	"fangotasia/setup"
 	"fangotasia/view"
 	"fmt"
+	"io/ioutil"
 	"math/rand"
 	"regexp"
 	"sort"
@@ -651,6 +652,8 @@ func (obj Object) Lang(area setup.Area) (r setup.Reaction) {
 	var keys []string
 	keys = make([]string, 0)
 
+	filename := setup.PathName + "/save/fangotasia.lang"
+
 	for k := range setup.TextElements["selectLanguage"] {
 		keys = append(keys, k)
 	}
@@ -665,7 +668,12 @@ func (obj Object) Lang(area setup.Area) (r setup.Reaction) {
 		SetLabel(setup.TextElements["selectLanguage"][setup.Language]).
 		SetOptions(keys, nil).
 		SetSelectedFunc(func(o string, i int) {
+			if i >= 0 {
+				ioutil.WriteFile(filename, []byte(o), 0644)
+			}
 			setup.Language = o
+			grid.AreaField.SetLabel(fmt.Sprintf("%s \u23CE ", setup.TextElements["next"][setup.Language]))
+			grid.InputField.SetLabel(fmt.Sprintf("%s? > ", setup.TextElements["andNow"][setup.Language]))
 			grid.Surroundings.SetText(strings.Join(view.Surroundings(area), "\n"))
 			grid.Grid.Clear()
 			grid.Grid.AddItem(grid.InputGrid, 0, 0, 1, 1, 0, 0, false)
