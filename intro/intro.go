@@ -4,6 +4,7 @@ import (
 	"fangotasia/grid"
 	"fangotasia/setup"
 	"fangotasia/view"
+	"fmt"
 	"io/ioutil"
 	"os"
 	"sort"
@@ -64,6 +65,8 @@ func SetupLanguage() {
 				ioutil.WriteFile(filename, []byte(o), 0644)
 			}
 			setup.Language = o
+			grid.AreaField.SetLabel(fmt.Sprintf("%s \u23CE ", setup.TextElements["next"][setup.Language]))
+			grid.InputField.SetLabel(fmt.Sprintf("%s? > ", setup.TextElements["andNow"][setup.Language]))
 			grid.Grid.Clear()
 			grid.Grid.AddItem(grid.AreaGrid, 0, 0, 1, 1, 0, 0, false)
 			grid.App.SetFocus(grid.AreaField)

@@ -1,6 +1,10 @@
 save/*sav*
 save/*lang*
 fangotasia
-fangotasia.arm*
-fangotasia.x86*
-*.tar.gz
+*.arm
+*.x86
+*.gz
+*/*.arm
+*/*.x86
+*/*.gz
+*.old
