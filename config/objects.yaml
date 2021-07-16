@@ -321,8 +321,8 @@ objects:
         short: Kugel
         article: die
       en:
-        long: a big shpere
-        short: shpere
+        long: a big sphere
+        short: sphere
         article: the
     area: 4
     value: 0
